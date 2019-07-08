@@ -12,8 +12,9 @@ import { getNormalized } from './getNormalized';
  * @param {Array} [json.y=[]] - y values
  */
 export class Spectrum {
-  constructor(x, y, options = {}) {
+  constructor(x, y, id, options = {}) {
     const { meta = {} } = options;
+    if (!id) throw new Error('Spectrum: id is mandatory');
 
     if (x && x.length > 1 && x[0] > x[1]) {
       this.x = x.reverse();
@@ -22,7 +23,7 @@ export class Spectrum {
       this.x = x || [];
       this.y = y || [];
     }
-
+    this.id = id;
     this.meta = meta;
     this.normalized = undefined;
   }

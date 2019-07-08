@@ -3,6 +3,7 @@ export function getJcampKind(data) {
   let xUnit = data.spectra[0].xUnit.toLowerCase();
   let yUnit = data.spectra[0].yUnit.toLowerCase();
 
+  console.log({ datatype, yUnit });
   if (datatype.match(/infrared/)) {
     if (yUnit.match(/absorbance/)) {
       return IR_ABSORBANCE;
@@ -18,6 +19,7 @@ export const IR_TRANSMITTANCE = {
   importation: {
     converter: (transmittance) => -Math.log10(transmittance)
   },
+  kind: 'Infrared',
   display: {
     xLabel: 'wavelength [cm-1]',
     xInverted: true,
@@ -27,6 +29,7 @@ export const IR_TRANSMITTANCE = {
 
 export const IR_ABSORBANCE = {
   normalization: {},
+  kind: 'Infrared',
   display: {
     xLabel: 'wavelength [cm-1]',
     xInverted: true,

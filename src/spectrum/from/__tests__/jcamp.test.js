@@ -3,13 +3,13 @@ import { join } from 'path';
 
 import { fromJcamp } from '../jcamp';
 
-test.only('fromJcamp absorbance', () => {
-  const path = join(__dirname, '../../../testFiles/absorbance.jdx');
+test('fromJcamp absorbance', () => {
+  const path = join(__dirname, '../../../../testFiles/absorbance.jdx');
   const jcamp = readFileSync(path, 'utf8');
-
-  const spectrum = fromJcamp(jcamp);
+  const spectrum = fromJcamp(jcamp, 'test');
   expect(spectrum.data.x).toHaveLength(1738);
   expect(spectrum.data.y).toHaveLength(1738);
+  expect(spectrum.id).toBe('test');
 });
 
 test('fromJcamp transmittance', () => {
