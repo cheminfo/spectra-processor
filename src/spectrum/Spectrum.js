@@ -1,5 +1,3 @@
-import sortX from 'ml-array-xy-sort-x';
-
 import { getData } from '../jsgraph/getData';
 
 import { getNormalized } from './getNormalized';
@@ -41,3 +39,5 @@ Spectrum.prototype.getNormalized = function (options) {
   if (!this.normalized) getNormalized(this, options);
   return this.normalized;
 };
+
+Spectrum.fromJcamp = function (jcamp, id, meta) {};

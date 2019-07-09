@@ -1,28 +1,31 @@
-import { fromJcamp } from './index.js';
+import { Spectrum } from './spectrum/Spectrum';
 
 export class SpectraProcessor {
   constructor(options = {}) {
     this.originalDataFilter = undefined;
-    this.dataFilter = {};
+    this.normalizationFilter = {};
     this.spectra = [];
-    this.debug = (kind, value) => {
-      switch (kind) {
-        case 'log':
-          console.log(value);
-          break;
-        case 'warn':
-          console.warn(value);
-          break;
-        case 'error':
-          console.error(value);
-          break;
-        default:
-          console.error(value);
-      }
-    };
+    this.debug =
+      options.debug !== undefined
+        ? options.debug
+        : (kind, value) => {
+          switch (kind) {
+            case 'log':
+              console.log(value);
+              break;
+            case 'warn':
+              console.warn(value);
+              break;
+            case 'error':
+              console.error(value);
+              break;
+            default:
+              console.error(value);
+          }
+        };
   }
 
-  setDataFilter(filter) {
+  setNormalizationFilter(filter) {
     if (this.originalDataFilter) {
       this.debug(
         'error',
@@ -30,7 +33,7 @@ export class SpectraProcessor {
       );
       return;
     }
-    this.dataFilter = filter;
+    this.normalizationFilter = filter;
     for (let spectrum of this.spectra) {
       spectrum.normalized = undefined;
     }
@@ -49,8 +52,18 @@ export class SpectraProcessor {
       debug('log', `Existing: ${id}`);
       return;
     }
-    let spectrum = Spectrum.fromJcamp(jcamp);
-    this.addSpectrum(spectrum, id, meta);
+    let spectrum = Spectrum.fromJcamp(jcamp, id, meta);
+    this.addSpectrum(spectrum);
+  }
+
+  /**
+   * Add a spectrum
+   * @param {Spectrum} spectrum
+   */
+  addSpectrum(spectrum) {
+    let index = this.getSpectrumIndex(spectrum.id);
+    if (index === undefined) index = this.data.length;
+    this.data[index] = spectrum;
   }
 
   removeSpectrum(id) {
