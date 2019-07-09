@@ -1,41 +1,23 @@
 import { Spectrum } from './spectrum/Spectrum';
+import parseJcamp from './parser/jcamp';
 
 export class SpectraProcessor {
   constructor(options = {}) {
-    this.originalDataFilter = undefined;
-    this.normalizationFilter = {};
+    this.keepOriginalData =
+      options.keepOriginalData === undefined ? false : options.keepOriginalData;
+    this.normalizationFilter = undefined;
     this.spectra = [];
-    this.debug =
-      options.debug !== undefined
-        ? options.debug
-        : (kind, value) => {
-          switch (kind) {
-            case 'log':
-              console.log(value);
-              break;
-            case 'warn':
-              console.warn(value);
-              break;
-            case 'error':
-              console.error(value);
-              break;
-            default:
-              console.error(value);
-          }
-        };
   }
 
-  setNormalizationFilter(filter) {
-    if (this.originalDataFilter) {
-      this.debug(
-        'error',
-        'Can not change data filter, no original data available'
+  setNormalizationFilter(normalizationFilter = {}) {
+    if (!this.keepOriginalData && this.spectra.length > 0) {
+      throw new Error(
+        'Can not change normalization filter, missing original data'
       );
-      return;
     }
-    this.normalizationFilter = filter;
+    this.normalizationFilter = normalizationFilter;
     for (let spectrum of this.spectra) {
-      spectrum.normalized = undefined;
+      spectrum.updateNormalized(this.normalizationFilter);
     }
   }
 
@@ -53,18 +35,22 @@ export class SpectraProcessor {
       return;
     }
 
-    let spectrum = Spectrum.fromJcamp(jcamp, id, meta);
-    this.addSpectrum(spectrum);
+    let parsed = parseJcamp(jcamp);
+    this.createAndAddSpectrum(parsed, id, meta);
   }
 
   /**
    * Add a spectrum
    * @param {Spectrum} spectrum
    */
-  addSpectrum(spectrum) {
-    let index = this.getSpectrumIndex(spectrum.id);
-    if (index === undefined) index = this.data.length;
-    this.data[index] = spectrum;
+  createAndAddSpectrum(parsed, id, meta) {
+    let index = this.getSpectrumIndex(id);
+    if (index === undefined) index = this.spectra.length;
+    let spectrum = new Spectrum(parsed.data.x, parsed.data.y, id, {
+      meta
+    });
+    spectrum.updateNormalized(this.normalizationFilter);
+    this.spectra[index] = spectrum;
   }
 
   removeSpectrum(id) {
@@ -79,24 +65,24 @@ export class SpectraProcessor {
 
   getSpectrumIndex(id) {
     if (!id) return undefined;
-    for (let i = 0; i < this.data.length; i++) {
-      let spectrum = this.data[i];
+    for (let i = 0; i < this.spectra.length; i++) {
+      let spectrum = this.spectra[i];
       if (spectrum.id === id) return i;
     }
     return undefined;
   }
 
   getNormalizedData() {
-    if (!this.data || !this.data[0]) return {};
+    if (!this.spectra || !this.spectra[0]) return {};
     let matrix = [];
     let meta = [];
     let ids = [];
-    for (let datum of this.data) {
-      ids.push(datum.id);
-      matrix.push(datum.normalized.y);
-      meta.push(datum.meta);
+    for (let spectrum of this.spectra) {
+      ids.push(spectrum.id);
+      matrix.push(spectrum.normalized.y);
+      meta.push(spectrum.meta);
     }
-    let x = this.data[0].normalized.x;
+    let x = this.spectra[0].normalized.x;
     return { ids, matrix, meta, x };
   }
 
@@ -105,22 +91,22 @@ export class SpectraProcessor {
     let chart = {
       data: []
     };
-    for (let datum of this.data) {
-      if (!ids || ids.includes(datum.id)) {
-        let data = datum.spectrum.getData({ mode, filter });
+    for (let spectrum of this.spectra) {
+      if (!ids || ids.includes(spectrum.id)) {
+        let data = spectrum.getData({ mode, filter });
         data.styles = {
           unselected: {
-            lineColor: datum.meta.color || 'darkgrey',
+            lineColor: spectrum.meta.color || 'darkgrey',
             lineWidth: 1,
             lineStyle: 1
           },
           selected: {
-            lineColor: datum.meta.color || 'darkgrey',
+            lineColor: spectrum.meta.color || 'darkgrey',
             lineWidth: 3,
             lineStyle: 1
           }
         };
-        data.label = datum.meta.id || datum.id;
+        data.label = spectrum.meta.id || spectrum.id;
         chart.data.push(data);
       }
     }

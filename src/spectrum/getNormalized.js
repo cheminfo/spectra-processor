@@ -3,8 +3,8 @@ import Stat from 'ml-stat/array';
 
 export function getNormalized(spectrum, options = {}) {
   let {
-    from = 0,
-    to = 100,
+    from = spectrum.x[0],
+    to = spectrum.x[spectrum.x.length - 1],
     numberOfPoints = 1024,
     processes = [],
     exclusions = []
@@ -13,14 +13,18 @@ export function getNormalized(spectrum, options = {}) {
   let y = spectrum.y.slice(0);
   for (let process of processes) {
     switch (process.kind) {
-      case 'centerMean':
-        var mean = Stat.mean(spectrum.y);
-        y = y.map((y) => y - mean);
+      case 'centerMean': {
+        let mean = Stat.mean(spectrum.y);
+        let meanFct = (y) => y - mean;
+        y = y.map(meanFct);
         break;
-      case 'scaleSD':
-        var std = Stat.standardDeviation(spectrum.y);
-        y = y.map((y) => y / std);
+      }
+      case 'scaleSD': {
+        let std = Stat.standardDeviation(spectrum.y);
+        let stdFct = (y) => y / std;
+        y = y.map(stdFct);
         break;
+      }
       default:
         console.error(`Unknown process kind: ${process.kind}`);
     }

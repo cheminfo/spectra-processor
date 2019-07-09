@@ -6,9 +6,10 @@ import { getJcampKind } from '../Kinds';
  * @param {string} jcamp - String containing the JCAMP data
  * @return {Spectrum} - New class element with the given data
  */
-export function fromJcamp(jcamp) {
-  const data = convert(jcamp, { xy: true });
-  const kind = getJcampKind(data);
+export default function jcamp(jcamp) {
+  const parsed = convert(jcamp, { xy: true });
+  const kind = getJcampKind(parsed);
+  const data = parsed.spectra[0].data[0];
   // we convert the data
   if (kind && kind.importation && kind.importation.converter) {
     data.y = data.y.map(kind.importation.converter);

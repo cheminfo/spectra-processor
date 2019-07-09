@@ -35,8 +35,8 @@ Spectrum.prototype.getData = function (options) {
   return getData(this, options);
 };
 
-Spectrum.prototype.getNormalized = function (options) {
-  if (!this.normalized) getNormalized(this, options);
+Spectrum.prototype.updateNormalized = function (options) {
+  this.normalized = getNormalized(this, options);
   return this.normalized;
 };
 

@@ -3,7 +3,6 @@ export function getJcampKind(data) {
   let xUnit = data.spectra[0].xUnit.toLowerCase();
   let yUnit = data.spectra[0].yUnit.toLowerCase();
 
-  console.log({ datatype, yUnit });
   if (datatype.match(/infrared/)) {
     if (yUnit.match(/absorbance/)) {
       return IR_ABSORBANCE;
