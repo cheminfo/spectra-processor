@@ -52,6 +52,7 @@ export class SpectraProcessor {
       debug('log', `Existing: ${id}`);
       return;
     }
+
     let spectrum = Spectrum.fromJcamp(jcamp, id, meta);
     this.addSpectrum(spectrum);
   }
