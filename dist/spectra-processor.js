@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.0.10
+ * @version v0.0.3
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -145,8 +145,7 @@ var jcampconverter = __webpack_require__(3);
  */
 
 
-function getData(spectrum) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function getData(spectrum, options = {}) {
   const filter = options.filter;
   let data = {
     x: [],
@@ -163,8 +162,7 @@ function getData(spectrum) {
   return data;
 }
 
-function updateNormalized(spectrum) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function updateNormalized(spectrum, options = {}) {
   let _options$from = options.from,
       from = _options$from === void 0 ? spectrum.x[0] : _options$from,
       _options$to = options.to,
@@ -200,7 +198,7 @@ function updateNormalized(spectrum) {
         }
 
       default:
-        console.error("Unknown process kind: ".concat(process.kind));
+        throw new Error(`Unknown process kind: ${process.kind}`);
     }
   }
 
@@ -226,8 +224,7 @@ function updateNormalized(spectrum) {
 
 
 class Spectrum {
-  constructor(x, y, id) {
-    let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  constructor(x, y, id, options = {}) {
     const _options$meta = options.meta,
           meta = _options$meta === void 0 ? {} : _options$meta;
     if (!id) throw new Error('Spectrum: id is mandatory');
@@ -264,7 +261,6 @@ Spectrum.prototype.updateNormalized = function (options) {
 
 function getJcampKind(data) {
   let datatype = data.spectra[0].dataType.toLowerCase();
-  let xUnit = data.spectra[0].xUnit.toLowerCase();
   let yUnit = data.spectra[0].yUnit.toLowerCase();
 
   if (datatype.match(/infrared/)) {
@@ -322,8 +318,7 @@ function jcamp(jcamp) {
   };
 }
 
-function getFilterAnnotations() {
-  let filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function getFilterAnnotations(filter = {}) {
   let _filter$exclusions = filter.exclusions,
       exclusions = _filter$exclusions === void 0 ? [] : _filter$exclusions;
   let annotations = [];
@@ -378,8 +373,7 @@ function getFilterAnnotations() {
 }
 
 class SpectraProcessor {
-  constructor() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  constructor(options = {}) {
     this.keepOriginalData = options.keepOriginalData === undefined ? false : options.keepOriginalData;
     this.normalizationFilter = undefined;
     this.spectra = [];
@@ -389,9 +383,7 @@ class SpectraProcessor {
     return getFilterAnnotations(this.normalizationFilter);
   }
 
-  setNormalizationFilter() {
-    let normalizationFilter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+  setNormalizationFilter(normalizationFilter = {}) {
     if (!this.keepOriginalData && this.spectra.length > 0) {
       throw new Error('Can not change normalization filter, missing original data. Use the option keepOriginalData=true.');
     }
@@ -412,10 +404,7 @@ class SpectraProcessor {
    */
 
 
-  addFromJcamp(jcamp$1, id) {
-    let meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    let force = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-
+  addFromJcamp(jcamp$1, id, meta = {}, force = false) {
     if (force === false && this.contains(id)) {
       return;
     }
@@ -497,8 +486,7 @@ class SpectraProcessor {
     };
   }
 
-  getNormalizedChart() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  getNormalizedChart(options = {}) {
     const ids = options.ids;
     let chart = {
       data: []
@@ -527,8 +515,7 @@ class SpectraProcessor {
     return chart;
   }
 
-  getChart() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  getChart(options = {}) {
     const ids = options.ids,
           _options$filter = options.filter,
           filter = _options$filter === void 0 ? {} : _options$filter;
@@ -2048,7 +2035,7 @@ function getConverter() {
           currentData.push(parseFloat(values[j + 1]) * spectrum.yFactor);
         }
       } else {
-        result.logs.push("Format error: ".concat(values));
+        result.logs.push(`Format error: ${values}`);
       }
     }
   }
@@ -2080,7 +2067,7 @@ function postToWorker(input, options) {
   }
 
   return new Promise(function (resolve) {
-    var stamp = "".concat(Date.now()).concat(Math.random());
+    var stamp = `${Date.now()}${Math.random()}`;
     stamps[stamp] = resolve;
     worker.postMessage(JSON.stringify({
       stamp: stamp,
@@ -2091,7 +2078,7 @@ function postToWorker(input, options) {
 }
 
 function createWorker() {
-  var workerURL = URL.createObjectURL(new Blob(["var getConverter =".concat(getConverter.toString(), ";var convert = getConverter(); onmessage = function (event) { var data = JSON.parse(event.data); postMessage(JSON.stringify({stamp: data.stamp, output: convert(data.input, data.options)})); };")], {
+  var workerURL = URL.createObjectURL(new Blob([`var getConverter =${getConverter.toString()};var convert = getConverter(); onmessage = function (event) { var data = JSON.parse(event.data); postMessage(JSON.stringify({stamp: data.stamp, output: convert(data.input, data.options)})); };`], {
     type: 'application/javascript'
   }));
   worker = new Worker(workerURL);
@@ -2106,8 +2093,7 @@ function createWorker() {
   });
 }
 
-function createTree(jcamp) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function createTree(jcamp, options = {}) {
   const _options$flatten = options.flatten,
         flatten = _options$flatten === void 0 ? false : _options$flatten;
 
@@ -2144,13 +2130,13 @@ function createTree(jcamp) {
 
       stack.push({
         title: title.join('\n'),
-        jcamp: "".concat(line, "\n"),
+        jcamp: `${line}\n`,
         children: []
       });
       current = stack[stack.length - 1];
       flat.push(current);
     } else if (labelLine.substring(0, 5) === '##END' && ntupleLevel === 0) {
-      current.jcamp += "".concat(line, "\n");
+      current.jcamp += `${line}\n`;
       var finished = stack.pop();
 
       if (stack.length !== 0) {
@@ -2161,7 +2147,7 @@ function createTree(jcamp) {
         result.push(finished);
       }
     } else if (current && current.jcamp) {
-      current.jcamp += "".concat(line, "\n");
+      current.jcamp += `${line}\n`;
       var match = labelLine.match(/^##(.*?)=(.+)/);
 
       if (match) {
@@ -2468,9 +2454,7 @@ function equallySpacedSlot(x, y, from, to, numberOfPoints) {
   return output;
 }
 // CONCATENATED MODULE: ./node_modules/ml-array-xy-equally-spaced/src/getZones.js
-function getZones(from, to, numberOfPoints) {
-  let exclusions = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-
+function getZones(from, to, numberOfPoints, exclusions = []) {
   if (from > to) {
     var _ref = [to, from];
     from = _ref[0];
@@ -2576,9 +2560,7 @@ function getZones(from, to, numberOfPoints) {
  * @return {object<x: Array, y:Array>} new object with x / y array with the equally spaced data.
  */
 
-function equallySpaced() {
-  let arrayXY = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function equallySpaced(arrayXY = {}, options = {}) {
   let x = arrayXY.x,
       y = arrayXY.y;
   let xLength = x.length;
@@ -2678,9 +2660,7 @@ function processZone(x, y, from, to, numberOfPoints, variant) {
 __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/ml-array-xy-filter-x/src/getZones.js
-function getZones(from, to) {
-  let exclusions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
+function getZones(from, to, exclusions = []) {
   if (from > to) {
     var _ref = [to, from];
     from = _ref[0];
@@ -2758,8 +2738,7 @@ function getZones(from, to) {
  * @return {{x: Array<number>, y: Array<number>}}
  */
 
-function filterX(points) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function filterX(points, options = {}) {
   const x = points.x,
         y = points.y;
   const _options$from = options.from,
