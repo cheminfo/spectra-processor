@@ -1,6 +1,5 @@
 export function getJcampKind(data) {
   let datatype = data.spectra[0].dataType.toLowerCase();
-  let xUnit = data.spectra[0].xUnit.toLowerCase();
   let yUnit = data.spectra[0].yUnit.toLowerCase();
 
   if (datatype.match(/infrared/)) {

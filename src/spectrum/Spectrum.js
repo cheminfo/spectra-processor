@@ -29,8 +29,6 @@ export class Spectrum {
   getXY() {
     return { x: this.x, y: this.y };
   }
-
-  max(from, to) {}
 }
 
 Spectrum.prototype.getData = function (options) {

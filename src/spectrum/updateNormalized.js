@@ -26,7 +26,7 @@ export function updateNormalized(spectrum, options = {}) {
         break;
       }
       default:
-        console.error(`Unknown process kind: ${process.kind}`);
+        throw new Error(`Unknown process kind: ${process.kind}`);
     }
   }
 
