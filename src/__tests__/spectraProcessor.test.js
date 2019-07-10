@@ -13,7 +13,7 @@ test('Load set of data', () => {
     from: 1000,
     to: 2600,
     numberOfPoints: 16,
-    applySNV: true
+    processes: [{ kind: 'centerMean' }, { kind: 'scaleSD' }]
   });
   for (let file of files) {
     let jcamp = readFileSync(join(__dirname, testFilesDir, file), 'utf8');
