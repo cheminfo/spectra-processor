@@ -1,5 +1,6 @@
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
+import { getFilterAnnotations } from './jsgraph/getFilterAnnotations';
 
 export class SpectraProcessor {
   constructor(options = {}) {
@@ -9,10 +10,14 @@ export class SpectraProcessor {
     this.spectra = [];
   }
 
+  getFilterAnnotations() {
+    return getFilterAnnotations(this.normalizationFilter);
+  }
+
   setNormalizationFilter(normalizationFilter = {}) {
     if (!this.keepOriginalData && this.spectra.length > 0) {
       throw new Error(
-        'Can not change normalization filter, missing original data'
+        'Can not change normalization filter, missing original data. Use the option keepOriginalData=true.'
       );
     }
     this.normalizationFilter = normalizationFilter;
@@ -31,7 +36,6 @@ export class SpectraProcessor {
    */
   addFromJcamp(jcamp, id, meta = {}, force = false) {
     if (force === false && this.contains(id)) {
-      debug('log', `Existing: ${id}`);
       return;
     }
 
@@ -56,7 +60,16 @@ export class SpectraProcessor {
   removeSpectrum(id) {
     let index = this.getSpectrumIndex(id);
     if (index === undefined) return undefined;
-    return this.data.splice(index, 1);
+    return this.spectra.splice(index, 1);
+  }
+
+  removeSpectraNotIn(ids) {
+    let currentIDs = this.spectra.map((spectrum) => spectrum.id);
+    for (let id of currentIDs) {
+      if (!ids.includes(id)) {
+        this.removeSpectrum(id);
+      }
+    }
   }
 
   contains(id) {
@@ -70,6 +83,12 @@ export class SpectraProcessor {
       if (spectrum.id === id) return i;
     }
     return undefined;
+  }
+
+  getSpectrum(id) {
+    let index = this.getSpectrumIndex(id);
+    if (index === undefined) return undefined;
+    return this.spectra[index];
   }
 
   getNormalizedData() {
@@ -86,14 +105,41 @@ export class SpectraProcessor {
     return { ids, matrix, meta, x };
   }
 
-  getChart(options = {}) {
-    const { ids, filter = {}, mode = this.mode } = options;
+  getNormalizedChart(options = {}) {
+    const { ids } = options;
     let chart = {
       data: []
     };
     for (let spectrum of this.spectra) {
       if (!ids || ids.includes(spectrum.id)) {
-        let data = spectrum.getData({ mode, filter });
+        let data = spectrum.normalized;
+        data.styles = {
+          unselected: {
+            lineColor: spectrum.meta.color || 'darkgrey',
+            lineWidth: 1,
+            lineStyle: 1
+          },
+          selected: {
+            lineColor: spectrum.meta.color || 'darkgrey',
+            lineWidth: 3,
+            lineStyle: 1
+          }
+        };
+        data.label = spectrum.meta.id || spectrum.id;
+        chart.data.push(data);
+      }
+    }
+    return chart;
+  }
+
+  getChart(options = {}) {
+    const { ids, filter = {} } = options;
+    let chart = {
+      data: []
+    };
+    for (let spectrum of this.spectra) {
+      if (!ids || ids.includes(spectrum.id)) {
+        let data = spectrum.getData({ filter });
         data.styles = {
           unselected: {
             lineColor: spectrum.meta.color || 'darkgrey',

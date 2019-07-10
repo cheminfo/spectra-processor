@@ -1,7 +1,7 @@
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
 
-export function getNormalized(spectrum, options = {}) {
+export function updateNormalized(spectrum, options = {}) {
   let {
     from = spectrum.x[0],
     to = spectrum.x[spectrum.x.length - 1],

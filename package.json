@@ -35,6 +35,7 @@
   "devDependencies": {
     "@babel/types": "^7.4.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "cheminfo-build": "^1.0.0",
     "codecov": "^3.5.0",
     "eslint": "^5.16.0",
     "eslint-config-cheminfo": "^1.20.1",
@@ -46,7 +47,6 @@
     "rollup": "^1.12.4"
   },
   "dependencies": {
-    "hash-it": "^4.0.4",
     "jcampconverter": "^3.0.1",
     "ml-array-max": "^1.1.1",
     "ml-array-min": "^1.1.1",

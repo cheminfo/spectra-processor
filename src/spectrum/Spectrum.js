@@ -1,6 +1,6 @@
 import { getData } from '../jsgraph/getData';
 
-import { getNormalized } from './getNormalized';
+import { updateNormalized } from './updateNormalized';
 
 /**
  * Class allowing manipulate one IR spectrum
@@ -29,6 +29,8 @@ export class Spectrum {
   getXY() {
     return { x: this.x, y: this.y };
   }
+
+  max(from, to) {}
 }
 
 Spectrum.prototype.getData = function (options) {
@@ -36,8 +38,5 @@ Spectrum.prototype.getData = function (options) {
 };
 
 Spectrum.prototype.updateNormalized = function (options) {
-  this.normalized = getNormalized(this, options);
-  return this.normalized;
+  return updateNormalized(this, options);
 };
-
-Spectrum.fromJcamp = function (jcamp, id, meta) {};

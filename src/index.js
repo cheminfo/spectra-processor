@@ -1,1 +1,3 @@
-export { SpectraProcessor } from './SpectraProcessor';
+import { SpectraProcessor } from './SpectraProcessor';
+
+export { SpectraProcessor };
