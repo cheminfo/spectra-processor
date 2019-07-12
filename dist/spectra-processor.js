@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.0.3
+ * @version v0.0.4
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -147,11 +147,8 @@ var jcampconverter = __webpack_require__(3);
  */
 
 
-function getData(spectrum) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    filter
-  } = options;
+function getData(spectrum, options = {}) {
+  const filter = options.filter;
   let data = {
     x: [],
     y: []
@@ -167,15 +164,17 @@ function getData(spectrum) {
   return data;
 }
 
-function updateNormalized(spectrum) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let {
-    from = spectrum.x[0],
-    to = spectrum.x[spectrum.x.length - 1],
-    numberOfPoints = 1024,
-    processes = [],
-    exclusions = []
-  } = options;
+function updateNormalized(spectrum, options = {}) {
+  let _options$from = options.from,
+      from = _options$from === void 0 ? spectrum.x[0] : _options$from,
+      _options$to = options.to,
+      to = _options$to === void 0 ? spectrum.x[spectrum.x.length - 1] : _options$to,
+      _options$numberOfPoin = options.numberOfPoints,
+      numberOfPoints = _options$numberOfPoin === void 0 ? 1024 : _options$numberOfPoin,
+      _options$processes = options.processes,
+      processes = _options$processes === void 0 ? [] : _options$processes,
+      _options$exclusions = options.exclusions,
+      exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
   let y = spectrum.y.slice(0);
 
   for (let process of processes) {
@@ -201,7 +200,7 @@ function updateNormalized(spectrum) {
         }
 
       default:
-        throw new Error("Unknown process kind: ".concat(process.kind));
+        throw new Error(`Unknown process kind: ${process.kind}`);
     }
   }
 
@@ -218,8 +217,7 @@ function updateNormalized(spectrum) {
   return result;
 }
 
-function updateRangesInfo(spectrum) {
-  let ranges = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+function updateRangesInfo(spectrum, ranges = []) {
   spectrum.ranges = {};
 
   for (let range of ranges) {
@@ -243,11 +241,9 @@ function updateRangesInfo(spectrum) {
 
 
 class Spectrum {
-  constructor(x, y, id) {
-    let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-    const {
-      meta = {}
-    } = options;
+  constructor(x, y, id, options = {}) {
+    const _options$meta = options.meta,
+          meta = _options$meta === void 0 ? {} : _options$meta;
     if (!id) throw new Error('Spectrum: id is mandatory');
 
     if (x && x.length > 1 && x[0] > x[1]) {
@@ -343,11 +339,9 @@ function jcamp(jcamp) {
   };
 }
 
-function getFilterAnnotations() {
-  let filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let {
-    exclusions = []
-  } = filter;
+function getFilterAnnotations(filter = {}) {
+  let _filter$exclusions = filter.exclusions,
+      exclusions = _filter$exclusions === void 0 ? [] : _filter$exclusions;
   let annotations = [];
   exclusions = exclusions.filter(exclusion => !exclusion.ignore);
   annotations = exclusions.map(exclusion => {
@@ -400,8 +394,7 @@ function getFilterAnnotations() {
 }
 
 class SpectraProcessor {
-  constructor() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  constructor(options = {}) {
     this.keepOriginalData = options.keepOriginalData === undefined ? false : options.keepOriginalData;
     this.normalizationFilter = undefined;
     this.spectra = [];
@@ -411,9 +404,7 @@ class SpectraProcessor {
     return getFilterAnnotations(this.normalizationFilter);
   }
 
-  setNormalizationFilter() {
-    let normalizationFilter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+  setNormalizationFilter(normalizationFilter = {}) {
     if (!this.keepOriginalData && this.spectra.length > 0) {
       throw new Error('Can not change normalization filter, missing original data. Use the option keepOriginalData=true.');
     }
@@ -434,10 +425,7 @@ class SpectraProcessor {
    */
 
 
-  addFromJcamp(jcamp$1, id) {
-    let meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    let force = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-
+  addFromJcamp(jcamp$1, id, meta = {}, force = false) {
     if (force === false && this.contains(id)) {
       return;
     }
@@ -525,11 +513,8 @@ class SpectraProcessor {
     };
   }
 
-  getNormalizedChart() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    const {
-      ids
-    } = options;
+  getNormalizedChart(options = {}) {
+    const ids = options.ids;
     let chart = {
       data: []
     };
@@ -557,12 +542,10 @@ class SpectraProcessor {
     return chart;
   }
 
-  getChart() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    const {
-      ids,
-      filter = {}
-    } = options;
+  getChart(options = {}) {
+    const ids = options.ids,
+          _options$filter = options.filter,
+          filter = _options$filter === void 0 ? {} : _options$filter;
     let chart = {
       data: []
     };
@@ -2079,7 +2062,7 @@ function getConverter() {
           currentData.push(parseFloat(values[j + 1]) * spectrum.yFactor);
         }
       } else {
-        result.logs.push("Format error: ".concat(values));
+        result.logs.push(`Format error: ${values}`);
       }
     }
   }
@@ -2111,7 +2094,7 @@ function postToWorker(input, options) {
   }
 
   return new Promise(function (resolve) {
-    var stamp = "".concat(Date.now()).concat(Math.random());
+    var stamp = `${Date.now()}${Math.random()}`;
     stamps[stamp] = resolve;
     worker.postMessage(JSON.stringify({
       stamp: stamp,
@@ -2122,7 +2105,7 @@ function postToWorker(input, options) {
 }
 
 function createWorker() {
-  var workerURL = URL.createObjectURL(new Blob(["var getConverter =".concat(getConverter.toString(), ";var convert = getConverter(); onmessage = function (event) { var data = JSON.parse(event.data); postMessage(JSON.stringify({stamp: data.stamp, output: convert(data.input, data.options)})); };")], {
+  var workerURL = URL.createObjectURL(new Blob([`var getConverter =${getConverter.toString()};var convert = getConverter(); onmessage = function (event) { var data = JSON.parse(event.data); postMessage(JSON.stringify({stamp: data.stamp, output: convert(data.input, data.options)})); };`], {
     type: 'application/javascript'
   }));
   worker = new Worker(workerURL);
@@ -2137,11 +2120,9 @@ function createWorker() {
   });
 }
 
-function createTree(jcamp) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    flatten = false
-  } = options;
+function createTree(jcamp, options = {}) {
+  const _options$flatten = options.flatten,
+        flatten = _options$flatten === void 0 ? false : _options$flatten;
 
   if (typeof jcamp !== 'string') {
     throw new TypeError('the JCAMP should be a string');
@@ -2176,13 +2157,13 @@ function createTree(jcamp) {
 
       stack.push({
         title: title.join('\n'),
-        jcamp: "".concat(line, "\n"),
+        jcamp: `${line}\n`,
         children: []
       });
       current = stack[stack.length - 1];
       flat.push(current);
     } else if (labelLine.substring(0, 5) === '##END' && ntupleLevel === 0) {
-      current.jcamp += "".concat(line, "\n");
+      current.jcamp += `${line}\n`;
       var finished = stack.pop();
 
       if (stack.length !== 0) {
@@ -2193,7 +2174,7 @@ function createTree(jcamp) {
         result.push(finished);
       }
     } else if (current && current.jcamp) {
-      current.jcamp += "".concat(line, "\n");
+      current.jcamp += `${line}\n`;
       var match = labelLine.match(/^##(.*?)=(.+)/);
 
       if (match) {
@@ -2277,14 +2258,11 @@ function arrayFindClosestIndex(array, target) {
  * @param {number} [options.toIndex=x.length-1] - Last point for integration
  */
 
-function arrayGetFromToIndex(x) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let {
-    fromIndex,
-    toIndex,
-    from,
-    to
-  } = options;
+function arrayGetFromToIndex(x, options = {}) {
+  let fromIndex = options.fromIndex,
+      toIndex = options.toIndex,
+      from = options.from,
+      to = options.to;
 
   if (fromIndex === undefined) {
     if (from !== undefined) {
@@ -2315,9 +2293,7 @@ const isAnyArray = __webpack_require__(0);
  */
 
 
-function xyCheck() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+function xyCheck(points = {}) {
   if (!isAnyArray(points.x) || !isAnyArray(points.y)) {
     throw new Error('Points must be an object of x and y arrays');
   }
@@ -2340,19 +2316,16 @@ function xyCheck() {
  * @return {number} Integration value on the specified range
  */
 
-function xyIntegration() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function xyIntegration(points = {}, options = {}) {
   xyCheck(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = arrayGetFromToIndex(x, options);
+
+  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
+        fromIndex = _arrayGetFromToIndex.fromIndex,
+        toIndex = _arrayGetFromToIndex.toIndex;
+
   let integration = 0;
 
   for (let i = fromIndex; i < toIndex; i++) {
@@ -2375,19 +2348,16 @@ function xyIntegration() {
  * @return {{x:[],y:[]}} A object with the integration function
  */
 
-function xyIntegral() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function xyIntegral(points = {}, options = {}) {
   xyCheck(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = arrayGetFromToIndex(x, options);
+
+  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
+        fromIndex = _arrayGetFromToIndex.fromIndex,
+        toIndex = _arrayGetFromToIndex.toIndex;
+
   let integral = {
     x: [x[fromIndex]],
     y: [0]
@@ -2416,19 +2386,16 @@ function xyIntegral() {
  * @return {number} Max y on the specified range
  */
 
-function xyMaxY() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function xyMaxY(points = {}, options = {}) {
   xyCheck(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = arrayGetFromToIndex(x, options);
+
+  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
+        fromIndex = _arrayGetFromToIndex.fromIndex,
+        toIndex = _arrayGetFromToIndex.toIndex;
+
   let maxY = y[fromIndex];
 
   for (let i = fromIndex; i <= toIndex; i++) {
@@ -2451,19 +2418,16 @@ function xyMaxY() {
  * @return {object}
  */
 
-function xyMaxYPoint() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function xyMaxYPoint(points = {}, options = {}) {
   xyCheck(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = arrayGetFromToIndex(x, options);
+
+  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
+        fromIndex = _arrayGetFromToIndex.fromIndex,
+        toIndex = _arrayGetFromToIndex.toIndex;
+
   let current = {
     x: x[fromIndex],
     y: y[fromIndex]
@@ -2769,11 +2733,11 @@ function equallySpacedSlot(x, y, from, to, numberOfPoints) {
   return output;
 }
 // CONCATENATED MODULE: ./node_modules/ml-array-xy-equally-spaced/src/getZones.js
-function getZones(from, to, numberOfPoints) {
-  let exclusions = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-
+function getZones(from, to, numberOfPoints, exclusions = []) {
   if (from > to) {
-    [from, to] = [to, from];
+    var _ref = [to, from];
+    from = _ref[0];
+    to = _ref[1];
   } // in exclusions from and to have to be defined
 
 
@@ -2782,7 +2746,9 @@ function getZones(from, to, numberOfPoints) {
 
   exclusions.forEach(exclusion => {
     if (exclusion.from > exclusion.to) {
-      [exclusion.to, exclusion.from] = [exclusion.from, exclusion.to];
+      var _ref2 = [exclusion.from, exclusion.to];
+      exclusion.to = _ref2[0];
+      exclusion.from = _ref2[1];
     }
   });
   exclusions.sort((a, b) => a.from - b.from); // we will rework the exclusions in order to remove overlap and outside range (from / to)
@@ -2873,13 +2839,9 @@ function getZones(from, to, numberOfPoints) {
  * @return {object<x: Array, y:Array>} new object with x / y array with the equally spaced data.
  */
 
-function equallySpaced() {
-  let arrayXY = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let {
-    x,
-    y
-  } = arrayXY;
+function equallySpaced(arrayXY = {}, options = {}) {
+  let x = arrayXY.x,
+      y = arrayXY.y;
   let xLength = x.length;
   let reverse = false;
 
@@ -2889,13 +2851,16 @@ function equallySpaced() {
     reverse = true;
   }
 
-  let {
-    from = x[0],
-    to = x[xLength - 1],
-    variant = 'smooth',
-    numberOfPoints = 100,
-    exclusions = []
-  } = options;
+  let _options$from = options.from,
+      from = _options$from === void 0 ? x[0] : _options$from,
+      _options$to = options.to,
+      to = _options$to === void 0 ? x[xLength - 1] : _options$to,
+      _options$variant = options.variant,
+      variant = _options$variant === void 0 ? 'smooth' : _options$variant,
+      _options$numberOfPoin = options.numberOfPoints,
+      numberOfPoints = _options$numberOfPoin === void 0 ? 100 : _options$numberOfPoin,
+      _options$exclusions = options.exclusions,
+      exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
 
   if (xLength !== y.length) {
     throw new RangeError("the x and y vector doesn't have the same size.");
@@ -2974,11 +2939,11 @@ function processZone(x, y, from, to, numberOfPoints, variant) {
 __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/ml-array-xy-filter-x/src/getZones.js
-function getZones(from, to) {
-  let exclusions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
+function getZones(from, to, exclusions = []) {
   if (from > to) {
-    [from, to] = [to, from];
+    var _ref = [to, from];
+    from = _ref[0];
+    to = _ref[1];
   } // in exclusions from and to have to be defined
 
 
@@ -2987,7 +2952,9 @@ function getZones(from, to) {
 
   exclusions.forEach(exclusion => {
     if (exclusion.from > exclusion.to) {
-      [exclusion.to, exclusion.from] = [exclusion.from, exclusion.to];
+      var _ref2 = [exclusion.from, exclusion.to];
+      exclusion.to = _ref2[0];
+      exclusion.from = _ref2[1];
     }
   });
   exclusions.sort((a, b) => a.from - b.from); // we will rework the exclusions in order to remove overlap and outside range (from / to)
@@ -3050,17 +3017,15 @@ function getZones(from, to) {
  * @return {{x: Array<number>, y: Array<number>}}
  */
 
-function filterX(points) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    x,
-    y
-  } = points;
-  const {
-    from = x[0],
-    to = x[x.length - 1],
-    exclusions = []
-  } = options;
+function filterX(points, options = {}) {
+  const x = points.x,
+        y = points.y;
+  const _options$from = options.from,
+        from = _options$from === void 0 ? x[0] : _options$from,
+        _options$to = options.to,
+        to = _options$to === void 0 ? x[x.length - 1] : _options$to,
+        _options$exclusions = options.exclusions,
+        exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
   let zones = getZones(from, to, exclusions);
   let currentZoneIndex = 0;
   let newX = [];
