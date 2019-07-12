@@ -1,6 +1,7 @@
 import { getData } from '../jsgraph/getData';
 
 import { updateNormalized } from './updateNormalized';
+import { updateRangesInfo } from './updateRangesInfo';
 
 /**
  * Class allowing manipulate one IR spectrum
@@ -37,4 +38,8 @@ Spectrum.prototype.getData = function (options) {
 
 Spectrum.prototype.updateNormalized = function (options) {
   return updateNormalized(this, options);
+};
+
+Spectrum.prototype.updateRangesInfo = function (ranges) {
+  updateRangesInfo(this, ranges);
 };

@@ -43,6 +43,12 @@ export class SpectraProcessor {
     this.createAndAddSpectrum(parsed, id, meta);
   }
 
+  updateRangesInfo(options) {
+    for (let spectrum of this.spectra) {
+      spectrum.updateRangesInfo(options);
+    }
+  }
+
   /**
    * Add a spectrum
    * @param {Spectrum} spectrum
