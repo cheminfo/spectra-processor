@@ -1,5 +1,3 @@
-import { exportAllDeclaration } from '@babel/types';
-
 import { updateRangesInfo } from '../updateRangesInfo';
 
 describe('updateRangesInfo', () => {
