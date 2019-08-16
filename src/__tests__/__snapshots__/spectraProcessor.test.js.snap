@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Load set of data 1`] = `
+exports[`SpectraProcessor Load set of data 1`] = `
 Object {
   "ids": Array [
     "0140_1a.jdx",

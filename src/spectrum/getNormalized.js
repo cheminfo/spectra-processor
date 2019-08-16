@@ -1,18 +1,23 @@
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
 
-export function updateNormalized(spectrum, options = {}) {
+export function getNormalized(spectrum, options = {}) {
+  if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
+    throw new Error('Can not get normalized data');
+  }
+
   let {
     from = spectrum.x[0],
     to = spectrum.x[spectrum.x.length - 1],
     numberOfPoints = 1024,
-    processes = [],
+    filters = [],
     exclusions = []
   } = options;
 
   let y = spectrum.y.slice(0);
-  for (let process of processes) {
-    switch (process.kind) {
+
+  for (let filter of filters) {
+    switch (filter.name) {
       case 'centerMean': {
         let mean = Stat.mean(spectrum.y);
         let meanFct = (y) => y - mean;
@@ -34,7 +39,6 @@ export function updateNormalized(spectrum, options = {}) {
     { x: spectrum.x, y },
     { from, to, numberOfPoints, exclusions }
   );
-  spectrum.normalized = result;
 
   return result;
 }

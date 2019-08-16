@@ -1,6 +1,5 @@
-import { getData } from '../jsgraph/getData';
-
-import { updateNormalized } from './updateNormalized';
+import { getData } from './getData';
+import { getNormalized } from './getNormalized';
 import { updateRangesInfo } from './updateRangesInfo';
 
 /**
@@ -11,23 +10,35 @@ import { updateRangesInfo } from './updateRangesInfo';
  * @param {Array} [json.y=[]] - y values
  */
 export class Spectrum {
+  /**
+   *
+   * @param {array} x
+   * @param {array} y
+   * @param {string} id
+   * @param {object} [options={}]
+   */
   constructor(x, y, id, options = {}) {
-    const { meta = {} } = options;
-    if (!id) throw new Error('Spectrum: id is mandatory');
-
+    const { meta = {}, keepOriginalData = false, normalization = {} } = options;
     if (x && x.length > 1 && x[0] > x[1]) {
-      this.x = x.reverse();
-      this.y = y.reverse();
+      x = x.reverse();
+      y = y.reverse();
     } else {
-      this.x = x || [];
-      this.y = y || [];
+      x = x || [];
+      y = y || [];
+    }
+    if (keepOriginalData) {
+      this.x = x;
+      this.y = y;
     }
     this.id = id;
     this.meta = meta;
-    this.normalized = undefined;
+    this.normalized = getNormalized({ x, y }, normalization);
   }
 
   getXY() {
+    if (!Array.isArray(this.x) || !Array.isArray(this.y)) {
+      throw new Error('Can not get normalized data');
+    }
     return { x: this.x, y: this.y };
   }
 }
@@ -36,8 +47,9 @@ Spectrum.prototype.getData = function (options) {
   return getData(this, options);
 };
 
-Spectrum.prototype.updateNormalized = function (options) {
-  return updateNormalized(this, options);
+Spectrum.prototype.updateNormalization = function (normalization) {
+  this.normalized = getNormalized(this, normalization);
+  this.ranges = {};
 };
 
 Spectrum.prototype.updateRangesInfo = function (ranges) {

@@ -1,46 +1,75 @@
+
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
-import { getFilterAnnotations } from './jsgraph/getFilterAnnotations';
+import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
+import { getChart } from './jsgraph/getChart';
+import { getNormalizedChart } from './jsgraph/getNormalizedChart';
+import { getScaledChart } from './jsgraph/getScaledChart';
+import { getRelativeChart } from './jsgraph/getRelativeChart';
 
 export class SpectraProcessor {
+  /**
+   * Manager a large number of spectra with the possibility to normalize the data
+   * and skip the original data.
+   * It is important to set correctly the options directly because changes
+   * will not be possible if the keepOriginalData is not true
+   * @param {object} [options={}]
+   * @param {boolean} [options.keepOriginalData=False]
+   * @param {object} [options.normalization={}] options to normalize the spectra before comparison
+   * @param {number} [options.normalization.from]
+   * @param {number} [options.normalization.to]
+   * @param {number} [options.normalization.numberOfPoints]
+   * @param {array<object>} [options.normalization.filters]
+   * @param {string} [options.normalization.filters.X.name]
+   * @param {object} [options.normalization.filters.X.options]
+   * @param {object} [options.rescale={}] rescale spectra based on various parameters
+   * @param {string} [options.rescale.range=]
+   * @param {string} [options.rescale.method]
+   * @param {object} [options.relative={}] display spectra relative to a targe
+   * @param {string} [options.relative.target]
+   */
   constructor(options = {}) {
-    this.keepOriginalData =
-      options.keepOriginalData === undefined ? false : options.keepOriginalData;
-    this.normalizationFilter = undefined;
+    this.options = options;
     this.spectra = [];
   }
 
-  getFilterAnnotations() {
-    return getFilterAnnotations(this.normalizationFilter);
+  getNormalizationAnnotations() {
+    return getNormalizationAnnotations(this.options.normalization);
   }
 
-  setNormalizationFilter(normalizationFilter = {}) {
-    if (!this.keepOriginalData && this.spectra.length > 0) {
-      throw new Error(
-        'Can not change normalization filter, missing original data. Use the option keepOriginalData=true.'
-      );
-    }
-    this.normalizationFilter = normalizationFilter;
+  /**
+   *
+   */
+  setRescale(rescale) {
+    this.options.rescale = rescale;
+  }
+
+  setNormalization(normalization = {}) {
+    checkOriginal(this, 'Can not change normalization filter.');
+    this.options.normalization = normalization;
     for (let spectrum of this.spectra) {
-      spectrum.updateNormalized(this.normalizationFilter);
+      spectrum.normalization = this.options.normalization;
+      spectrum.updateNormalized();
     }
   }
 
   /**
    * Add jcamp
    * @param {string} jcamp
-   * @param {string} id
-   * @param {boolean} [force=false]
-   * @param {object} [meta={}]
-   * @param {string} [meta.color]
+   * @param {object} [options={}]
+   * @param {object} [options.meta={}]
+   * @param {string} [options.meta.color]
+   * @param {object} [options.id={}]
+   * @param {boolean} [options.force=false] replace existing spectrum (same ID)
    */
-  addFromJcamp(jcamp, id, meta = {}, force = false) {
-    if (force === false && this.contains(id)) {
+
+  addFromJcamp(jcamp, options = {}) {
+    if (options.force !== true && options.id && this.contains(options.id)) {
       return;
     }
 
     let parsed = parseJcamp(jcamp);
-    this.createAndAddSpectrum(parsed, id, meta);
+    this.addFromData(parsed.data, options);
   }
 
   updateRangesInfo(options) {
@@ -50,16 +79,22 @@ export class SpectraProcessor {
   }
 
   /**
-   * Add a spectrum
-   * @param {Spectrum} spectrum
+   *
+   * @param {object} parsed
+   * @param {object} [options={}]
+   * @param {object} [options.meta={}]
+   * @return {Spectrum}
    */
-  createAndAddSpectrum(parsed, id, meta) {
+
+  addFromData(data, options = {}) {
+    const id = options.id || Math.random(0).toString(36).substring;
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
-    let spectrum = new Spectrum(parsed.data.x, parsed.data.y, id, {
-      meta
+    let spectrum = new Spectrum(data.x, data.y, id, {
+      meta: options.meta,
+      keepOriginalData: this.options.keepOriginalData,
+      normalization: this.options.normalization
     });
-    spectrum.updateNormalized(this.normalizationFilter);
     this.spectra[index] = spectrum;
   }
 
@@ -111,57 +146,35 @@ export class SpectraProcessor {
     return { ids, matrix, meta, x };
   }
 
-  getNormalizedChart(options = {}) {
-    const { ids } = options;
-    let chart = {
-      data: []
-    };
-    for (let spectrum of this.spectra) {
-      if (!ids || ids.includes(spectrum.id)) {
-        let data = spectrum.normalized;
-        data.styles = {
-          unselected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 1,
-            lineStyle: 1
-          },
-          selected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 3,
-            lineStyle: 1
-          }
-        };
-        data.label = spectrum.meta.id || spectrum.id;
-        chart.data.push(data);
-      }
-    }
-    return chart;
+  getChart() {
+    checkOriginal(this, 'Can not getChart but you may try getNormalizedChart.');
+    return getChart(this.spectra);
   }
 
-  getChart(options = {}) {
-    const { ids, filter = {} } = options;
-    let chart = {
-      data: []
-    };
-    for (let spectrum of this.spectra) {
-      if (!ids || ids.includes(spectrum.id)) {
-        let data = spectrum.getData({ filter });
-        data.styles = {
-          unselected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 1,
-            lineStyle: 1
-          },
-          selected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 3,
-            lineStyle: 1
-          }
-        };
-        data.label = spectrum.meta.id || spectrum.id;
-        chart.data.push(data);
-      }
+  getNormalizedChart(options) {
+    return getNormalizedChart(this.spectra, options);
+  }
+
+  getScaledChart(from, to, options) {
+    return getScaledChart(this.spectra, from, to, options);
+  }
+
+  getRelativeChart(targetID, options) {
+    let targetSpectrum = this.getSpectrum(targetID);
+    if (!targetSpectrum) {
+      throw new Error('Target spectrum not found');
     }
-    return chart;
+    return getRelativeChart(this.spectra, targetSpectrum, options);
+  }
+}
+
+export function checkOriginal(spectraProcessor, message) {
+  if (
+    !spectraProcessor.options.keepOriginalData &&
+    spectraProcessor.spectra.length > 0
+  ) {
+    throw new Error(
+      `${message} Missing original data. Use the option keepOriginalData=true.`
+    );
   }
 }

@@ -1,10 +1,10 @@
-import { updateNormalized } from '../updateNormalized';
+import { getNormalized } from '../getNormalized';
 
-describe('updateNormalized', () => {
+describe('getNormalized', () => {
   it('SNV', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let result = updateNormalized(
+    let result = getNormalized(
       {
         x,
         y
@@ -22,7 +22,7 @@ describe('updateNormalized', () => {
   it('with SNV', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let result = updateNormalized(
+    let result = getNormalized(
       {
         x,
         y
@@ -31,7 +31,7 @@ describe('updateNormalized', () => {
         from: 1,
         to: 9,
         numberOfPoints: 5,
-        processes: [{ kind: 'centerMean' }, { kind: 'scaleSD' }]
+        filters: [{ name: 'centerMean' }, { name: 'scaleSD' }]
       }
     );
 
