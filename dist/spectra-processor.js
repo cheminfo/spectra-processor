@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.1.0
+ * @version v0.2.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -120,7 +120,7 @@ module.exports = isAnyArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(process) {
 
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -130,28 +130,31 @@ function _interopDefault(ex) {
   return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
 }
 
-var filterX = _interopDefault(__webpack_require__(6));
+var filterX = _interopDefault(__webpack_require__(8));
 
-var equallySpaced = _interopDefault(__webpack_require__(5));
+var equallySpaced = _interopDefault(__webpack_require__(7));
 
-var Stat = _interopDefault(__webpack_require__(2));
+var Stat = _interopDefault(__webpack_require__(3));
 
-var mlSpectraProcessing = __webpack_require__(4);
+var mlSpectraProcessing = __webpack_require__(6);
 
-var jcampconverter = __webpack_require__(3);
+var jcampconverter = __webpack_require__(4);
+
+var mean = _interopDefault(__webpack_require__(5));
 /**
  *
- * @param {*} spectrum
- * @param {object} [options={}]
- *
+ * @param {Spectrum} spectrum
+ * @param {object} [filter={}]
+ * @param {array} [filter.from]
+ * @param {array} [filter.to]
+ * @param {array} [filter.exclusions=[]]
  */
 
 
-function getData(spectrum, options = {}) {
-  const filter = options.filter;
+function getData(spectrum, filter = {}) {
   let data = {
-    x: [],
-    y: []
+    x: spectrum.x,
+    y: spectrum.y
   };
 
   if (filter) {
@@ -164,21 +167,25 @@ function getData(spectrum, options = {}) {
   return data;
 }
 
-function updateNormalized(spectrum, options = {}) {
+function getNormalized(spectrum, options = {}) {
+  if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
+    throw new Error('Can not get normalized data');
+  }
+
   let _options$from = options.from,
       from = _options$from === void 0 ? spectrum.x[0] : _options$from,
       _options$to = options.to,
       to = _options$to === void 0 ? spectrum.x[spectrum.x.length - 1] : _options$to,
       _options$numberOfPoin = options.numberOfPoints,
       numberOfPoints = _options$numberOfPoin === void 0 ? 1024 : _options$numberOfPoin,
-      _options$processes = options.processes,
-      processes = _options$processes === void 0 ? [] : _options$processes,
+      _options$filters = options.filters,
+      filters = _options$filters === void 0 ? [] : _options$filters,
       _options$exclusions = options.exclusions,
       exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
   let y = spectrum.y.slice(0);
 
-  for (let process of processes) {
-    switch (process.kind) {
+  for (let filter of filters) {
+    switch (filter.name) {
       case 'centerMean':
         {
           let mean = Stat.mean(spectrum.y);
@@ -213,7 +220,6 @@ function updateNormalized(spectrum, options = {}) {
     numberOfPoints,
     exclusions
   });
-  spectrum.normalized = result;
   return result;
 }
 
@@ -224,11 +230,11 @@ function updateRangesInfo(spectrum, ranges = []) {
     range = JSON.parse(JSON.stringify(range));
     spectrum.ranges[range.label] = range;
     let fromToIndex = {
-      fromIndex: mlSpectraProcessing.arrayFindClosestIndex(spectrum.normalized.x, range.from),
-      toIndex: mlSpectraProcessing.arrayFindClosestIndex(spectrum.normalized.x, range.to)
+      fromIndex: mlSpectraProcessing.X.findClosestIndex(spectrum.normalized.x, range.from),
+      toIndex: mlSpectraProcessing.X.findClosestIndex(spectrum.normalized.x, range.to)
     };
-    range.integration = mlSpectraProcessing.xyIntegration(spectrum.normalized, fromToIndex);
-    range.maxPoint = mlSpectraProcessing.xyMaxYPoint(spectrum.normalized, fromToIndex);
+    range.integration = mlSpectraProcessing.XY.integration(spectrum.normalized, fromToIndex);
+    range.maxPoint = mlSpectraProcessing.XY.maxYPoint(spectrum.normalized, fromToIndex);
   }
 }
 /**
@@ -241,25 +247,47 @@ function updateRangesInfo(spectrum, ranges = []) {
 
 
 class Spectrum {
+  /**
+   *
+   * @param {array} x
+   * @param {array} y
+   * @param {string} id
+   * @param {object} [options={}]
+   */
   constructor(x, y, id, options = {}) {
     const _options$meta = options.meta,
-          meta = _options$meta === void 0 ? {} : _options$meta;
-    if (!id) throw new Error('Spectrum: id is mandatory');
+          meta = _options$meta === void 0 ? {} : _options$meta,
+          _options$keepOriginal = options.keepOriginalData,
+          keepOriginalData = _options$keepOriginal === void 0 ? false : _options$keepOriginal,
+          _options$normalizatio = options.normalization,
+          normalization = _options$normalizatio === void 0 ? {} : _options$normalizatio;
 
     if (x && x.length > 1 && x[0] > x[1]) {
-      this.x = x.reverse();
-      this.y = y.reverse();
+      x = x.reverse();
+      y = y.reverse();
     } else {
-      this.x = x || [];
-      this.y = y || [];
+      x = x || [];
+      y = y || [];
+    }
+
+    if (keepOriginalData) {
+      this.x = x;
+      this.y = y;
     }
 
     this.id = id;
     this.meta = meta;
-    this.normalized = undefined;
+    this.normalized = getNormalized({
+      x,
+      y
+    }, normalization);
   }
 
   getXY() {
+    if (!Array.isArray(this.x) || !Array.isArray(this.y)) {
+      throw new Error('Can not get normalized data');
+    }
+
     return {
       x: this.x,
       y: this.y
@@ -272,8 +300,9 @@ Spectrum.prototype.getData = function (options) {
   return getData(this, options);
 };
 
-Spectrum.prototype.updateNormalized = function (options) {
-  return updateNormalized(this, options);
+Spectrum.prototype.updateNormalization = function (normalization) {
+  this.normalized = getNormalized(this, normalization);
+  this.ranges = {};
 };
 
 Spectrum.prototype.updateRangesInfo = function (ranges) {
@@ -339,7 +368,7 @@ function jcamp(jcamp) {
   };
 }
 
-function getFilterAnnotations(filter = {}) {
+function getNormalizationAnnotations(filter = {}) {
   let _filter$exclusions = filter.exclusions,
       exclusions = _filter$exclusions === void 0 ? [] : _filter$exclusions;
   let annotations = [];
@@ -393,45 +422,237 @@ function getFilterAnnotations(filter = {}) {
   return annotations;
 }
 
+function addChartDataStyle(data, spectrum) {
+  data.styles = {
+    unselected: {
+      lineColor: spectrum.meta.color || 'darkgrey',
+      lineWidth: 1,
+      lineStyle: 1
+    },
+    selected: {
+      lineColor: spectrum.meta.color || 'darkgrey',
+      lineWidth: 3,
+      lineStyle: 1
+    }
+  };
+  data.label = spectrum.meta.id || spectrum.id;
+}
+/**
+ * Retrieve a chart with selected original data
+ * @param {*} options
+ */
+
+
+function getChart(spectra, options = {}) {
+  const ids = options.ids,
+        _options$filter = options.filter,
+        filter = _options$filter === void 0 ? {} : _options$filter;
+  let chart = {
+    data: []
+  };
+
+  for (let spectrum of spectra) {
+    if (!ids || ids.includes(spectrum.id)) {
+      let data = spectrum.getData({
+        filter
+      });
+      addChartDataStyle(data, spectrum);
+      chart.data.push(data);
+    }
+  }
+
+  return chart;
+}
+
+function getNormalizedChart(spectra, options = {}) {
+  const ids = options.ids;
+  let chart = {
+    data: []
+  };
+
+  for (let spectrum of spectra) {
+    if (!ids || ids.includes(spectrum.id)) {
+      let data = spectrum.normalized;
+      addChartDataStyle(data, spectrum);
+      chart.data.push(data);
+    }
+  }
+
+  return chart;
+}
+/**
+ * Scaling all the charts so that they match at a specific point
+ * @param {array} spectra
+ * @param {number} from
+ * @param {number} to
+ * @param {object} [options={}]
+ * @param {array} [options.ids=[]] List of selected spectra to consider, by default all
+ * @param {string} [options.method='max'] min, max, range
+ *
+ */
+
+
+function getScaledChart(spectra, from, to, options = {}) {
+  if (!Array.isArray(spectra) || spectra.length < 1) {
+    throw new Error('getScaledChart: No spectra');
+  }
+
+  if (from === undefined) {
+    throw new Error('getScaledChart: `from` as to be defined');
+  }
+
+  if (to === undefined) to = from;
+  let fromToIndex = {
+    fromIndex: mlSpectraProcessing.X.findClosestIndex(spectra[0].normalized.x, from),
+    toIndex: mlSpectraProcessing.X.findClosestIndex(spectra[0].normalized.x, to)
+  };
+  const ids = options.ids,
+        _options$method = options.method,
+        method = _options$method === void 0 ? 'max' : _options$method;
+  let methodFct;
+
+  switch (method) {
+    case 'min':
+      methodFct = spectrum => mlSpectraProcessing.XY.minYPoint(spectrum, fromToIndex).y;
+
+      break;
+
+    case 'max':
+      methodFct = spectrum => mlSpectraProcessing.XY.maxYPoint(spectrum, fromToIndex).y;
+
+      break;
+
+    case 'range':
+      methodFct = spectrum => mlSpectraProcessing.XY.integration(spectrum, fromToIndex);
+
+      break;
+
+    default:
+      throw new Error(`getScaledChart: unknown method: ${method}`);
+  }
+
+  const length = spectra[0].normalized.x.length;
+  let chart = {
+    data: []
+  };
+  let values = spectra.map(spectrum => methodFct(spectrum.normalized));
+  let meanValue = mean(values);
+
+  for (let i = 0; i < spectra.length; i++) {
+    let spectrum = spectra[i];
+
+    if (!ids || ids.includes(spectrum.id)) {
+      let factor = meanValue / values[i];
+      let scaledY = new Array(length);
+
+      for (let j = 0; j < length; j++) {
+        scaledY[j] = spectrum.normalized.y[j] * factor;
+      }
+
+      let data = {
+        x: spectrum.normalized.x,
+        y: scaledY
+      };
+      addChartDataStyle(data, spectrum);
+      chart.data.push(data);
+    }
+  }
+
+  return chart;
+}
+
+function getRelativeChart(spectra, targetSpectrum, options = {}) {
+  let targetDataY = targetSpectrum.normalized.y;
+  const ids = options.ids;
+  let chart = {
+    data: []
+  };
+
+  for (let spectrum of spectra) {
+    if (!ids || ids.includes(spectrum.id)) {
+      let relativeY = new Array(targetDataY.length);
+
+      for (let i = 0; i < targetDataY.length; i++) {
+        relativeY[i] = spectrum.normalized.y[i] - targetDataY[i];
+      }
+
+      let data = {
+        x: spectrum.normalized.x,
+        y: relativeY
+      };
+      addChartDataStyle(data, spectrum);
+      chart.data.push(data);
+    }
+  }
+
+  return chart;
+}
+
 class SpectraProcessor {
+  /**
+   * Manager a large number of spectra with the possibility to normalize the data
+   * and skip the original data.
+   * It is important to set correctly the options directly because changes
+   * will not be possible if the keepOriginalData is not true
+   * @param {object} [options={}]
+   * @param {boolean} [options.keepOriginalData=False]
+   * @param {object} [options.normalization={}] options to normalize the spectra before comparison
+   * @param {number} [options.normalization.from]
+   * @param {number} [options.normalization.to]
+   * @param {number} [options.normalization.numberOfPoints]
+   * @param {array<object>} [options.normalization.filters]
+   * @param {string} [options.normalization.filters.X.name]
+   * @param {object} [options.normalization.filters.X.options]
+   * @param {object} [options.rescale={}] rescale spectra based on various parameters
+   * @param {string} [options.rescale.range=]
+   * @param {string} [options.rescale.method]
+   * @param {object} [options.relative={}] display spectra relative to a targe
+   * @param {string} [options.relative.target]
+   */
   constructor(options = {}) {
-    this.keepOriginalData = options.keepOriginalData === undefined ? false : options.keepOriginalData;
-    this.normalizationFilter = undefined;
+    this.options = options;
     this.spectra = [];
   }
 
-  getFilterAnnotations() {
-    return getFilterAnnotations(this.normalizationFilter);
+  getNormalizationAnnotations() {
+    return getNormalizationAnnotations(this.options.normalization);
+  }
+  /**
+   *
+   */
+
+
+  setRescale(rescale) {
+    this.options.rescale = rescale;
   }
 
-  setNormalizationFilter(normalizationFilter = {}) {
-    if (!this.keepOriginalData && this.spectra.length > 0) {
-      throw new Error('Can not change normalization filter, missing original data. Use the option keepOriginalData=true.');
-    }
-
-    this.normalizationFilter = normalizationFilter;
+  setNormalization(normalization = {}) {
+    checkOriginal(this, 'Can not change normalization filter.');
+    this.options.normalization = normalization;
 
     for (let spectrum of this.spectra) {
-      spectrum.updateNormalized(this.normalizationFilter);
+      spectrum.normalization = this.options.normalization;
+      spectrum.updateNormalized();
     }
   }
   /**
    * Add jcamp
    * @param {string} jcamp
-   * @param {string} id
-   * @param {boolean} [force=false]
-   * @param {object} [meta={}]
-   * @param {string} [meta.color]
+   * @param {object} [options={}]
+   * @param {object} [options.meta={}]
+   * @param {string} [options.meta.color]
+   * @param {object} [options.id={}]
+   * @param {boolean} [options.force=false] replace existing spectrum (same ID)
    */
 
 
-  addFromJcamp(jcamp$1, id, meta = {}, force = false) {
-    if (force === false && this.contains(id)) {
+  addFromJcamp(jcamp$1, options = {}) {
+    if (options.force !== true && options.id && this.contains(options.id)) {
       return;
     }
 
     let parsed = jcamp(jcamp$1);
-    this.createAndAddSpectrum(parsed, id, meta);
+    this.addFromData(parsed.data, options);
   }
 
   updateRangesInfo(options) {
@@ -440,18 +661,23 @@ class SpectraProcessor {
     }
   }
   /**
-   * Add a spectrum
-   * @param {Spectrum} spectrum
+   *
+   * @param {object} parsed
+   * @param {object} [options={}]
+   * @param {object} [options.meta={}]
+   * @return {Spectrum}
    */
 
 
-  createAndAddSpectrum(parsed, id, meta) {
+  addFromData(data, options = {}) {
+    const id = options.id || Math.random(0).toString(36).substring;
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
-    let spectrum = new Spectrum(parsed.data.x, parsed.data.y, id, {
-      meta
+    let spectrum = new Spectrum(data.x, data.y, id, {
+      meta: options.meta,
+      keepOriginalData: this.options.keepOriginalData,
+      normalization: this.options.normalization
     });
-    spectrum.updateNormalized(this.normalizationFilter);
     this.spectra[index] = spectrum;
   }
 
@@ -513,74 +739,255 @@ class SpectraProcessor {
     };
   }
 
-  getNormalizedChart(options = {}) {
-    const ids = options.ids;
-    let chart = {
-      data: []
-    };
-
-    for (let spectrum of this.spectra) {
-      if (!ids || ids.includes(spectrum.id)) {
-        let data = spectrum.normalized;
-        data.styles = {
-          unselected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 1,
-            lineStyle: 1
-          },
-          selected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 3,
-            lineStyle: 1
-          }
-        };
-        data.label = spectrum.meta.id || spectrum.id;
-        chart.data.push(data);
-      }
-    }
-
-    return chart;
+  getChart() {
+    checkOriginal(this, 'Can not getChart but you may try getNormalizedChart.');
+    return getChart(this.spectra);
   }
 
-  getChart(options = {}) {
-    const ids = options.ids,
-          _options$filter = options.filter,
-          filter = _options$filter === void 0 ? {} : _options$filter;
-    let chart = {
-      data: []
-    };
+  getNormalizedChart(options) {
+    return getNormalizedChart(this.spectra, options);
+  }
 
-    for (let spectrum of this.spectra) {
-      if (!ids || ids.includes(spectrum.id)) {
-        let data = spectrum.getData({
-          filter
-        });
-        data.styles = {
-          unselected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 1,
-            lineStyle: 1
-          },
-          selected: {
-            lineColor: spectrum.meta.color || 'darkgrey',
-            lineWidth: 3,
-            lineStyle: 1
-          }
-        };
-        data.label = spectrum.meta.id || spectrum.id;
-        chart.data.push(data);
-      }
+  getScaledChart(from, to, options) {
+    return getScaledChart(this.spectra, from, to, options);
+  }
+
+  getRelativeChart(targetID, options) {
+    let targetSpectrum = this.getSpectrum(targetID);
+
+    if (!targetSpectrum) {
+      throw new Error('Target spectrum not found');
     }
 
-    return chart;
+    return getRelativeChart(this.spectra, targetSpectrum, options);
   }
 
 }
 
+function checkOriginal(spectraProcessor, message) {
+  if (!spectraProcessor.options.keepOriginalData && spectraProcessor.spectra.length > 0) {
+    throw new Error(`${message} Missing original data. Use the option keepOriginalData=true.`);
+  }
+}
+
 exports.SpectraProcessor = SpectraProcessor;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1125,7 +1532,7 @@ exports.cumulativeSum = function cumulativeSum(array) {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2207,19 +2614,71 @@ module.exports = {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var is_any_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var is_any_array__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(is_any_array__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * Computes the mean of the given values
+ * @param {Array<number>} input
+ * @return {number}
+ */
+
+function mean(input) {
+  if (!is_any_array__WEBPACK_IMPORTED_MODULE_0___default()(input)) {
+    throw new TypeError('input must be an array');
+  }
+
+  if (input.length === 0) {
+    throw new TypeError('input must not be empty');
+  }
+
+  var sum = 0;
+
+  for (var i = 0; i < input.length; i++) {
+    sum += input[i];
+  }
+
+  return sum / input.length;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (mean);
+
+/***/ }),
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/array/arrayFindClosestIndex.js
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/check.js
+const isAnyArray = __webpack_require__(0);
+/**
+ * Throw an error in no an object of x,y arrays
+ * @param {object} [points={}]
+ */
+
+
+function check(points = {}) {
+  if (!isAnyArray(points.x) || !isAnyArray(points.y)) {
+    throw new Error('Points must be an object of x and y arrays');
+  }
+
+  if (points.x.length !== points.y.length) {
+    throw new Error('The x and y arrays mush have the same length');
+  }
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/findClosestIndex.js
 /**
  * Returns the closest index of a `target` in an ordered array
  * @param {array} array
  * @param {number} target
  */
-function arrayFindClosestIndex(array, target) {
+function findClosestIndex(array, target) {
   let low = 0;
   let high = array.length - 1;
   let middle = 0;
@@ -2246,7 +2705,7 @@ function arrayFindClosestIndex(array, target) {
     return low;
   }
 }
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/array/arrayGetFromToIndex.js
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/getFromToIndex.js
 
 /**
  * Returns an object with {fromIndex, toIndex} for a specific from / to
@@ -2258,7 +2717,7 @@ function arrayFindClosestIndex(array, target) {
  * @param {number} [options.toIndex=x.length-1] - Last point for integration
  */
 
-function arrayGetFromToIndex(x, options = {}) {
+function getFromToIndex(x, options = {}) {
   let fromIndex = options.fromIndex,
       toIndex = options.toIndex,
       from = options.from,
@@ -2266,7 +2725,7 @@ function arrayGetFromToIndex(x, options = {}) {
 
   if (fromIndex === undefined) {
     if (from !== undefined) {
-      fromIndex = arrayFindClosestIndex(x, from);
+      fromIndex = findClosestIndex(x, from);
     } else {
       fromIndex = 0;
     }
@@ -2274,7 +2733,7 @@ function arrayGetFromToIndex(x, options = {}) {
 
   if (toIndex === undefined) {
     if (to !== undefined) {
-      toIndex = arrayFindClosestIndex(x, to);
+      toIndex = findClosestIndex(x, to);
     } else {
       toIndex = x.length - 1;
     }
@@ -2285,24 +2744,7 @@ function arrayGetFromToIndex(x, options = {}) {
     toIndex
   };
 }
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/xyCheck.js
-const isAnyArray = __webpack_require__(0);
-/**
- * Throw an error in no an object of x,y arrays
- * @param {object} [points={}]
- */
-
-
-function xyCheck(points = {}) {
-  if (!isAnyArray(points.x) || !isAnyArray(points.y)) {
-    throw new Error('Points must be an object of x and y arrays');
-  }
-
-  if (points.x.length !== points.y.length) {
-    throw new Error('The x and y arrays mush have the same length');
-  }
-}
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/xyIntegration.js
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/integration.js
 
 
 /**
@@ -2316,15 +2758,15 @@ function xyCheck(points = {}) {
  * @return {number} Integration value on the specified range
  */
 
-function xyIntegration(points = {}, options = {}) {
-  xyCheck(points);
+function integration_integration(points = {}, options = {}) {
+  check(points);
   const x = points.x,
         y = points.y;
   if (x.length < 2) return 0;
 
-  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
-        fromIndex = _arrayGetFromToIndex.fromIndex,
-        toIndex = _arrayGetFromToIndex.toIndex;
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
 
   let integration = 0;
 
@@ -2334,7 +2776,7 @@ function xyIntegration(points = {}, options = {}) {
 
   return integration;
 }
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/xyIntegral.js
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/integral.js
 
 
 /**
@@ -2345,34 +2787,55 @@ function xyIntegration(points = {}, options = {}) {
  * @param {number} [options.fromIndex=0] - First point for integration
  * @param {number} [options.to] - Last value for integration in the X scale
  * @param {number} [options.toIndex=x.length-1] - Last point for integration
+ * @param {boolean} [options.reverse=false] - Integrate from the larger value to the smallest value
  * @return {{x:[],y:[]}} A object with the integration function
  */
 
-function xyIntegral(points = {}, options = {}) {
-  xyCheck(points);
+function integral_integral(points = {}, options = {}) {
+  const _options$reverse = options.reverse,
+        reverse = _options$reverse === void 0 ? false : _options$reverse;
+  check(points);
   const x = points.x,
         y = points.y;
   if (x.length < 2) return 0;
 
-  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
-        fromIndex = _arrayGetFromToIndex.fromIndex,
-        toIndex = _arrayGetFromToIndex.toIndex;
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
 
-  let integral = {
-    x: [x[fromIndex]],
-    y: [0]
-  };
   let integration = 0;
+  let integral;
 
-  for (let i = fromIndex; i < toIndex; i++) {
-    integration += (x[i + 1] - x[i]) * (y[i + 1] + y[i]) / 2;
-    integral.x.push(x[i + 1]);
-    integral.y.push(integration);
+  if (reverse) {
+    integral = {
+      x: [x[toIndex]],
+      y: [0]
+    };
+
+    for (let i = toIndex; i > fromIndex; i--) {
+      integration += (x[i] - x[i - 1]) * (y[i - 1] + y[i]) / 2;
+      integral.x.push(x[i - 1]);
+      integral.y.push(integration);
+    }
+
+    integral.x.reverse();
+    integral.y.reverse();
+  } else {
+    integral = {
+      x: [x[fromIndex]],
+      y: [0]
+    };
+
+    for (let i = fromIndex; i < toIndex; i++) {
+      integration += (x[i + 1] - x[i]) * (y[i + 1] + y[i]) / 2;
+      integral.x.push(x[i + 1]);
+      integral.y.push(integration);
+    }
   }
 
   return integral;
 }
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/xyMaxY.js
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/maxY.js
 
 
 /**
@@ -2386,15 +2849,15 @@ function xyIntegral(points = {}, options = {}) {
  * @return {number} Max y on the specified range
  */
 
-function xyMaxY(points = {}, options = {}) {
-  xyCheck(points);
+function maxY_maxY(points = {}, options = {}) {
+  check(points);
   const x = points.x,
         y = points.y;
   if (x.length < 2) return 0;
 
-  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
-        fromIndex = _arrayGetFromToIndex.fromIndex,
-        toIndex = _arrayGetFromToIndex.toIndex;
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
 
   let maxY = y[fromIndex];
 
@@ -2404,7 +2867,7 @@ function xyMaxY(points = {}, options = {}) {
 
   return maxY;
 }
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/xyMaxYPoint.js
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/maxYPoint.js
 
 
 /**
@@ -2418,15 +2881,15 @@ function xyMaxY(points = {}, options = {}) {
  * @return {object}
  */
 
-function xyMaxYPoint(points = {}, options = {}) {
-  xyCheck(points);
+function maxYPoint(points = {}, options = {}) {
+  check(points);
   const x = points.x,
         y = points.y;
   if (x.length < 2) return 0;
 
-  const _arrayGetFromToIndex = arrayGetFromToIndex(x, options),
-        fromIndex = _arrayGetFromToIndex.fromIndex,
-        toIndex = _arrayGetFromToIndex.toIndex;
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
 
   let current = {
     x: x[fromIndex],
@@ -2442,24 +2905,466 @@ function xyMaxYPoint(points = {}, options = {}) {
 
   return current;
 }
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/minYPoint.js
+
+
+/**
+ * Finds the max y value in a range and return a {x,y} point
+ * @param {object} [points={}] - Object of points contains property x (an ordered increasing array) and y (an array)
+ * @param {object} [options={}]
+ * @param {number} [options.from] - First value for integration in the X scale
+ * @param {number} [options.fromIndex=0] - First point for integration
+ * @param {number} [options.to] - Last value for integration in the X scale
+ * @param {number} [options.toIndex=x.length-1] - Last point for integration
+ * @return {object}
+ */
+
+function minYPoint(points = {}, options = {}) {
+  check(points);
+  const x = points.x,
+        y = points.y;
+  if (x.length < 2) return 0;
+
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
+
+  let current = {
+    x: x[fromIndex],
+    y: y[fromIndex]
+  };
+
+  for (let i = fromIndex; i <= toIndex; i++) {
+    if (y[i] < current.y) current = {
+      x: x[i],
+      y: y[i]
+    };
+  }
+
+  return current;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/reduce.js
+
+/**
+ * Reduce the number of points while keeping the same noise. Practical to
+ * display many spectra as SVG
+ * @param {array} x
+ * @param {array} y
+ * @param {object} [options={}]
+ * @param {number} [from=x[0]]
+ * @param {number} [to=x[x.length-1]]
+ * @param {number} [nbPoints=4001] Number of points
+ */
+
+function reduce(x, y, options = {}) {
+  let _options$from = options.from,
+      from = _options$from === void 0 ? x[0] : _options$from,
+      _options$to = options.to,
+      to = _options$to === void 0 ? x[x.length - 1] : _options$to,
+      _options$nbPoints = options.nbPoints,
+      nbPoints = _options$nbPoints === void 0 ? 4000 : _options$nbPoints;
+  let fromIndex = findClosestIndex(x, from);
+  let toIndex = findClosestIndex(x, to);
+  if (fromIndex > 0 && x[fromIndex] > from) fromIndex--;
+  if (toIndex < x.length - 1 && x[toIndex] < to) toIndex++;
+
+  if (toIndex - fromIndex < nbPoints) {
+    return {
+      x: x.slice(fromIndex, toIndex + 1),
+      y: y.slice(fromIndex, toIndex + 1)
+    };
+  }
+
+  let newX = [x[fromIndex]];
+  let newY = [y[fromIndex]];
+  let minY = Number.MAX_VALUE;
+  let maxY = Number.MIN_VALUE;
+
+  if (nbPoints % 2 === 0) {
+    nbPoints = nbPoints / 2 + 1;
+  } else {
+    nbPoints = (nbPoints - 1) / 2 + 1;
+  }
+
+  let slot = (x[toIndex] - x[fromIndex]) / (nbPoints - 1);
+  let currentX = x[fromIndex] + slot;
+  let first = true;
+
+  for (let i = fromIndex + 1; i <= toIndex; i++) {
+    if (first) {
+      minY = y[i];
+      maxY = y[i];
+      first = false;
+    } else {
+      if (y[i] < minY) minY = y[i];
+      if (y[i] > maxY) maxY = y[i];
+    }
+
+    if (x[i] >= currentX || i === toIndex) {
+      newX.push(currentX - slot / 2);
+      newY.push(minY);
+      newX.push(currentX);
+      newY.push(maxY);
+      currentX += slot;
+      first = true;
+    }
+  } // we will need to make some kind of min / max because there are too many points
+  // we will always keep the first point and the last point
+
+
+  return {
+    x: newX,
+    y: newY
+  };
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/sortX.js
+/**
+ * Sort object of array, x has to be monotone.
+ * @param {object} data Object of kind {x:[], re:[], im:[]}.
+ * @return {SD}
+ */
+function sortX(data) {
+  const x = data.x,
+        y = data.y;
+
+  if (x.length !== y.length) {
+    throw TypeError('sortX: length of x and y must be identical');
+  }
+
+  if (x.length < 2 || x[0] < x[1]) return data;
+  return {
+    x: x.slice(0).reverse(),
+    y: y.slice(0).reverse()
+  };
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/index.js
+
+
+
+
+
+
+
+
+const XY = {
+  check: check,
+  integral: integral_integral,
+  integration: integration_integration,
+  maxY: maxY_maxY,
+  maxYPoint: maxYPoint,
+  minYPoint: minYPoint,
+  reduce: reduce,
+  sortX: sortX
+};
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xreim/zeroFilling.js
+/**
+ * This function make a zero filling to re and im part.
+ * @param {object} data Object of kind {x:[], re:[], im:[]}.
+ * @param {number} zeroFilling - final number of points
+ * @return {SD}
+ */
+function zeroFilling(data, zeroFilling) {
+  let length = data.x.length;
+  if (zeroFilling === 0 || length === zeroFilling) return data;
+
+  if (length > zeroFilling) {
+    return {
+      x: data.x.slice(0, zeroFilling),
+      re: data.re.slice(0, zeroFilling),
+      im: data.im.slice(0, zeroFilling)
+    };
+  }
+
+  const x = data.x;
+  const re = data.re;
+  const im = data.im;
+  const newX = new Float64Array(zeroFilling);
+  const newRE = new Float64Array(zeroFilling);
+  const newIM = new Float64Array(zeroFilling);
+
+  for (let i = 0; i < length; i++) {
+    newX[i] = x[i];
+    newRE[i] = re[i];
+    newIM[i] = im[i];
+  }
+
+  const deltaX = (x[x.length - 1] - x[0]) / (length - 1);
+
+  for (let i = length; i < zeroFilling; i++) {
+    newX[i] = newX[i - 1] + deltaX;
+  }
+
+  return {
+    x: newX,
+    re: newRE,
+    im: newIM
+  };
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xreim/sortX.js
+/**
+ * Sort object of array, x has to be monotone.
+ * @param {object} data Object of kind {x:[], re:[], im:[]}.
+ * @return {SD}
+ */
+function sortX_sortX(data) {
+  const x = data.x,
+        re = data.re,
+        im = data.im;
+
+  if (x.length !== re.length || x.length !== im.length) {
+    throw TypeError('sortX: length of x, re and im must be identical');
+  }
+
+  if (x.length < 2 || x[0] < x[1]) return data;
+  return {
+    x: x.slice(0).reverse(),
+    re: re.slice(0).reverse(),
+    im: im.slice(0).reverse()
+  };
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xreim/index.js
+
+
+const XReIm = {
+  zeroFilling: zeroFilling,
+  sortX: sortX_sortX
+};
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/reim/absolute.js
+/**
+ * Calculate absolute value of a spectrum
+ * @param {object} reim - An object of kind {re:[], im:[]}
+ * @return {Float64Array}
+ */
+function absolute(data) {
+  const length = data.re.length;
+  const re = data.re;
+  const im = data.im;
+  const newArray = new Float64Array(length);
+
+  for (let i = 0; i < length; i++) {
+    newArray[i] = Math.sqrt(re[i] ** 2 + im[i] ** 2);
+  }
+
+  return newArray;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/reim/phaseCorrection.js
+/**
+ * Phase correction filter
+ * @param {object} reim - An object of kind {re:[], im:[]}
+ * @param {number} [phi0 = 0] - value
+ * @param {number} [phi1 = 0] - value
+ * @return {object} returns a new object {re:[], im:[]}
+ */
+function phaseCorrection(data, phi0, phi1) {
+  phi0 = Number.isFinite(phi0) ? phi0 : 0;
+  phi1 = Number.isFinite(phi1) ? phi1 : 0;
+  const re = data.re.slice(0);
+  const im = data.im.slice(0);
+  const length = data.re.length;
+  const delta = phi1 / length;
+  const alpha = 2 * Math.pow(Math.sin(delta / 2), 2);
+  const beta = Math.sin(delta);
+  let cosTheta = Math.cos(phi0);
+  let sinTheta = Math.sin(phi0);
+  const newRe = new Float64Array(length);
+  const newIm = new Float64Array(length);
+
+  for (let i = 0; i < length; i++) {
+    newRe[i] = re[i] * cosTheta - im[i] * sinTheta;
+    newIm[i] = re[i] * sinTheta + im[i] * cosTheta; // calculate angles i+1 from i
+
+    cosTheta = cosTheta - (alpha * cosTheta + beta * sinTheta);
+    sinTheta = sinTheta - (alpha * sinTheta - beta * cosTheta);
+  }
+
+  return {
+    re: newRe,
+    im: newIm
+  };
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/reim/index.js
+
+
+const ReIm = {
+  absolute: absolute,
+  phaseCorrection: phaseCorrection
+};
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/rotate.js
+/**
+ * This function performs a circular shift to a new array
+ * Positive values of shifts will shift to the right and negative values will do to the left
+ * @example rotate([1,2,3,4],1) -> [4,1,2,3]
+ * @example rotate([1,2,3,4],-1) -> [2,3,4,1]
+ * @param {Array} array - the array that will be rotated
+ * @param {number} shift
+ * @return {Array}
+ */
+function rotate(array, shift) {
+  shift = shift % array.length;
+  if (shift < 0) shift += array.length;
+  return array.slice(array.length - shift).concat(array.slice(0, array.length - shift));
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/subtract.js
+/**
+ * This function subtract the first array by the second array or a constant value from each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function subtract(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] - constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] - array2[i];
+    }
+  }
+
+  return array3;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/add.js
+/**
+
+/**
+ * This function add the first array by the second array or a constant value to each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function add(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] + constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] + array2[i];
+    }
+  }
+
+  return array3;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/multiply.js
+/**
+
+/**
+ * This function multiply the first array by the second array or a constant value to each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function multiply(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] * constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] * array2[i];
+    }
+  }
+
+  return array3;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/divide.js
+/**
+
+/**
+ * This function divide the first array by the second array or a constant value to each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function divide(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] / constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] / array2[i];
+    }
+  }
+
+  return array3;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/index.js
+
+
+
+
+
+
+const X = {
+  findClosestIndex: findClosestIndex,
+  rotate: rotate,
+  subtract: subtract,
+  add: add,
+  multiply: multiply,
+  divide: divide
+};
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/index.js
-/* concated harmony reexport arrayFindClosestIndex */__webpack_require__.d(__webpack_exports__, "arrayFindClosestIndex", function() { return arrayFindClosestIndex; });
-/* concated harmony reexport arrayGetFromToIndex */__webpack_require__.d(__webpack_exports__, "arrayGetFromToIndex", function() { return arrayGetFromToIndex; });
-/* concated harmony reexport xyIntegration */__webpack_require__.d(__webpack_exports__, "xyIntegration", function() { return xyIntegration; });
-/* concated harmony reexport xyIntegral */__webpack_require__.d(__webpack_exports__, "xyIntegral", function() { return xyIntegral; });
-/* concated harmony reexport xyCheck */__webpack_require__.d(__webpack_exports__, "xyCheck", function() { return xyCheck; });
-/* concated harmony reexport xyMaxY */__webpack_require__.d(__webpack_exports__, "xyMaxY", function() { return xyMaxY; });
-/* concated harmony reexport xyMaxYPoint */__webpack_require__.d(__webpack_exports__, "xyMaxYPoint", function() { return xyMaxYPoint; });
-
-
-
+/* concated harmony reexport XY */__webpack_require__.d(__webpack_exports__, "XY", function() { return XY; });
+/* concated harmony reexport XReIm */__webpack_require__.d(__webpack_exports__, "XReIm", function() { return XReIm; });
+/* concated harmony reexport ReIm */__webpack_require__.d(__webpack_exports__, "ReIm", function() { return ReIm; });
+/* concated harmony reexport X */__webpack_require__.d(__webpack_exports__, "X", function() { return X; });
 
 
 
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2932,7 +3837,7 @@ function processZone(x, y, from, to, numberOfPoints, variant) {
 }
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
