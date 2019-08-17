@@ -1,5 +1,3 @@
-import { exportAllDeclaration } from '@babel/types';
-
 import { Spectrum } from '../Spectrum';
 
 describe('Spectrum', () => {

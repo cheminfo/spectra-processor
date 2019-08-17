@@ -1,5 +1,3 @@
-import { checkOriginal } from '../SpectraProcessor';
-
 import { addChartDataStyle } from './addChartDataStyle';
 /**
  * Retrieve a chart with selected original data

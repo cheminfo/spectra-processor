@@ -1,6 +1,7 @@
 import mean from 'ml-array-mean';
-import { XY, Array } from 'ml-spectra-processing';
+import { XY, X } from 'ml-spectra-processing';
 
+import { addChartDataStyle } from './addChartDataStyle';
 /**
  * Scaling all the charts so that they match at a specific point
  * @param {array} spectra
@@ -12,7 +13,6 @@ import { XY, Array } from 'ml-spectra-processing';
  *
  */
 export function getScaledChart(spectra, from, to, options = {}) {
-  console.log(Array.isArray);
   if (!Array.isArray(spectra) || spectra.length < 1) {
     throw new Error('getScaledChart: No spectra');
   }
@@ -22,8 +22,8 @@ export function getScaledChart(spectra, from, to, options = {}) {
   if (to === undefined) to = from;
 
   let fromToIndex = {
-    fromIndex: Array.findClosestIndex(spectra[0].normalized.x, from),
-    toIndex: Array.findClosestIndex(spectra[0].normalized.x, to)
+    fromIndex: X.findClosestIndex(spectra[0].normalized.x, from),
+    toIndex: X.findClosestIndex(spectra[0].normalized.x, to)
   };
 
   const { ids, method = 'max' } = options;
@@ -32,10 +32,10 @@ export function getScaledChart(spectra, from, to, options = {}) {
 
   switch (method) {
     case 'min':
-      methodFct = (spectrum) => XY.minYPoint(spectrum, fromToIndex);
+      methodFct = (spectrum) => XY.minYPoint(spectrum, fromToIndex).y;
       break;
     case 'max':
-      methodFct = (spectrum) => XY.maxYPoint(spectrum, fromToIndex);
+      methodFct = (spectrum) => XY.maxYPoint(spectrum, fromToIndex).y;
       break;
     case 'range':
       methodFct = (spectrum) => XY.integration(spectrum, fromToIndex);
@@ -50,17 +50,17 @@ export function getScaledChart(spectra, from, to, options = {}) {
     data: []
   };
 
-  let values = spectra.map(methodFct(spectrum));
+  let values = spectra.map((spectrum) => methodFct(spectrum.normalized));
   let meanValue = mean(values);
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < spectra.length; i++) {
     let spectrum = spectra[i];
 
     if (!ids || ids.includes(spectrum.id)) {
       let factor = meanValue / values[i];
       let scaledY = new Array(length);
-      for (let i = 0; i < length; i++) {
-        scaledY[i] = spectrum.normalized.y[i] * factor;
+      for (let j = 0; j < length; j++) {
+        scaledY[j] = spectrum.normalized.y[j] * factor;
       }
       let data = {
         x: spectrum.normalized.x,

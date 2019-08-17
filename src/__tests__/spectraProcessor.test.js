@@ -1,7 +1,11 @@
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+
 import { SpectraProcessor } from '../SpectraProcessor';
+
+expect.extend({ toBeDeepCloseTo });
 
 const testFilesDir = '../../testFiles/xtc';
 
@@ -65,9 +69,22 @@ describe('SpectraProcessor', () => {
     expect(relativeData[1].y).toStrictEqual([0, 0, 0, 0]);
     expect(relativeData[2].y).toStrictEqual([0.875, 1, 1, 0.875]);
 
-    let scaledData = spectraProcessor.getScaledChart(1, 1).data;
+    let scaledData = spectraProcessor.getScaledChart(1, 1, {
+      method: 'max'
+    }).data;
     expect(scaledData[0].y).toStrictEqual([1.5, 3, 4.5, 5.0625]);
     expect(scaledData[1].y).toStrictEqual([1.875, 3, 4, 4.25]);
     expect(scaledData[2].y).toStrictEqual([2.0625, 3, 3.75, 3.84375]);
+
+    let scaledIntegralData = spectraProcessor.getScaledChart(0, 3, {
+      method: 'range'
+    }).data;
+
+    expect(scaledIntegralData[0].y).toBeDeepCloseTo([1.4, 2.8, 4.2, 4.725], 3);
+    expect(scaledIntegralData[1].y).toBeDeepCloseTo([1.875, 3, 4, 4.25]);
+    expect(scaledIntegralData[2].y).toBeDeepCloseTo(
+      [2.14, 3.11, 3.89, 3.98],
+      2
+    );
   });
 });
