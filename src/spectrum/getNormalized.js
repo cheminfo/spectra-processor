@@ -30,6 +30,9 @@ export function getNormalized(spectrum, options = {}) {
         y = y.map(stdFct);
         break;
       }
+      case '':
+      case undefined:
+        break;
       default:
         throw new Error(`Unknown process kind: ${process.kind}`);
     }

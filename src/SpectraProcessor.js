@@ -1,4 +1,3 @@
-
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
@@ -22,6 +21,9 @@ export class SpectraProcessor {
    * @param {array<object>} [options.normalization.filters]
    * @param {string} [options.normalization.filters.X.name]
    * @param {object} [options.normalization.filters.X.options]
+   * @param {array<object>} [options.normalization.exclusions]
+   * @param {string} [options.normalization.exclusions.X.from]
+   * @param {object} [options.normalization.exclusions.X.to]
    * @param {object} [options.rescale={}] rescale spectra based on various parameters
    * @param {string} [options.rescale.range=]
    * @param {string} [options.rescale.method]
@@ -48,8 +50,7 @@ export class SpectraProcessor {
     checkOriginal(this, 'Can not change normalization filter.');
     this.options.normalization = normalization;
     for (let spectrum of this.spectra) {
-      spectrum.normalization = this.options.normalization;
-      spectrum.updateNormalized();
+      spectrum.updateNormalization(this.options.normalization);
     }
   }
 
