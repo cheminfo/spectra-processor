@@ -10,7 +10,7 @@ import { addChartDataStyle } from './addChartDataStyle';
  * @param {boolean} [options.relative=false]
  */
 export function getScaledChart(spectraProcessor, options = {}) {
-  let scaled = spectraProcessor.getScaledData();
+  let scaled = spectraProcessor.getScaledData(options);
 
   let chart = {
     data: []

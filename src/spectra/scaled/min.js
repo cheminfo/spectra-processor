@@ -1,16 +1,9 @@
 import { XY, X } from 'ml-spectra-processing';
 
-export function min(spectra, targetSpectrum, range = {}) {
-  let { from, to } = range;
-  if (from === undefined) {
-    throw new Error('getScaledChart: `from` as to be defined');
-  }
-  if (to === undefined) to = from;
+import { getFromToIndex } from './getFromToIndex';
 
-  let fromToIndex = {
-    fromIndex: X.findClosestIndex(targetSpectrum.normalized.x, from),
-    toIndex: X.findClosestIndex(targetSpectrum.normalized.x, to)
-  };
+export function min(spectra, targetSpectrum, range = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
 
   let targetValue = XY.minYPoint(targetSpectrum.normalized, fromToIndex).y;
 

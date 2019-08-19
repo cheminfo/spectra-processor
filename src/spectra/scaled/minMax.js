@@ -1,17 +1,10 @@
-import { XY, X } from 'ml-spectra-processing';
+import { XY } from 'ml-spectra-processing';
 import SimpleLinearRegression from 'ml-regression-simple-linear';
 
-export function minMax(spectra, targetSpectrum, range = {}) {
-  let { from, to } = range;
-  if (from === undefined) {
-    throw new Error('getScaledChart: `from` as to be defined');
-  }
-  if (to === undefined) to = from;
+import { getFromToIndex } from './getFromToIndex';
 
-  let fromToIndex = {
-    fromIndex: X.findClosestIndex(targetSpectrum.normalized.x, from),
-    toIndex: X.findClosestIndex(targetSpectrum.normalized.x, to)
-  };
+export function minMax(spectra, targetSpectrum, range = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
 
   let targetValue = {
     min: XY.minYPoint(targetSpectrum.normalized, fromToIndex).y,
