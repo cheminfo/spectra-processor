@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.2.0
+ * @version v0.3.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -132,15 +132,15 @@ function _interopDefault(ex) {
 
 var filterX = _interopDefault(__webpack_require__(8));
 
-var equallySpaced = _interopDefault(__webpack_require__(7));
+var equallySpaced = _interopDefault(__webpack_require__(6));
 
 var Stat = _interopDefault(__webpack_require__(3));
 
-var mlSpectraProcessing = __webpack_require__(6);
+var mlSpectraProcessing = __webpack_require__(5);
 
 var jcampconverter = __webpack_require__(4);
 
-var mean = _interopDefault(__webpack_require__(5));
+var SimpleLinearRegression = _interopDefault(__webpack_require__(7));
 /**
  *
  * @param {Spectrum} spectrum
@@ -205,6 +205,10 @@ function getNormalized(spectrum, options = {}) {
           y = y.map(stdFct);
           break;
         }
+
+      case '':
+      case undefined:
+        break;
 
       default:
         throw new Error(`Unknown process kind: ${process.kind}`);
@@ -481,111 +485,224 @@ function getNormalizedChart(spectra, options = {}) {
   return chart;
 }
 /**
- * Scaling all the charts so that they match at a specific point
- * @param {array} spectra
- * @param {number} from
- * @param {number} to
- * @param {object} [options={}]
- * @param {array} [options.ids=[]] List of selected spectra to consider, by default all
- * @param {string} [options.method='max'] min, max, range
  *
+ * @param {SpectraProcessor} spectraProcessor
+ * @param {object} [options={}] scale spectra based on various parameters
+ * @param {object} [options.range] from - to
+ * @param {Array} [options.ids] ids of selected spectra
+ * @param {string} [options.targetID=spectra[0].id]
+ * @param {string} [options.method='max'] min, max, range, minMax
+ * @param {boolean} [options.relative=false]
  */
 
 
-function getScaledChart(spectra, from, to, options = {}) {
-  if (!Array.isArray(spectra) || spectra.length < 1) {
-    throw new Error('getScaledChart: No spectra');
-  }
-
-  if (from === undefined) {
-    throw new Error('getScaledChart: `from` as to be defined');
-  }
-
-  if (to === undefined) to = from;
-  let fromToIndex = {
-    fromIndex: mlSpectraProcessing.X.findClosestIndex(spectra[0].normalized.x, from),
-    toIndex: mlSpectraProcessing.X.findClosestIndex(spectra[0].normalized.x, to)
-  };
-  const ids = options.ids,
-        _options$method = options.method,
-        method = _options$method === void 0 ? 'max' : _options$method;
-  let methodFct;
-
-  switch (method) {
-    case 'min':
-      methodFct = spectrum => mlSpectraProcessing.XY.minYPoint(spectrum, fromToIndex).y;
-
-      break;
-
-    case 'max':
-      methodFct = spectrum => mlSpectraProcessing.XY.maxYPoint(spectrum, fromToIndex).y;
-
-      break;
-
-    case 'range':
-      methodFct = spectrum => mlSpectraProcessing.XY.integration(spectrum, fromToIndex);
-
-      break;
-
-    default:
-      throw new Error(`getScaledChart: unknown method: ${method}`);
-  }
-
-  const length = spectra[0].normalized.x.length;
+function getScaledChart(spectraProcessor, options = {}) {
+  let scaled = spectraProcessor.getScaledData(options);
   let chart = {
     data: []
   };
-  let values = spectra.map(spectrum => methodFct(spectrum.normalized));
-  let meanValue = mean(values);
 
-  for (let i = 0; i < spectra.length; i++) {
-    let spectrum = spectra[i];
-
-    if (!ids || ids.includes(spectrum.id)) {
-      let factor = meanValue / values[i];
-      let scaledY = new Array(length);
-
-      for (let j = 0; j < length; j++) {
-        scaledY[j] = spectrum.normalized.y[j] * factor;
-      }
-
-      let data = {
-        x: spectrum.normalized.x,
-        y: scaledY
-      };
-      addChartDataStyle(data, spectrum);
-      chart.data.push(data);
-    }
+  for (let i = 0; i < scaled.matrix.length; i++) {
+    let data = {
+      x: scaled.x,
+      y: scaled.matrix[i]
+    };
+    addChartDataStyle(data, {
+      meta: scaled.meta[i],
+      id: scaled.ids[i]
+    });
+    chart.data.push(data);
   }
 
   return chart;
 }
 
-function getRelativeChart(spectra, targetSpectrum, options = {}) {
-  let targetDataY = targetSpectrum.normalized.y;
-  const ids = options.ids;
-  let chart = {
-    data: []
-  };
+function getNormalizedData(spectra, options = {}) {
+  if (!spectra || !spectra[0]) return {};
+  let matrix = [];
+  let meta = [];
+  let currentIDs = [];
 
   for (let spectrum of spectra) {
-    if (!ids || ids.includes(spectrum.id)) {
-      let relativeY = new Array(targetDataY.length);
+    currentIDs.push(spectrum.id);
+    matrix.push(spectrum.normalized.y);
+    meta.push(spectrum.meta);
+  }
 
-      for (let i = 0; i < targetDataY.length; i++) {
-        relativeY[i] = spectrum.normalized.y[i] - targetDataY[i];
-      }
+  let x = spectra[0].normalized.x;
+  return {
+    ids: currentIDs,
+    matrix,
+    meta,
+    x
+  };
+}
 
-      let data = {
-        x: spectrum.normalized.x,
-        y: relativeY
-      };
-      addChartDataStyle(data, spectrum);
-      chart.data.push(data);
+function getFromToIndex(xs, range) {
+  let from = range.from,
+      to = range.to;
+
+  if (from === undefined) {
+    from = xs[0];
+  }
+
+  if (to === undefined) {
+    to = xs[xs.length - 1];
+  }
+
+  return {
+    fromIndex: mlSpectraProcessing.X.findClosestIndex(xs, from),
+    toIndex: mlSpectraProcessing.X.findClosestIndex(xs, to)
+  };
+}
+
+function min(spectra, targetSpectrum, range = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
+  let targetValue = mlSpectraProcessing.XY.minYPoint(targetSpectrum.normalized, fromToIndex).y;
+  let values = spectra.map(spectrum => mlSpectraProcessing.XY.minYPoint(spectrum.normalized, fromToIndex).y);
+  let matrix = [];
+
+  for (let i = 0; i < spectra.length; i++) {
+    let spectrum = spectra[i];
+    let factor = targetValue / values[i];
+    matrix.push(mlSpectraProcessing.X.multiply(spectrum.normalized.y, factor));
+  }
+
+  return matrix;
+}
+
+function max(spectra, targetSpectrum, range = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
+  let targetValue = mlSpectraProcessing.XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y;
+  let values = spectra.map(spectrum => mlSpectraProcessing.XY.maxYPoint(spectrum.normalized, fromToIndex).y);
+  let matrix = [];
+
+  for (let i = 0; i < spectra.length; i++) {
+    let spectrum = spectra[i];
+    let factor = targetValue / values[i];
+    matrix.push(mlSpectraProcessing.X.multiply(spectrum.normalized.y, factor));
+  }
+
+  return matrix;
+}
+
+function minMax(spectra, targetSpectrum, range = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
+  let targetValue = {
+    min: mlSpectraProcessing.XY.minYPoint(targetSpectrum.normalized, fromToIndex).y,
+    max: mlSpectraProcessing.XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y
+  };
+  let values = spectra.map(spectrum => {
+    return {
+      min: mlSpectraProcessing.XY.minYPoint(spectrum.normalized, fromToIndex).y,
+      max: mlSpectraProcessing.XY.maxYPoint(spectrum.normalized, fromToIndex).y
+    };
+  });
+  let matrix = [];
+
+  for (let i = 0; i < spectra.length; i++) {
+    let spectrum = spectra[i];
+    const regression = new SimpleLinearRegression([targetValue.min, targetValue.max], [values[i].min, values[i].max]);
+    let length = spectrum.normalized.y.length;
+    let scaled = new Array(length);
+
+    for (let j = 0; j < length; j++) {
+      scaled[j] = regression.computeX(spectrum.normalized.y[j]);
+    }
+
+    matrix.push(scaled);
+  }
+
+  return matrix;
+}
+
+function range(spectra, targetSpectrum, range = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
+  let targetValue = mlSpectraProcessing.XY.integration(targetSpectrum.normalized, fromToIndex);
+  let values = spectra.map(spectrum => mlSpectraProcessing.XY.integration(spectrum.normalized, fromToIndex));
+  let matrix = [];
+
+  for (let i = 0; i < spectra.length; i++) {
+    let spectrum = spectra[i];
+    let factor = targetValue / values[i];
+    matrix.push(mlSpectraProcessing.X.multiply(spectrum.normalized.y, factor));
+  }
+
+  return matrix;
+}
+/**
+ *
+ * @param {Array<Spectrum>} spectra
+ * @param {object} [options={}] scale spectra based on various parameters
+ * @param {object} [options.range] from - to
+ * @param {Array} [options.ids] ids of selected spectra
+ * @param {string} [options.targetID=spectra[0].id]
+ * @param {string} [options.method='max'] min, max, range, minMax
+ * @param {boolean} [options.relative=false]
+ */
+
+
+function getScaledData(spectraProcessor, options = {}) {
+  if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
+  const range$1 = options.range,
+        targetID = options.targetID,
+        relative = options.relative,
+        method = options.method,
+        ids = options.ids;
+  let targetSpectrum = spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
+  let spectra = spectraProcessor.getSpectra(ids);
+  let result;
+
+  if (method === '' || method === undefined) {
+    result = getNormalizedData(spectra);
+  } else {
+    let matrix;
+
+    switch (method.toLowerCase()) {
+      case 'min':
+        matrix = min(spectra, targetSpectrum, range$1);
+        break;
+
+      case 'max':
+        matrix = max(spectra, targetSpectrum, range$1);
+        break;
+
+      case 'minmax':
+        matrix = minMax(spectra, targetSpectrum, range$1);
+        break;
+
+      case 'range':
+        matrix = range(spectra, targetSpectrum, range$1);
+        break;
+
+      default:
+        throw new Error(`getScaledData: unknown method: ${method}`);
+    }
+
+    let meta = [];
+    let currentIDs = [];
+
+    for (let spectrum of spectra) {
+      currentIDs.push(spectrum.id);
+      meta.push(spectrum.meta);
+    }
+
+    let x = spectra[0].normalized.x;
+    result = {
+      ids: currentIDs,
+      matrix,
+      meta,
+      x
+    };
+  }
+
+  if (relative) {
+    for (let i = 0; i < result.matrix.length; i++) {
+      result.matrix[i] = mlSpectraProcessing.X.subtract(result.matrix[i], targetSpectrum.normalized.y);
     }
   }
 
-  return chart;
+  return result;
 }
 
 class SpectraProcessor {
@@ -603,11 +720,14 @@ class SpectraProcessor {
    * @param {array<object>} [options.normalization.filters]
    * @param {string} [options.normalization.filters.X.name]
    * @param {object} [options.normalization.filters.X.options]
-   * @param {object} [options.rescale={}] rescale spectra based on various parameters
-   * @param {string} [options.rescale.range=]
-   * @param {string} [options.rescale.method]
-   * @param {object} [options.relative={}] display spectra relative to a targe
-   * @param {string} [options.relative.target]
+   * @param {array<object>} [options.normalization.exclusions]
+   * @param {string} [options.normalization.exclusions.X.from]
+   * @param {object} [options.normalization.exclusions.X.to]
+   * @param {object} [options.scale={}] scale spectra based on various parameters
+   * @param {string} [options.scale.range=]
+   * @param {string} [options.scale.targetID=spectra[0].id]
+   * @param {string} [options.scale.relative=false]
+   * @param {string} [options.scale.method='max'] min, max, range, minMax
    */
   constructor(options = {}) {
     this.options = options;
@@ -622,8 +742,8 @@ class SpectraProcessor {
    */
 
 
-  setRescale(rescale) {
-    this.options.rescale = rescale;
+  setRescale(scale) {
+    this.options.scale = scale;
   }
 
   setNormalization(normalization = {}) {
@@ -631,9 +751,16 @@ class SpectraProcessor {
     this.options.normalization = normalization;
 
     for (let spectrum of this.spectra) {
-      spectrum.normalization = this.options.normalization;
-      spectrum.updateNormalized();
+      spectrum.updateNormalization(this.options.normalization);
     }
+  }
+
+  getNormalizedData() {
+    return getNormalizedData(this.spectra);
+  }
+
+  getScaledData(options) {
+    return getScaledData(this, options);
   }
   /**
    * Add jcamp
@@ -712,31 +839,28 @@ class SpectraProcessor {
     return undefined;
   }
 
+  getSpectra(ids) {
+    if (!ids || !Array.isArray(ids) || ids.length === 0) return this.spectra;
+    let spectra = [];
+
+    for (let id of ids) {
+      let index = this.getSpectrumIndex(id);
+      console.log({
+        index
+      });
+
+      if (index !== undefined) {
+        spectra.push(this.spectra[index]);
+      }
+    }
+
+    return spectra;
+  }
+
   getSpectrum(id) {
     let index = this.getSpectrumIndex(id);
     if (index === undefined) return undefined;
     return this.spectra[index];
-  }
-
-  getNormalizedData() {
-    if (!this.spectra || !this.spectra[0]) return {};
-    let matrix = [];
-    let meta = [];
-    let ids = [];
-
-    for (let spectrum of this.spectra) {
-      ids.push(spectrum.id);
-      matrix.push(spectrum.normalized.y);
-      meta.push(spectrum.meta);
-    }
-
-    let x = this.spectra[0].normalized.x;
-    return {
-      ids,
-      matrix,
-      meta,
-      x
-    };
   }
 
   getChart() {
@@ -748,18 +872,8 @@ class SpectraProcessor {
     return getNormalizedChart(this.spectra, options);
   }
 
-  getScaledChart(from, to, options) {
-    return getScaledChart(this.spectra, from, to, options);
-  }
-
-  getRelativeChart(targetID, options) {
-    let targetSpectrum = this.getSpectrum(targetID);
-
-    if (!targetSpectrum) {
-      throw new Error('Target spectrum not found');
-    }
-
-    return getRelativeChart(this.spectra, targetSpectrum, options);
+  getScaledChart(options) {
+    return getScaledChart(this, options);
   }
 
 }
@@ -2619,41 +2733,6 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var is_any_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var is_any_array__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(is_any_array__WEBPACK_IMPORTED_MODULE_0__);
-
-/**
- * Computes the mean of the given values
- * @param {Array<number>} input
- * @return {number}
- */
-
-function mean(input) {
-  if (!is_any_array__WEBPACK_IMPORTED_MODULE_0___default()(input)) {
-    throw new TypeError('input must be an array');
-  }
-
-  if (input.length === 0) {
-    throw new TypeError('input must not be empty');
-  }
-
-  var sum = 0;
-
-  for (var i = 0; i < input.length; i++) {
-    sum += input[i];
-  }
-
-  return sum / input.length;
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (mean);
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/check.js
 const isAnyArray = __webpack_require__(0);
@@ -3364,7 +3443,7 @@ const X = {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3834,6 +3913,219 @@ function processZone(x, y, from, to, numberOfPoints, variant) {
     }),
     y: output
   };
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./node_modules/ml-regression-base/src/index.js
+
+
+class BaseRegression {
+  constructor() {
+    if (new.target === BaseRegression) {
+      throw new Error('BaseRegression must be subclassed');
+    }
+  }
+
+  predict(x) {
+    if (typeof x === 'number') {
+      return this._predict(x);
+    } else if (Array.isArray(x)) {
+      const y = [];
+
+      for (let i = 0; i < x.length; i++) {
+        y.push(this._predict(x[i]));
+      }
+
+      return y;
+    } else {
+      throw new TypeError('x must be a number or array');
+    }
+  }
+
+  _predict() {
+    throw new Error('_predict must be implemented');
+  }
+
+  train() {// Do nothing for this package
+  }
+
+  toString() {
+    return '';
+  }
+
+  toLaTeX() {
+    return '';
+  }
+  /**
+   * Return the correlation coefficient of determination (r) and chi-square.
+   * @param {Array<number>} x
+   * @param {Array<number>} y
+   * @return {object}
+   */
+
+
+  score(x, y) {
+    if (!Array.isArray(x) || !Array.isArray(y) || x.length !== y.length) {
+      throw new Error('x and y must be arrays of the same length');
+    }
+
+    const n = x.length;
+    const y2 = new Array(n);
+
+    for (let i = 0; i < n; i++) {
+      y2[i] = this._predict(x[i]);
+    }
+
+    let xSum = 0;
+    let ySum = 0;
+    let chi2 = 0;
+    let rmsd = 0;
+    let xSquared = 0;
+    let ySquared = 0;
+    let xY = 0;
+
+    for (let i = 0; i < n; i++) {
+      xSum += y2[i];
+      ySum += y[i];
+      xSquared += y2[i] * y2[i];
+      ySquared += y[i] * y[i];
+      xY += y2[i] * y[i];
+
+      if (y[i] !== 0) {
+        chi2 += (y[i] - y2[i]) * (y[i] - y2[i]) / y[i];
+      }
+
+      rmsd += (y[i] - y2[i]) * (y[i] - y2[i]);
+    }
+
+    const r = (n * xY - xSum * ySum) / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
+    return {
+      r: r,
+      r2: r * r,
+      chi2: chi2,
+      rmsd: Math.sqrt(rmsd / n)
+    };
+  }
+
+}
+// CONCATENATED MODULE: ./node_modules/ml-regression-base/src/checkArrayLength.js
+function checkArraySize(x, y) {
+  if (!Array.isArray(x) || !Array.isArray(y)) {
+    throw new TypeError('x and y must be arrays');
+  }
+
+  if (x.length !== y.length) {
+    throw new RangeError('x and y arrays must have the same length');
+  }
+}
+// CONCATENATED MODULE: ./node_modules/ml-regression-base/src/maybeToPrecision.js
+function maybeToPrecision(value, digits) {
+  if (value < 0) {
+    value = 0 - value;
+
+    if (typeof digits === 'number') {
+      return `- ${value.toPrecision(digits)}`;
+    } else {
+      return `- ${value.toString()}`;
+    }
+  } else {
+    if (typeof digits === 'number') {
+      return value.toPrecision(digits);
+    } else {
+      return value.toString();
+    }
+  }
+}
+// CONCATENATED MODULE: ./node_modules/ml-regression-simple-linear/src/index.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return src_SimpleLinearRegression; });
+
+class src_SimpleLinearRegression extends BaseRegression {
+  constructor(x, y) {
+    super();
+
+    if (x === true) {
+      this.slope = y.slope;
+      this.intercept = y.intercept;
+      this.coefficients = [y.intercept, y.slope];
+    } else {
+      checkArraySize(x, y);
+      regress(this, x, y);
+    }
+  }
+
+  toJSON() {
+    return {
+      name: 'simpleLinearRegression',
+      slope: this.slope,
+      intercept: this.intercept
+    };
+  }
+
+  _predict(x) {
+    return this.slope * x + this.intercept;
+  }
+
+  computeX(y) {
+    return (y - this.intercept) / this.slope;
+  }
+
+  toString(precision) {
+    let result = 'f(x) = ';
+
+    if (this.slope !== 0) {
+      const xFactor = maybeToPrecision(this.slope, precision);
+      result += `${xFactor === '1' ? '' : `${xFactor} * `}x`;
+
+      if (this.intercept !== 0) {
+        const absIntercept = Math.abs(this.intercept);
+        const operator = absIntercept === this.intercept ? '+' : '-';
+        result += ` ${operator} ${maybeToPrecision(absIntercept, precision)}`;
+      }
+    } else {
+      result += maybeToPrecision(this.intercept, precision);
+    }
+
+    return result;
+  }
+
+  toLaTeX(precision) {
+    return this.toString(precision);
+  }
+
+  static load(json) {
+    if (json.name !== 'simpleLinearRegression') {
+      throw new TypeError('not a SLR model');
+    }
+
+    return new src_SimpleLinearRegression(true, json);
+  }
+
+}
+
+function regress(slr, x, y) {
+  const n = x.length;
+  let xSum = 0;
+  let ySum = 0;
+  let xSquared = 0;
+  let xY = 0;
+
+  for (let i = 0; i < n; i++) {
+    xSum += x[i];
+    ySum += y[i];
+    xSquared += x[i] * x[i];
+    xY += x[i] * y[i];
+  }
+
+  const numerator = n * xY - xSum * ySum;
+  slr.slope = numerator / (n * xSquared - xSum * xSum);
+  slr.intercept = 1 / n * ySum - slr.slope * (1 / n) * xSum;
+  slr.coefficients = [slr.intercept, slr.slope];
 }
 
 /***/ }),
