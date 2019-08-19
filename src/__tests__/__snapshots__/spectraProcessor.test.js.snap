@@ -928,3 +928,91 @@ Object {
   ],
 }
 `;
+
+exports[`SpectraProcessor test getScaledChart 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "label": 1,
+      "styles": Object {
+        "selected": Object {
+          "lineColor": "darkgrey",
+          "lineStyle": 1,
+          "lineWidth": 3,
+        },
+        "unselected": Object {
+          "lineColor": "darkgrey",
+          "lineStyle": 1,
+          "lineWidth": 1,
+        },
+      },
+      "x": Array [
+        0,
+        1,
+        2,
+        3,
+      ],
+      "y": Array [
+        1,
+        2,
+        3,
+        3.375,
+      ],
+    },
+    Object {
+      "label": 2,
+      "styles": Object {
+        "selected": Object {
+          "lineColor": "darkgrey",
+          "lineStyle": 1,
+          "lineWidth": 3,
+        },
+        "unselected": Object {
+          "lineColor": "darkgrey",
+          "lineStyle": 1,
+          "lineWidth": 1,
+        },
+      },
+      "x": Array [
+        0,
+        1,
+        2,
+        3,
+      ],
+      "y": Array [
+        1.875,
+        3,
+        4,
+        4.25,
+      ],
+    },
+    Object {
+      "label": 3,
+      "styles": Object {
+        "selected": Object {
+          "lineColor": "darkgrey",
+          "lineStyle": 1,
+          "lineWidth": 3,
+        },
+        "unselected": Object {
+          "lineColor": "darkgrey",
+          "lineStyle": 1,
+          "lineWidth": 1,
+        },
+      },
+      "x": Array [
+        0,
+        1,
+        2,
+        3,
+      ],
+      "y": Array [
+        2.75,
+        4,
+        5,
+        5.125,
+      ],
+    },
+  ],
+}
+`;

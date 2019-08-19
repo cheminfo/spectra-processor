@@ -4,7 +4,8 @@ import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotatio
 import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
-import { getRelativeChart } from './jsgraph/getRelativeChart';
+import { getNormalizedData } from './spectra/getNormalizedData';
+import { getScaledData } from './spectra/getScaledData';
 
 export class SpectraProcessor {
   /**
@@ -24,11 +25,11 @@ export class SpectraProcessor {
    * @param {array<object>} [options.normalization.exclusions]
    * @param {string} [options.normalization.exclusions.X.from]
    * @param {object} [options.normalization.exclusions.X.to]
-   * @param {object} [options.rescale={}] rescale spectra based on various parameters
-   * @param {string} [options.rescale.range=]
-   * @param {string} [options.rescale.method]
-   * @param {object} [options.relative={}] display spectra relative to a targe
-   * @param {string} [options.relative.target]
+   * @param {object} [options.scale={}] scale spectra based on various parameters
+   * @param {string} [options.scale.range=]
+   * @param {string} [options.scale.targetID=spectra[0].id]
+   * @param {string} [options.scale.relative=false]
+   * @param {string} [options.scale.method='max'] min, max, range, minMax
    */
   constructor(options = {}) {
     this.options = options;
@@ -42,8 +43,8 @@ export class SpectraProcessor {
   /**
    *
    */
-  setRescale(rescale) {
-    this.options.rescale = rescale;
+  setRescale(scale) {
+    this.options.scale = scale;
   }
 
   setNormalization(normalization = {}) {
@@ -52,6 +53,14 @@ export class SpectraProcessor {
     for (let spectrum of this.spectra) {
       spectrum.updateNormalization(this.options.normalization);
     }
+  }
+
+  getNormalizedData() {
+    return getNormalizedData(this.spectra);
+  }
+
+  getScaledData(options) {
+    return getScaledData(this, options);
   }
 
   /**
@@ -127,24 +136,23 @@ export class SpectraProcessor {
     return undefined;
   }
 
+  getSpectra(ids) {
+    if (!ids || !Array.isArray(ids) || ids.length === 0) return this.spectra;
+    let spectra = [];
+    for (let id of ids) {
+      let index = this.getSpectrumIndex(id);
+      console.log({ index });
+      if (index !== undefined) {
+        spectra.push(this.spectra[index]);
+      }
+    }
+    return spectra;
+  }
+
   getSpectrum(id) {
     let index = this.getSpectrumIndex(id);
     if (index === undefined) return undefined;
     return this.spectra[index];
-  }
-
-  getNormalizedData() {
-    if (!this.spectra || !this.spectra[0]) return {};
-    let matrix = [];
-    let meta = [];
-    let ids = [];
-    for (let spectrum of this.spectra) {
-      ids.push(spectrum.id);
-      matrix.push(spectrum.normalized.y);
-      meta.push(spectrum.meta);
-    }
-    let x = this.spectra[0].normalized.x;
-    return { ids, matrix, meta, x };
   }
 
   getChart() {
@@ -156,16 +164,8 @@ export class SpectraProcessor {
     return getNormalizedChart(this.spectra, options);
   }
 
-  getScaledChart(from, to, options) {
-    return getScaledChart(this.spectra, from, to, options);
-  }
-
-  getRelativeChart(targetID, options) {
-    let targetSpectrum = this.getSpectrum(targetID);
-    if (!targetSpectrum) {
-      throw new Error('Target spectrum not found');
-    }
-    return getRelativeChart(this.spectra, targetSpectrum, options);
+  getScaledChart(options) {
+    return getScaledChart(this, options);
   }
 }
 

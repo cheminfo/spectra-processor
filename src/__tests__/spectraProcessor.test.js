@@ -42,49 +42,74 @@ describe('SpectraProcessor', () => {
     }).toThrow('Missing original data.');
   });
 
-  it('test basic case', () => {
-    let spectraProcessor = new SpectraProcessor({
-      normalization: {
-        from: 0,
-        to: 3,
-        numberOfPoints: 4
-      }
+  it('test getScaleddData undefined method', () => {
+    let spectraProcessor = getSimpleDataProcessor();
+
+    let scaled = spectraProcessor.getScaledData({
+      range: { from: 0.9, to: 2.1 }
     });
 
-    spectraProcessor.addFromData(
-      { x: [0, 1, 2, 3], y: [1, 2, 3, 4] },
-      { id: 1 }
-    );
-    spectraProcessor.addFromData(
-      { x: [0, 1, 2, 3], y: [2, 3, 4, 5] },
-      { id: 2 }
-    );
-    spectraProcessor.addFromData(
-      { x: [0, 1, 2, 3], y: [3, 4, 5, 6] },
-      { id: 3 }
-    );
+    expect(scaled.matrix).toStrictEqual([
+      [1, 2, 3, 3.375],
+      [1.875, 3, 4, 4.25],
+      [2.75, 4, 5, 5.125]
+    ]);
+  });
 
-    let relativeData = spectraProcessor.getRelativeChart(2).data;
-    expect(relativeData[0].y).toStrictEqual([-0.875, -1, -1, -0.875]);
-    expect(relativeData[1].y).toStrictEqual([0, 0, 0, 0]);
-    expect(relativeData[2].y).toStrictEqual([0.875, 1, 1, 0.875]);
+  it('test getScaleddData undefined method, relative', () => {
+    let spectraProcessor = getSimpleDataProcessor();
 
-    let scaledData = spectraProcessor.getScaledChart(1, 1, {
-      method: 'max'
-    }).data;
-    expect(scaledData[0].y).toStrictEqual([1.5, 3, 4.5, 5.0625]);
-    expect(scaledData[1].y).toStrictEqual([1.875, 3, 4, 4.25]);
-    expect(scaledData[2].y).toStrictEqual([2.0625, 3, 3.75, 3.84375]);
+    let scaled = spectraProcessor.getScaledData({
+      range: { from: 0.9, to: 2.1 },
+      relative: true
+    });
+    expect(scaled.matrix).toStrictEqual([
+      [0, 0, 0, 0],
+      [0.875, 1, 1, 0.875],
+      [1.75, 2, 2, 1.75]
+    ]);
+  });
 
-    let scaledIntegralData = spectraProcessor.getScaledChart(0, 3, {
-      method: 'range'
-    }).data;
+  it('test getScaleddData minMax method, relative', () => {
+    let spectraProcessor = getSimpleDataProcessor();
 
-    expect(scaledIntegralData[0].y).toBeDeepCloseTo([1.4, 2.8, 4.2, 4.725], 3);
-    expect(scaledIntegralData[1].y).toBeDeepCloseTo([1.875, 3, 4, 4.25]);
-    expect(scaledIntegralData[2].y).toBeDeepCloseTo(
-      [2.14, 3.11, 3.89, 3.98],
-      2
-    );
+    let scaled = spectraProcessor.getScaledData({
+      range: { from: 0.9, to: 2.1 },
+      method: 'minMax',
+      relative: true
+    });
+
+    expect(scaled.matrix).toStrictEqual([
+      [0, 0, 0, 0],
+      [-0.125, 0, 0, -0.125],
+      [-0.25, 0, 0, -0.25]
+    ]);
+  });
+
+  it('test getScaledChart', () => {
+    let spectraProcessor = getSimpleDataProcessor();
+
+    let spectra = spectraProcessor.getScaledChart({
+      range: { from: 0.9, to: 2.1 },
+      method: 'minMax',
+      relative: true
+    });
+
+    expect(spectra).toMatchSnapshot();
   });
 });
+
+function getSimpleDataProcessor() {
+  const spectraProcessor = new SpectraProcessor({
+    normalization: {
+      from: 0,
+      to: 3,
+      numberOfPoints: 4
+    }
+  });
+
+  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [1, 2, 3, 4] }, { id: 1 });
+  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [2, 3, 4, 5] }, { id: 2 });
+  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 4, 5, 6] }, { id: 3 });
+  return spectraProcessor;
+}
