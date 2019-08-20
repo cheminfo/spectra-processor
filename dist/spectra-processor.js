@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.3.0
+ * @version v0.4.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -151,8 +151,7 @@ var SimpleLinearRegression = _interopDefault(__webpack_require__(7));
  */
 
 
-function getData(spectrum) {
-  let filter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function getData(spectrum, filter = {}) {
   let data = {
     x: spectrum.x,
     y: spectrum.y
@@ -168,9 +167,7 @@ function getData(spectrum) {
   return data;
 }
 
-function getNormalized(spectrum) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+function getNormalized(spectrum, options = {}) {
   // did the options change ?
   if (JSON.stringify(spectrum.normalizationOptions) === JSON.stringify(options)) {
     return spectrum.normalized;
@@ -182,13 +179,16 @@ function getNormalized(spectrum) {
     throw new Error('getNormalized: Can not get normalized data, missing original data.');
   }
 
-  let {
-    from = spectrum.x[0],
-    to = spectrum.x[spectrum.x.length - 1],
-    numberOfPoints = 1024,
-    filters = [],
-    exclusions = []
-  } = options;
+  let _options$from = options.from,
+      from = _options$from === void 0 ? spectrum.x[0] : _options$from,
+      _options$to = options.to,
+      to = _options$to === void 0 ? spectrum.x[spectrum.x.length - 1] : _options$to,
+      _options$numberOfPoin = options.numberOfPoints,
+      numberOfPoints = _options$numberOfPoin === void 0 ? 1024 : _options$numberOfPoin,
+      _options$filters = options.filters,
+      filters = _options$filters === void 0 ? [] : _options$filters,
+      _options$exclusions = options.exclusions,
+      exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
   let y = spectrum.y.slice(0);
 
   for (let filter of filters) {
@@ -218,7 +218,7 @@ function getNormalized(spectrum) {
         break;
 
       default:
-        throw new Error("Unknown process kind: ".concat(process.kind));
+        throw new Error(`Unknown process kind: ${process.kind}`);
     }
   }
 
@@ -234,8 +234,7 @@ function getNormalized(spectrum) {
   return result;
 }
 
-function updateRangesInfo(spectrum) {
-  let ranges = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+function updateRangesInfo(spectrum, ranges = []) {
   spectrum.ranges = {};
 
   for (let range of ranges) {
@@ -266,12 +265,11 @@ class Spectrum {
    * @param {string} id
    * @param {object} [options={}]
    */
-  constructor(x, y, id) {
-    let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-    const {
-      meta = {},
-      normalization = {}
-    } = options;
+  constructor(x, y, id, options = {}) {
+    const _options$meta = options.meta,
+          meta = _options$meta === void 0 ? {} : _options$meta,
+          _options$normalizatio = options.normalization,
+          normalization = _options$normalizatio === void 0 ? {} : _options$normalizatio;
 
     if (x && x.length > 1 && x[0] > x[1]) {
       this.x = x.reverse();
@@ -389,11 +387,9 @@ function jcamp(jcamp) {
   };
 }
 
-function getNormalizationAnnotations() {
-  let filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let {
-    exclusions = []
-  } = filter;
+function getNormalizationAnnotations(filter = {}) {
+  let _filter$exclusions = filter.exclusions,
+      exclusions = _filter$exclusions === void 0 ? [] : _filter$exclusions;
   let annotations = [];
   exclusions = exclusions.filter(exclusion => !exclusion.ignore);
   annotations = exclusions.map(exclusion => {
@@ -466,12 +462,10 @@ function addChartDataStyle(data, spectrum) {
  */
 
 
-function getChart(spectra) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    ids,
-    filter = {}
-  } = options;
+function getChart(spectra, options = {}) {
+  const ids = options.ids,
+        _options$filter = options.filter,
+        filter = _options$filter === void 0 ? {} : _options$filter;
   let chart = {
     data: []
   };
@@ -489,11 +483,8 @@ function getChart(spectra) {
   return chart;
 }
 
-function getNormalizedChart(spectra) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    ids
-  } = options;
+function getNormalizedChart(spectra, options = {}) {
+  const ids = options.ids;
   let chart = {
     data: []
   };
@@ -520,8 +511,7 @@ function getNormalizedChart(spectra) {
  */
 
 
-function getScaledChart(spectraProcessor) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function getScaledChart(spectraProcessor, options = {}) {
   let scaled = spectraProcessor.getScaledData(options);
   let chart = {
     data: []
@@ -543,7 +533,6 @@ function getScaledChart(spectraProcessor) {
 }
 
 function getNormalizedData(spectra) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   if (!spectra || !spectra[0]) return {};
   let matrix = [];
   let meta = [];
@@ -565,10 +554,8 @@ function getNormalizedData(spectra) {
 }
 
 function getFromToIndex(xs, range) {
-  let {
-    from,
-    to
-  } = range;
+  let from = range.from,
+      to = range.to;
 
   if (from === undefined) {
     from = xs[0];
@@ -584,8 +571,7 @@ function getFromToIndex(xs, range) {
   };
 }
 
-function min(spectra, targetSpectrum) {
-  let range = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function min(spectra, targetSpectrum, range = {}) {
   let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
   let targetValue = mlSpectraProcessing.XY.minYPoint(targetSpectrum.normalized, fromToIndex).y;
   let values = spectra.map(spectrum => mlSpectraProcessing.XY.minYPoint(spectrum.normalized, fromToIndex).y);
@@ -600,8 +586,7 @@ function min(spectra, targetSpectrum) {
   return matrix;
 }
 
-function max(spectra, targetSpectrum) {
-  let range = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function max(spectra, targetSpectrum, range = {}) {
   let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
   let targetValue = mlSpectraProcessing.XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y;
   let values = spectra.map(spectrum => mlSpectraProcessing.XY.maxYPoint(spectrum.normalized, fromToIndex).y);
@@ -616,8 +601,7 @@ function max(spectra, targetSpectrum) {
   return matrix;
 }
 
-function minMax(spectra, targetSpectrum) {
-  let range = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function minMax(spectra, targetSpectrum, range = {}) {
   let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
   let targetValue = {
     min: mlSpectraProcessing.XY.minYPoint(targetSpectrum.normalized, fromToIndex).y,
@@ -647,8 +631,7 @@ function minMax(spectra, targetSpectrum) {
   return matrix;
 }
 
-function range(spectra, targetSpectrum) {
-  let range = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function range(spectra, targetSpectrum, range = {}) {
   let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
   let targetValue = mlSpectraProcessing.XY.integration(targetSpectrum.normalized, fromToIndex);
   let values = spectra.map(spectrum => mlSpectraProcessing.XY.integration(spectrum.normalized, fromToIndex));
@@ -674,16 +657,13 @@ function range(spectra, targetSpectrum) {
  */
 
 
-function getScaledData(spectraProcessor) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function getScaledData(spectraProcessor, options = {}) {
   if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
-  const {
-    range: range$1,
-    targetID,
-    relative,
-    method,
-    ids
-  } = options;
+  const range$1 = options.range,
+        targetID = options.targetID,
+        relative = options.relative,
+        method = options.method,
+        ids = options.ids;
   let targetSpectrum = spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
   let spectra = spectraProcessor.getSpectra(ids);
   let result;
@@ -711,7 +691,7 @@ function getScaledData(spectraProcessor) {
         break;
 
       default:
-        throw new Error("getScaledData: unknown method: ".concat(method));
+        throw new Error(`getScaledData: unknown method: ${method}`);
     }
 
     let meta = [];
@@ -757,8 +737,7 @@ class SpectraProcessor {
    * @param {string} [options.normalization.exclusions.X.from]
    * @param {object} [options.normalization.exclusions.X.to]
    */
-  constructor() {
-    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  constructor(options = {}) {
     this.normalization = options.normalization;
     this.maxMemory = options.maxMemory || 64 * 1024 * 1024;
     this.keepOriginal = true;
@@ -769,8 +748,7 @@ class SpectraProcessor {
     return getNormalizationAnnotations(this.normalization);
   }
 
-  setNormalization() {
-    let normalization = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  setNormalization(normalization = {}) {
     this.normalization = normalization;
 
     for (let spectrum of this.spectra) {
@@ -806,9 +784,7 @@ class SpectraProcessor {
    */
 
 
-  addFromJcamp(jcamp$1) {
-    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+  addFromJcamp(jcamp$1, options = {}) {
     if (options.force !== true && options.id && this.contains(options.id)) {
       return;
     }
@@ -831,8 +807,7 @@ class SpectraProcessor {
    */
 
 
-  addFromData(data) {
-    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  addFromData(data, options = {}) {
     if (this.spectra.length === 0) this.keepOriginal = true;
     const id = options.id || Math.random(0).toString(36).substring;
     let index = this.getSpectrumIndex(id);
@@ -2643,7 +2618,7 @@ function getConverter() {
           currentData.push(parseFloat(values[j + 1]) * spectrum.yFactor);
         }
       } else {
-        result.logs.push("Format error: ".concat(values));
+        result.logs.push(`Format error: ${values}`);
       }
     }
   }
@@ -2675,7 +2650,7 @@ function postToWorker(input, options) {
   }
 
   return new Promise(function (resolve) {
-    var stamp = "".concat(Date.now()).concat(Math.random());
+    var stamp = `${Date.now()}${Math.random()}`;
     stamps[stamp] = resolve;
     worker.postMessage(JSON.stringify({
       stamp: stamp,
@@ -2686,7 +2661,7 @@ function postToWorker(input, options) {
 }
 
 function createWorker() {
-  var workerURL = URL.createObjectURL(new Blob(["var getConverter =".concat(getConverter.toString(), ";var convert = getConverter(); onmessage = function (event) { var data = JSON.parse(event.data); postMessage(JSON.stringify({stamp: data.stamp, output: convert(data.input, data.options)})); };")], {
+  var workerURL = URL.createObjectURL(new Blob([`var getConverter =${getConverter.toString()};var convert = getConverter(); onmessage = function (event) { var data = JSON.parse(event.data); postMessage(JSON.stringify({stamp: data.stamp, output: convert(data.input, data.options)})); };`], {
     type: 'application/javascript'
   }));
   worker = new Worker(workerURL);
@@ -2701,11 +2676,9 @@ function createWorker() {
   });
 }
 
-function createTree(jcamp) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    flatten = false
-  } = options;
+function createTree(jcamp, options = {}) {
+  const _options$flatten = options.flatten,
+        flatten = _options$flatten === void 0 ? false : _options$flatten;
 
   if (typeof jcamp !== 'string') {
     throw new TypeError('the JCAMP should be a string');
@@ -2740,13 +2713,13 @@ function createTree(jcamp) {
 
       stack.push({
         title: title.join('\n'),
-        jcamp: "".concat(line, "\n"),
+        jcamp: `${line}\n`,
         children: []
       });
       current = stack[stack.length - 1];
       flat.push(current);
     } else if (labelLine.substring(0, 5) === '##END' && ntupleLevel === 0) {
-      current.jcamp += "".concat(line, "\n");
+      current.jcamp += `${line}\n`;
       var finished = stack.pop();
 
       if (stack.length !== 0) {
@@ -2757,7 +2730,7 @@ function createTree(jcamp) {
         result.push(finished);
       }
     } else if (current && current.jcamp) {
-      current.jcamp += "".concat(line, "\n");
+      current.jcamp += `${line}\n`;
       var match = labelLine.match(/^##(.*?)=(.+)/);
 
       if (match) {
@@ -2804,9 +2777,7 @@ const isAnyArray = __webpack_require__(0);
  */
 
 
-function check() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+function check(points = {}) {
   if (!isAnyArray(points.x) || !isAnyArray(points.y)) {
     throw new Error('Points must be an object of x and y arrays');
   }
@@ -2860,14 +2831,11 @@ function findClosestIndex(array, target) {
  * @param {number} [options.toIndex=x.length-1] - Last point for integration
  */
 
-function getFromToIndex(x) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let {
-    fromIndex,
-    toIndex,
-    from,
-    to
-  } = options;
+function getFromToIndex(x, options = {}) {
+  let fromIndex = options.fromIndex,
+      toIndex = options.toIndex,
+      from = options.from,
+      to = options.to;
 
   if (fromIndex === undefined) {
     if (from !== undefined) {
@@ -2904,19 +2872,16 @@ function getFromToIndex(x) {
  * @return {number} Integration value on the specified range
  */
 
-function integration_integration() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function integration_integration(points = {}, options = {}) {
   check(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = getFromToIndex(x, options);
+
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
+
   let integration = 0;
 
   for (let i = fromIndex; i < toIndex; i++) {
@@ -2940,22 +2905,18 @@ function integration_integration() {
  * @return {{x:[],y:[]}} A object with the integration function
  */
 
-function integral_integral() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    reverse = false
-  } = options;
+function integral_integral(points = {}, options = {}) {
+  const _options$reverse = options.reverse,
+        reverse = _options$reverse === void 0 ? false : _options$reverse;
   check(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = getFromToIndex(x, options);
+
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
+
   let integration = 0;
   let integral;
 
@@ -3002,19 +2963,16 @@ function integral_integral() {
  * @return {number} Max y on the specified range
  */
 
-function maxY_maxY() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function maxY_maxY(points = {}, options = {}) {
   check(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = getFromToIndex(x, options);
+
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
+
   let maxY = y[fromIndex];
 
   for (let i = fromIndex; i <= toIndex; i++) {
@@ -3037,19 +2995,16 @@ function maxY_maxY() {
  * @return {object}
  */
 
-function maxYPoint() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function maxYPoint(points = {}, options = {}) {
   check(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = getFromToIndex(x, options);
+
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
+
   let current = {
     x: x[fromIndex],
     y: y[fromIndex]
@@ -3078,19 +3033,16 @@ function maxYPoint() {
  * @return {object}
  */
 
-function minYPoint() {
-  let points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function minYPoint(points = {}, options = {}) {
   check(points);
-  const {
-    x,
-    y
-  } = points;
+  const x = points.x,
+        y = points.y;
   if (x.length < 2) return 0;
-  const {
-    fromIndex,
-    toIndex
-  } = getFromToIndex(x, options);
+
+  const _getFromToIndex = getFromToIndex(x, options),
+        fromIndex = _getFromToIndex.fromIndex,
+        toIndex = _getFromToIndex.toIndex;
+
   let current = {
     x: x[fromIndex],
     y: y[fromIndex]
@@ -3118,13 +3070,13 @@ function minYPoint() {
  * @param {number} [nbPoints=4001] Number of points
  */
 
-function reduce(x, y) {
-  let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  let {
-    from = x[0],
-    to = x[x.length - 1],
-    nbPoints = 4000
-  } = options;
+function reduce(x, y, options = {}) {
+  let _options$from = options.from,
+      from = _options$from === void 0 ? x[0] : _options$from,
+      _options$to = options.to,
+      to = _options$to === void 0 ? x[x.length - 1] : _options$to,
+      _options$nbPoints = options.nbPoints,
+      nbPoints = _options$nbPoints === void 0 ? 4000 : _options$nbPoints;
   let fromIndex = findClosestIndex(x, from);
   let toIndex = findClosestIndex(x, to);
   if (fromIndex > 0 && x[fromIndex] > from) fromIndex--;
@@ -3186,10 +3138,8 @@ function reduce(x, y) {
  * @return {SD}
  */
 function sortX(data) {
-  const {
-    x,
-    y
-  } = data;
+  const x = data.x,
+        y = data.y;
 
   if (x.length !== y.length) {
     throw TypeError('sortX: length of x and y must be identical');
@@ -3271,11 +3221,9 @@ function zeroFilling(data, zeroFilling) {
  * @return {SD}
  */
 function sortX_sortX(data) {
-  const {
-    x,
-    re,
-    im
-  } = data;
+  const x = data.x,
+        re = data.re,
+        im = data.im;
 
   if (x.length !== re.length || x.length !== im.length) {
     throw TypeError('sortX: length of x, re and im must be identical');
@@ -3804,11 +3752,11 @@ function equallySpacedSlot(x, y, from, to, numberOfPoints) {
   return output;
 }
 // CONCATENATED MODULE: ./node_modules/ml-array-xy-equally-spaced/src/getZones.js
-function getZones(from, to, numberOfPoints) {
-  let exclusions = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-
+function getZones(from, to, numberOfPoints, exclusions = []) {
   if (from > to) {
-    [from, to] = [to, from];
+    var _ref = [to, from];
+    from = _ref[0];
+    to = _ref[1];
   } // in exclusions from and to have to be defined
 
 
@@ -3817,7 +3765,9 @@ function getZones(from, to, numberOfPoints) {
 
   exclusions.forEach(exclusion => {
     if (exclusion.from > exclusion.to) {
-      [exclusion.to, exclusion.from] = [exclusion.from, exclusion.to];
+      var _ref2 = [exclusion.from, exclusion.to];
+      exclusion.to = _ref2[0];
+      exclusion.from = _ref2[1];
     }
   });
   exclusions.sort((a, b) => a.from - b.from); // we will rework the exclusions in order to remove overlap and outside range (from / to)
@@ -3908,13 +3858,9 @@ function getZones(from, to, numberOfPoints) {
  * @return {object<x: Array, y:Array>} new object with x / y array with the equally spaced data.
  */
 
-function equallySpaced() {
-  let arrayXY = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let {
-    x,
-    y
-  } = arrayXY;
+function equallySpaced(arrayXY = {}, options = {}) {
+  let x = arrayXY.x,
+      y = arrayXY.y;
   let xLength = x.length;
   let reverse = false;
 
@@ -3924,13 +3870,16 @@ function equallySpaced() {
     reverse = true;
   }
 
-  let {
-    from = x[0],
-    to = x[xLength - 1],
-    variant = 'smooth',
-    numberOfPoints = 100,
-    exclusions = []
-  } = options;
+  let _options$from = options.from,
+      from = _options$from === void 0 ? x[0] : _options$from,
+      _options$to = options.to,
+      to = _options$to === void 0 ? x[xLength - 1] : _options$to,
+      _options$variant = options.variant,
+      variant = _options$variant === void 0 ? 'smooth' : _options$variant,
+      _options$numberOfPoin = options.numberOfPoints,
+      numberOfPoints = _options$numberOfPoin === void 0 ? 100 : _options$numberOfPoin,
+      _options$exclusions = options.exclusions,
+      exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
 
   if (xLength !== y.length) {
     throw new RangeError("the x and y vector doesn't have the same size.");
@@ -4116,9 +4065,9 @@ function maybeToPrecision(value, digits) {
     value = 0 - value;
 
     if (typeof digits === 'number') {
-      return "- ".concat(value.toPrecision(digits));
+      return `- ${value.toPrecision(digits)}`;
     } else {
-      return "- ".concat(value.toString());
+      return `- ${value.toString()}`;
     }
   } else {
     if (typeof digits === 'number') {
@@ -4166,12 +4115,12 @@ class src_SimpleLinearRegression extends BaseRegression {
 
     if (this.slope !== 0) {
       const xFactor = maybeToPrecision(this.slope, precision);
-      result += "".concat(xFactor === '1' ? '' : "".concat(xFactor, " * "), "x");
+      result += `${xFactor === '1' ? '' : `${xFactor} * `}x`;
 
       if (this.intercept !== 0) {
         const absIntercept = Math.abs(this.intercept);
         const operator = absIntercept === this.intercept ? '+' : '-';
-        result += " ".concat(operator, " ").concat(maybeToPrecision(absIntercept, precision));
+        result += ` ${operator} ${maybeToPrecision(absIntercept, precision)}`;
       }
     } else {
       result += maybeToPrecision(this.intercept, precision);
@@ -4222,11 +4171,11 @@ function regress(slr, x, y) {
 __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/ml-array-xy-filter-x/src/getZones.js
-function getZones(from, to) {
-  let exclusions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
+function getZones(from, to, exclusions = []) {
   if (from > to) {
-    [from, to] = [to, from];
+    var _ref = [to, from];
+    from = _ref[0];
+    to = _ref[1];
   } // in exclusions from and to have to be defined
 
 
@@ -4235,7 +4184,9 @@ function getZones(from, to) {
 
   exclusions.forEach(exclusion => {
     if (exclusion.from > exclusion.to) {
-      [exclusion.to, exclusion.from] = [exclusion.from, exclusion.to];
+      var _ref2 = [exclusion.from, exclusion.to];
+      exclusion.to = _ref2[0];
+      exclusion.from = _ref2[1];
     }
   });
   exclusions.sort((a, b) => a.from - b.from); // we will rework the exclusions in order to remove overlap and outside range (from / to)
@@ -4298,17 +4249,15 @@ function getZones(from, to) {
  * @return {{x: Array<number>, y: Array<number>}}
  */
 
-function filterX(points) {
-  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  const {
-    x,
-    y
-  } = points;
-  const {
-    from = x[0],
-    to = x[x.length - 1],
-    exclusions = []
-  } = options;
+function filterX(points, options = {}) {
+  const x = points.x,
+        y = points.y;
+  const _options$from = options.from,
+        from = _options$from === void 0 ? x[0] : _options$from,
+        _options$to = options.to,
+        to = _options$to === void 0 ? x[x.length - 1] : _options$to,
+        _options$exclusions = options.exclusions,
+        exclusions = _options$exclusions === void 0 ? [] : _options$exclusions;
   let zones = getZones(from, to, exclusions);
   let currentZoneIndex = 0;
   let newX = [];
