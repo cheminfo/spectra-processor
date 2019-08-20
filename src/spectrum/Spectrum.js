@@ -18,21 +18,29 @@ export class Spectrum {
    * @param {object} [options={}]
    */
   constructor(x, y, id, options = {}) {
-    const { meta = {}, keepOriginalData = false, normalization = {} } = options;
+    const { meta = {}, normalization = {} } = options;
     if (x && x.length > 1 && x[0] > x[1]) {
-      x = x.reverse();
-      y = y.reverse();
+      this.x = x.reverse();
+      this.y = y.reverse();
     } else {
-      x = x || [];
-      y = y || [];
-    }
-    if (keepOriginalData) {
-      this.x = x;
-      this.y = y;
+      this.x = x || [];
+      this.y = y || [];
     }
     this.id = id;
     this.meta = meta;
-    this.normalized = getNormalized({ x, y }, normalization);
+    this.normalized = getNormalized(this, normalization);
+    this.updateMemory();
+  }
+
+  updateMemory() {
+    this.memory =
+      ((this.x && this.x.length) || 0) * 16 + this.normalized.x.length * 16;
+  }
+
+  removeOriginal() {
+    this.x = undefined;
+    this.y = undefined;
+    this.updateMemory();
   }
 
   getXY() {
@@ -50,6 +58,7 @@ Spectrum.prototype.getData = function (options) {
 Spectrum.prototype.updateNormalization = function (normalization) {
   this.normalized = getNormalized(this, normalization);
   this.ranges = {};
+  this.updateMemory();
 };
 
 Spectrum.prototype.updateRangesInfo = function (ranges) {

@@ -1,9 +1,17 @@
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
+import equal from 'deep-equal';
 
 export function getNormalized(spectrum, options = {}) {
+  // did the options change ?
+  if (equal(spectrum.normalizationOptions, options)) {
+    return spectrum.normalized;
+  }
+  spectrum.normalizationOptions = JSON.parse(JSON.stringify(options));
   if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
-    throw new Error('Can not get normalized data');
+    throw new Error(
+      'getNormalized: Can not get normalized data, missing original data.'
+    );
   }
 
   let {

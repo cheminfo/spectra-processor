@@ -47,6 +47,7 @@
     "rollup": "^1.19.4"
   },
   "dependencies": {
+    "deep-equal": "^1.0.1",
     "jcampconverter": "^3.0.1",
     "ml-array-max": "^1.1.1",
     "ml-array-mean": "^1.1.1",

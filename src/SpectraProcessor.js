@@ -11,10 +11,8 @@ export class SpectraProcessor {
   /**
    * Manager a large number of spectra with the possibility to normalize the data
    * and skip the original data.
-   * It is important to set correctly the options directly because changes
-   * will not be possible if the keepOriginalData is not true
    * @param {object} [options={}]
-   * @param {boolean} [options.keepOriginalData=False]
+   * @param {boolean} [options.maxMemory=64M]
    * @param {object} [options.normalization={}] options to normalize the spectra before comparison
    * @param {number} [options.normalization.from]
    * @param {number} [options.normalization.to]
@@ -40,15 +38,7 @@ export class SpectraProcessor {
     return getNormalizationAnnotations(this.options.normalization);
   }
 
-  /**
-   *
-   */
-  setRescale(scale) {
-    this.options.scale = scale;
-  }
-
   setNormalization(normalization = {}) {
-    checkOriginal(this, 'Can not change normalization filter.');
     this.options.normalization = normalization;
     for (let spectrum of this.spectra) {
       spectrum.updateNormalization(this.options.normalization);
@@ -102,7 +92,6 @@ export class SpectraProcessor {
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {
       meta: options.meta,
-      keepOriginalData: this.options.keepOriginalData,
       normalization: this.options.normalization
     });
     this.spectra[index] = spectrum;
@@ -141,7 +130,6 @@ export class SpectraProcessor {
     let spectra = [];
     for (let id of ids) {
       let index = this.getSpectrumIndex(id);
-      console.log({ index });
       if (index !== undefined) {
         spectra.push(this.spectra[index]);
       }
@@ -156,7 +144,6 @@ export class SpectraProcessor {
   }
 
   getChart() {
-    checkOriginal(this, 'Can not getChart but you may try getNormalizedChart.');
     return getChart(this.spectra);
   }
 
@@ -167,15 +154,6 @@ export class SpectraProcessor {
   getScaledChart(options) {
     return getScaledChart(this, options);
   }
-}
 
-export function checkOriginal(spectraProcessor, message) {
-  if (
-    !spectraProcessor.options.keepOriginalData &&
-    spectraProcessor.spectra.length > 0
-  ) {
-    throw new Error(
-      `${message} Missing original data. Use the option keepOriginalData=true.`
-    );
-  }
+  checkSize() {}
 }
