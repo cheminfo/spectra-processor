@@ -1,7 +1,7 @@
 import { Spectrum } from '../Spectrum';
 
 describe('Spectrum', () => {
-  it('without keeping the original data', () => {
+  it('removing the original data', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
     let result = new Spectrum(x, y, 'test', {
@@ -9,6 +9,7 @@ describe('Spectrum', () => {
         numberOfPoints: 6
       }
     });
+    result.removeOriginal();
     expect(result.x).toBeUndefined();
     expect(result.y).toBeUndefined();
     expect(result.normalized).toStrictEqual({
@@ -25,7 +26,6 @@ describe('Spectrum', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
     let spectrum = new Spectrum(x, y, 'test', {
-      keepOriginalData: true,
       normalization: {
         numberOfPoints: 6
       }

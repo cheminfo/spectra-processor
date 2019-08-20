@@ -32,6 +32,8 @@ describe('SpectraProcessor', () => {
     expect(normalized.matrix[0]).toHaveLength(16);
     expect(normalized).toMatchSnapshot();
 
+    spectraProcessor.removeOriginals();
+
     expect(() => {
       spectraProcessor.setNormalization({
         from: 1000,
@@ -39,7 +41,9 @@ describe('SpectraProcessor', () => {
         numberOfPoints: 16,
         applySNV: true
       });
-    }).toThrow('Missing original data.');
+    }).toThrow(
+      'getNormalized: Can not get normalized data, missing original data'
+    );
   });
 
   it('test getScaleddData undefined method', () => {
@@ -86,7 +90,7 @@ describe('SpectraProcessor', () => {
     ]);
   });
 
-  it('test getScaledChart', () => {
+  it('test getScaledChart minMax and relative', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let spectra = spectraProcessor.getScaledChart({

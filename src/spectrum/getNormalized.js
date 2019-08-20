@@ -1,10 +1,11 @@
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
-import equal from 'deep-equal';
 
 export function getNormalized(spectrum, options = {}) {
   // did the options change ?
-  if (equal(spectrum.normalizationOptions, options)) {
+  if (
+    JSON.stringify(spectrum.normalizationOptions) === JSON.stringify(options)
+  ) {
     return spectrum.normalized;
   }
   spectrum.normalizationOptions = JSON.parse(JSON.stringify(options));

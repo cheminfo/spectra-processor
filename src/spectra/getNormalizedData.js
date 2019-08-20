@@ -1,4 +1,4 @@
-export function getNormalizedData(spectra, options = {}) {
+export function getNormalizedData(spectra) {
   if (!spectra || !spectra[0]) return {};
   let matrix = [];
   let meta = [];

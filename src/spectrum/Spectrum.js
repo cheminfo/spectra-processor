@@ -33,8 +33,9 @@ export class Spectrum {
   }
 
   updateMemory() {
-    this.memory =
-      ((this.x && this.x.length) || 0) * 16 + this.normalized.x.length * 16;
+    let original = ((this.x && this.x.length) || 0) * 16;
+    let normalized = this.normalized.x.length * 16;
+    this.memory = { original, normalized, total: original + normalized };
   }
 
   removeOriginal() {
