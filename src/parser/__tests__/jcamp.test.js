@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import jcampParser from '../jcamp';
 
-test('fromJcamp absorbance', () => {
+test('jcampParser absorbance', () => {
   const path = join(__dirname, '../../../testFiles/absorbance.jdx');
   const jcamp = readFileSync(path, 'utf8');
   const spectrum = jcampParser(jcamp, 'test');
@@ -21,7 +21,7 @@ test('fromJcamp absorbance', () => {
   });
 });
 
-test('fromJcamp transmittance', () => {
+test('jcampParser transmittance', () => {
   const path = join(__dirname, '../../../testFiles/transmittance1.jdx');
   const jcamp = readFileSync(path, 'utf8');
   const spectrum = jcampParser(jcamp);

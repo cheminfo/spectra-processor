@@ -2,9 +2,9 @@ import { convert } from 'jcampconverter';
 
 import { getJcampKind } from '../Kinds';
 /**
- * Creates a new Chromatogram element based in a JCAMP string
+ * Create a spectrum from a jcamp
  * @param {string} jcamp - String containing the JCAMP data
- * @return {Spectrum} - New class element with the given data
+ * @return {Spectrum} - new instance of Spectrum with the provided data
  */
 export default function jcamp(jcamp) {
   const parsed = convert(jcamp, { xy: true, keepRecordsRegExp: /TITLE/ });
