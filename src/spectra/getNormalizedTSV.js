@@ -12,7 +12,10 @@ export function getNormalizedTSV(spectra) {
   let allKeysObject = {};
   for (let metum of meta) {
     for (let key of Object.keys(metum)) {
-      allKeysObject[key] = true;
+      let type = typeof metum[key];
+      if (type === 'number' || type === 'string' || type === 'boolean') {
+        allKeysObject[key] = true;
+      }
     }
   }
   let allKeys = Object.keys(allKeysObject);
