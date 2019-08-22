@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.4.0
+ * @version v0.5.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -143,6 +143,7 @@ var jcampconverter = __webpack_require__(4);
 var SimpleLinearRegression = _interopDefault(__webpack_require__(7));
 /**
  *
+ * @private
  * @param {Spectrum} spectrum
  * @param {object} [filter={}]
  * @param {array} [filter.from]
@@ -166,6 +167,13 @@ function getData(spectrum, filter = {}) {
 
   return data;
 }
+/**
+ *
+ * @private
+ * @param {*} spectrum
+ * @param {*} options
+ */
+
 
 function getNormalized(spectrum, options = {}) {
   // did the options change ?
@@ -233,6 +241,12 @@ function getNormalized(spectrum, options = {}) {
   });
   return result;
 }
+/**
+ *  @private
+ * @param {*} spectrum
+ * @param {*} ranges
+ */
+
 
 function updateRangesInfo(spectrum, ranges = []) {
   spectrum.ranges = {};
@@ -531,6 +545,12 @@ function getScaledChart(spectraProcessor, options = {}) {
 
   return chart;
 }
+/**
+ * @private
+ * @param {*} spectra
+ * @param {*} options
+ */
+
 
 function getNormalizedData(spectra) {
   if (!spectra || !spectra[0]) return {};
@@ -646,7 +666,7 @@ function range(spectra, targetSpectrum, range = {}) {
   return matrix;
 }
 /**
- *
+ * @private
  * @param {Array<Spectrum>} spectra
  * @param {object} [options={}] scale spectra based on various parameters
  * @param {object} [options.range] from - to
@@ -654,6 +674,7 @@ function range(spectra, targetSpectrum, range = {}) {
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
  * @param {boolean} [options.relative=false]
+ * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
  */
 
 
@@ -747,6 +768,20 @@ class SpectraProcessor {
   getNormalizationAnnotations() {
     return getNormalizationAnnotations(this.normalization);
   }
+  /**
+   * Recalculate the normalized data using the stored original data if available
+   * This will throw an error in the original data is not present
+   * @param {number} [normalization.from]
+   * @param {number} [normalization.to]
+   * @param {number} [normalization.numberOfPoints]
+   * @param {array<object>} [normalization.filters]
+   * @param {string} [normalization.filters.X.name]
+   * @param {object} [normalization.filters.X.options]
+   * @param {array<object>} [normalization.exclusions]
+   * @param {string} [normalization.exclusions.X.from]
+   * @param {object} [normalization.exclusions.X.to]
+   */
+
 
   setNormalization(normalization = {}) {
     this.normalization = normalization;
@@ -755,18 +790,24 @@ class SpectraProcessor {
       spectrum.updateNormalization(this.normalization);
     }
   }
+  /**
+   * Returns an object contains 4 parameters with the normalized data
+   * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
+   */
+
 
   getNormalizedData() {
     return getNormalizedData(this.spectra);
   }
   /**
-   *
-   * @param {*} [options={}]
-   * @param {object} [scale={}] scale spectra based on various parameters
-   * @param {string} [scale.range=]
-   * @param {string} [scale.targetID=spectra[0].id]
-   * @param {string} [scale.relative=false]
-   * @param {string} [scale.method='max'] min, max, range, minMax
+    * Returns an object contains 4 parameters with the scaled data
+   * @param {object} [options={}] scale spectra based on various parameters
+   * @param {object} [options.range] from - to
+   * @param {Array} [options.ids] ids of selected spectra, by default all
+   * @param {string} [options.targetID=spectra[0].id]
+   * @param {string} [options.method='max'] min, max, range, minMax
+   * @param {boolean} [options.relative=false]
+   * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
    */
 
 
@@ -799,8 +840,8 @@ class SpectraProcessor {
     }
   }
   /**
-   *
-   * @param {object} parsed
+   * Add a spectrum based on the data
+   * @param {object} data {x, y, id, {meta, normalization}}
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
    * @return {Spectrum}
@@ -835,12 +876,22 @@ class SpectraProcessor {
       spectrum.removeOriginal();
     }
   }
+  /**
+   * Remove the spectrum from the SpectraProcessor for the specified id
+   * @param {string} id
+   */
+
 
   removeSpectrum(id) {
     let index = this.getSpectrumIndex(id);
     if (index === undefined) return undefined;
     return this.spectra.splice(index, 1);
   }
+  /**
+   * Remove all the spectra not present in the list
+   * @param {Array} [ids] Array of ids of the spectra to keep
+   */
+
 
   removeSpectraNotIn(ids) {
     let currentIDs = this.spectra.map(spectrum => spectrum.id);
@@ -851,10 +902,21 @@ class SpectraProcessor {
       }
     }
   }
+  /**
+   * Checks if the ID of a spectrum exists in the SpectraProcessor
+   * @param {string} id
+   */
+
 
   contains(id) {
     return !isNaN(this.getSpectrumIndex(id));
   }
+  /**
+   * Returns the index of the spectrum in the spectra array
+   * @param {string} id
+   * @returns {number}
+   */
+
 
   getSpectrumIndex(id) {
     if (!id) return undefined;
@@ -866,6 +928,12 @@ class SpectraProcessor {
 
     return undefined;
   }
+  /**
+   * Returns a spectrum from its ID
+   * @param {Array} ids
+   * @returns {Array<Spectrum}
+   */
+
 
   getSpectra(ids) {
     if (!ids || !Array.isArray(ids) || ids.length === 0) return this.spectra;
@@ -881,20 +949,49 @@ class SpectraProcessor {
 
     return spectra;
   }
+  /**
+   * Returns the index of the spectrum in the spectra array
+   * @param {string} id
+   * @returns {number}
+   */
+
 
   getSpectrum(id) {
     let index = this.getSpectrumIndex(id);
     if (index === undefined) return undefined;
     return this.spectra[index];
   }
+  /**
+   * Returns a JSGraph chart object for all the spectra
+   * @returns {object}
+   */
+
 
   getChart() {
     return getChart(this.spectra);
   }
+  /**
+   * Returns a JSGraph chart object for all the normalized spectra
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @returns {object}
+   */
+
 
   getNormalizedChart(options) {
     return getNormalizedChart(this.spectra, options);
   }
+  /**
+   * Returns a JSGraph chart object for all the scaled normalized spectra
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {object} [options.range] from - to
+   * @param {string} [options.targetID=spectra[0].id]
+   * @param {string} [options.method='max'] min, max, range, minMax
+   * @param {boolean} [options.relative=false]
+   * @returns {object}
+   */
+
 
   getScaledChart(options) {
     return getScaledChart(this, options);
