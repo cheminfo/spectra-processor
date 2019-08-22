@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
@@ -31,6 +31,11 @@ describe('SpectraProcessor', () => {
     expect(normalized.ids).toHaveLength(45);
     expect(normalized.matrix[0]).toHaveLength(16);
     expect(normalized).toMatchSnapshot();
+
+    let normalizedTSV = spectraProcessor.getNormalizedTSV();
+    expect(normalizedTSV).toHaveLength(15421);
+    expect(normalizedTSV).toMatchSnapshot();
+    writeFileSync(`${__dirname}/test.txt`, normalizedTSV);
 
     spectraProcessor.removeOriginals();
 

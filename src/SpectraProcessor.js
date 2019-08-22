@@ -5,6 +5,7 @@ import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
 import { getNormalizedData } from './spectra/getNormalizedData';
+import { getNormalizedTSV } from './spectra/getNormalizedTSV';
 import { getScaledData } from './spectra/getScaledData';
 
 export class SpectraProcessor {
@@ -64,6 +65,14 @@ export class SpectraProcessor {
   }
 
   /**
+   * Returns a tab separated value containing the normalized data
+   * @returns {string}
+   */
+  getNormalizedTSV() {
+    return getNormalizedTSV(this.spectra);
+  }
+
+  /**
 
    * Returns an object contains 4 parameters with the scaled data
    * @param {object} [options={}] scale spectra based on various parameters
@@ -80,6 +89,7 @@ export class SpectraProcessor {
 
   /**
    * Add jcamp
+   * By default TITLE from the jcamp will be in the meta information
    * @param {string} jcamp
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
@@ -93,7 +103,8 @@ export class SpectraProcessor {
       return;
     }
     let parsed = parseJcamp(jcamp);
-    this.addFromData(parsed.data, options);
+    let meta = { ...parsed.meta, ...(options.meta || {}) };
+    this.addFromData(parsed.data, { meta, id: options.id });
   }
 
   updateRangesInfo(options) {
