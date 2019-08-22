@@ -2,6 +2,7 @@ import filterX from 'ml-array-xy-filter-x';
 
 /**
  *
+ * @private
  * @param {Spectrum} spectrum
  * @param {object} [filter={}]
  * @param {array} [filter.from]

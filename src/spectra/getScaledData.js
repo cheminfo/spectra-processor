@@ -7,7 +7,7 @@ import { minMax } from './scaled/minMax';
 import { range as rangeFct } from './scaled/range';
 
 /**
- *
+ * @private
  * @param {Array<Spectrum>} spectra
  * @param {object} [options={}] scale spectra based on various parameters
  * @param {object} [options.range] from - to
@@ -15,6 +15,7 @@ import { range as rangeFct } from './scaled/range';
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
  * @param {boolean} [options.relative=false]
+ * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
  */
 
 export function getScaledData(spectraProcessor, options = {}) {

@@ -1,3 +1,9 @@
+/**
+ * @private
+ * @param {*} spectra
+ * @param {*} options
+ */
+
 export function getNormalizedData(spectra) {
   if (!spectra || !spectra[0]) return {};
   let matrix = [];

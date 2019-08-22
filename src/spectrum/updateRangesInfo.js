@@ -1,5 +1,10 @@
 import { XY, X } from 'ml-spectra-processing';
 
+/**
+ *  @private
+ * @param {*} spectrum
+ * @param {*} ranges
+ */
 export function updateRangesInfo(spectrum, ranges = []) {
   spectrum.ranges = {};
   for (let range of ranges) {

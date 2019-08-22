@@ -9,11 +9,21 @@
 
 This package allows to store spectra in an object and make many processing on them
 
-It should be able to deal with large amount of large files and will automatically reduce the data
-size in order to keep reasonable size. The idea is that all the sun of data should not contain
-over 50 millions points with corresponds to 400Mb of data.
+It should be able to deal with large amount of large files and will automatically reduce the data size in order to keep reasonable size. This reduction of data is based on normalization parameters that includes:
+* from / to
+* normalization filters
+* final number of points
+* exclusion zones
 
-If you plan to use larger amount you need to add filters during loading of the data
+The package will try by default to have less than 64 Mb of memory used and if the presence of original data yield to a higher amount it will remove the orignal data.
+This will have as consequence that you will not be able to change the normalization parameters. 
+
+Practically this means that if you have 1024 spectra of 65536 points and you normalize the data to 4096 points it can still be kept in memory.
+
+* Memory for spectra:  1024 * 65536 * 8 (double): over 64 Mb, original spectra will be removed
+* Memory for normalized: 1024 * 4k * 8: 32 Mb: can be processed further
+
+
 
 ## Installation
 
@@ -24,29 +34,9 @@ If you plan to use larger amount you need to add filters during loading of the d
 ```js
 import SpectraProcessor from 'spectra-processor';
 
-let spectrum = SpectraProcessor.fromJcamp(jcamp);
-
-// let spectrum = SpectraProcessor.fromText(jcamp);
-
-spectrum.setPeaks([]);
-
-// if optimize is true, peak picking will find the best peak close to wavelength
-spectrum.peakPicking(wavelength, { range: 0, optimize: true });
-console.log(spectrum.peaks());
-
-spectrum.autoPeakPicking({
-  fromWavelength: 1500,
-  toWavelength: 4000,
-  noiseLvel: 0.01
-});
-
-// you may selecdt how you would like to retrieve the data
-// there are 3 modes: ABSORBANCE, TRANSMITTANCE or PERCENT_TRANSMITTANCE
-// those methods are very practical in coordination with www.jsgraph.org
-spectrum.setMode(SpectraProcessor.ABSORBANCE);
-let annotations = spectrum.getAnnotations();
-let data = spectrum.getData();
+let spectrum = SpectraProcessor.addFromJcamp(jcamp);
 ```
+
 
 ## [API Documentation](https://cheminfo.github.io/spectra-processor/)
 

@@ -1,6 +1,12 @@
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
 
+/**
+ *
+ * @private
+ * @param {*} spectrum
+ * @param {*} options
+ */
 export function getNormalized(spectrum, options = {}) {
   // did the options change ?
   if (
