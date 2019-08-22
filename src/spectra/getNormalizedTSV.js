@@ -1,4 +1,4 @@
-const { getNormalizedData } = require('./getNormalizedData');
+import { getNormalizedData } from './getNormalizedData.js';
 
 /**
  * @private
