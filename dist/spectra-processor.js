@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.5.0
+ * @version v0.5.1
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -121,6 +121,10 @@ module.exports = isAnyArray;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -386,10 +390,12 @@ const IR_ABSORBANCE = {
 
 function jcamp(jcamp) {
   const parsed = jcampconverter.convert(jcamp, {
-    xy: true
+    xy: true,
+    keepRecordsRegExp: /TITLE/
   });
   const kind = getJcampKind(parsed);
-  const data = parsed.spectra[0].data[0]; // we convert the data
+  const data = parsed.spectra[0].data[0];
+  const meta = parsed.info; // we convert the data
 
   if (kind && kind.importation && kind.importation.converter) {
     data.y = data.y.map(kind.importation.converter);
@@ -397,7 +403,8 @@ function jcamp(jcamp) {
 
   return {
     data,
-    kind
+    kind,
+    meta
   };
 }
 
@@ -472,23 +479,21 @@ function addChartDataStyle(data, spectrum) {
 }
 /**
  * Retrieve a chart with selected original data
- * @param {*} options
+ * @param {object} [options={}]
+ * @param {Array} [options.ids] List of spectra ids, by default all
+ * @param {Array} [options.maxDataPoints=]
  */
 
 
 function getChart(spectra, options = {}) {
-  const ids = options.ids,
-        _options$filter = options.filter,
-        filter = _options$filter === void 0 ? {} : _options$filter;
+  const ids = options.ids;
   let chart = {
     data: []
   };
 
   for (let spectrum of spectra) {
     if (!ids || ids.includes(spectrum.id)) {
-      let data = spectrum.getData({
-        filter
-      });
+      let data = spectrum.getData();
       addChartDataStyle(data, spectrum);
       chart.data.push(data);
     }
@@ -571,6 +576,48 @@ function getNormalizedData(spectra) {
     meta,
     x
   };
+}
+/**
+ * @private
+ * @param {*} spectra
+ * @param {*} options
+ */
+
+
+function getNormalizedTSV(spectra) {
+  let _getNormalizedData = getNormalizedData(spectra),
+      matrix = _getNormalizedData.matrix,
+      meta = _getNormalizedData.meta,
+      ids = _getNormalizedData.ids,
+      x = _getNormalizedData.x;
+
+  let allKeysObject = {};
+
+  for (let metum of meta) {
+    for (let key of Object.keys(metum)) {
+      allKeysObject[key] = true;
+    }
+  }
+
+  let allKeys = Object.keys(allKeysObject);
+  let lines = [];
+  let line = [];
+  line.push('id', ...allKeys, ...x);
+  lines.push(line.join('\t'));
+
+  for (let i = 0; i < ids.length; i++) {
+    line = [];
+    line.push(ids[i]);
+
+    for (let key of allKeys) {
+      line.push(meta[i][key]);
+    }
+
+    line.push(...matrix[i]);
+    lines.push(line.join('\t'));
+  }
+
+  return lines.join('\n');
 }
 
 function getFromToIndex(xs, range) {
@@ -800,6 +847,15 @@ class SpectraProcessor {
     return getNormalizedData(this.spectra);
   }
   /**
+   * Returns a tab separated value containing the normalized data
+   * @returns {string}
+   */
+
+
+  getNormalizedTSV() {
+    return getNormalizedTSV(this.spectra);
+  }
+  /**
     * Returns an object contains 4 parameters with the scaled data
    * @param {object} [options={}] scale spectra based on various parameters
    * @param {object} [options.range] from - to
@@ -816,6 +872,7 @@ class SpectraProcessor {
   }
   /**
    * Add jcamp
+   * By default TITLE from the jcamp will be in the meta information
    * @param {string} jcamp
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
@@ -831,7 +888,13 @@ class SpectraProcessor {
     }
 
     let parsed = jcamp(jcamp$1);
-    this.addFromData(parsed.data, options);
+
+    let meta = _objectSpread({}, parsed.meta, options.meta || {});
+
+    this.addFromData(parsed.data, {
+      meta,
+      id: options.id
+    });
   }
 
   updateRangesInfo(options) {
