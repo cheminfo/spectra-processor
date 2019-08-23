@@ -60,17 +60,25 @@ export class SpectraProcessor {
   /**
    * Returns an object contains 4 parameters with the normalized data
    * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] List of spectra ids to export, by default all
    */
-  getNormalizedData() {
-    return getNormalizedData(this.spectra);
+  getNormalizedData(options = {}) {
+    const { ids } = options;
+    let spectra = this.getSpectra(ids);
+    return getNormalizedData(spectra);
   }
 
   /**
    * Returns a tab separated value containing the normalized data
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] List of spectra ids to export, by default all
    * @returns {string}
    */
-  getNormalizedTSV() {
-    return getNormalizedTSV(this.spectra);
+  getNormalizedTSV(options = {}) {
+    const { ids } = options;
+    let spectra = this.getSpectra(ids);
+    return getNormalizedTSV(spectra);
   }
 
   /**
@@ -115,7 +123,10 @@ export class SpectraProcessor {
 
   addFromTSV(text) {
     let parsed = tsv(text);
-    console.log(parsed);
+    if (!parsed) {
+      throw new Error('temp');
+    }
+    //    console.log(parsed);
   }
 
   updateRangesInfo(options) {

@@ -30,6 +30,12 @@ describe('SpectraProcessor', () => {
     let normalized = spectraProcessor.getNormalizedData();
     expect(normalized.ids).toHaveLength(45);
     expect(normalized.matrix[0]).toHaveLength(16);
+    let normalizedSelection = spectraProcessor.getNormalizedData({
+      ids: ['0140_1a.jdx', '0140_1b.jdx', '0140_1c.jdx', 'asdf']
+    });
+    expect(normalizedSelection.ids).toHaveLength(3);
+    expect(normalizedSelection.matrix[0]).toHaveLength(16);
+
     expect(normalized).toMatchSnapshot();
 
     let normalizedTSV = spectraProcessor.getNormalizedTSV();
