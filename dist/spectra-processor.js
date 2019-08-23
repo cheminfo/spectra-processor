@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.5.1
+ * @version v0.6.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -383,9 +383,9 @@ const IR_ABSORBANCE = {
   }
 };
 /**
- * Creates a new Chromatogram element based in a JCAMP string
+ * Create a spectrum from a jcamp
  * @param {string} jcamp - String containing the JCAMP data
- * @return {Spectrum} - New class element with the given data
+ * @return {Spectrum} - new instance of Spectrum with the provided data
  */
 
 function jcamp(jcamp) {
@@ -595,7 +595,11 @@ function getNormalizedTSV(spectra) {
 
   for (let metum of meta) {
     for (let key of Object.keys(metum)) {
-      allKeysObject[key] = true;
+      let type = typeof metum[key];
+
+      if (type === 'number' || type === 'string' || type === 'boolean') {
+        allKeysObject[key] = true;
+      }
     }
   }
 
