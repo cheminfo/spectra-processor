@@ -1,5 +1,6 @@
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
+import tsv from './parser/tsv';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
@@ -105,6 +106,16 @@ export class SpectraProcessor {
     let parsed = parseJcamp(jcamp);
     let meta = { ...parsed.meta, ...(options.meta || {}) };
     this.addFromData(parsed.data, { meta, id: options.id });
+  }
+
+  /**
+   * Add normalized spectra from TSV
+   * @param {string} text
+   */
+
+  addFromTSV(text) {
+    let parsed = tsv(text);
+    console.log(parsed);
   }
 
   updateRangesInfo(options) {
