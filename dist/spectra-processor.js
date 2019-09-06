@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.6.0
+ * @version v0.7.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -405,6 +405,57 @@ function jcamp(jcamp) {
     data,
     kind,
     meta
+  };
+}
+/**
+ * Creates a g
+ * @param {string} text - String containing the JCAMP data
+ * @return {object} - {matrix, data, x, ids}
+ */
+
+
+function tsv(text) {
+  let lines = text.split(/[\r\n]+/).filter(value => value);
+  let matrix = [];
+  let ids = [];
+  let meta = [];
+  let x = [];
+  let headers = lines[0].split('\t');
+  let labels = [];
+
+  for (let i = 0; i < headers.length; i++) {
+    let header = headers[i];
+
+    if (isNaN(header)) {
+      labels[i] = header;
+    } else {
+      x = headers.slice(i).map(value => Number(value));
+      break;
+    }
+  }
+
+  for (let i = 1; i < lines.length; i++) {
+    let line = lines[i];
+    let parts = line.split('\t');
+    ids.push(parts[0]);
+    let oneMeta = {};
+    meta.push(oneMeta);
+
+    for (let j = 1; j < parts.length; j++) {
+      if (j < labels.length) {
+        oneMeta[labels[j]] = parts[j];
+      } else {
+        matrix.push(parts.slice(labels.length).map(value => Number(value)));
+        break;
+      }
+    }
+  }
+
+  return {
+    x,
+    meta,
+    matrix,
+    ids
   };
 }
 
@@ -844,20 +895,28 @@ class SpectraProcessor {
   /**
    * Returns an object contains 4 parameters with the normalized data
    * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] List of spectra ids to export, by default all
    */
 
 
-  getNormalizedData() {
-    return getNormalizedData(this.spectra);
+  getNormalizedData(options = {}) {
+    const ids = options.ids;
+    let spectra = this.getSpectra(ids);
+    return getNormalizedData(spectra);
   }
   /**
    * Returns a tab separated value containing the normalized data
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] List of spectra ids to export, by default all
    * @returns {string}
    */
 
 
-  getNormalizedTSV() {
-    return getNormalizedTSV(this.spectra);
+  getNormalizedTSV(options = {}) {
+    const ids = options.ids;
+    let spectra = this.getSpectra(ids);
+    return getNormalizedTSV(spectra);
   }
   /**
     * Returns an object contains 4 parameters with the scaled data
@@ -899,6 +958,20 @@ class SpectraProcessor {
       meta,
       id: options.id
     });
+  }
+  /**
+   * Add normalized spectra from TSV
+   * @param {string} text
+   */
+
+
+  addFromTSV(text) {
+    let parsed = tsv(text);
+
+    if (!parsed) {
+      throw new Error('temp');
+    } //    console.log(parsed);
+
   }
 
   updateRangesInfo(options) {
