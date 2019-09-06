@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.7.0
+ * @version v0.8.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -282,12 +282,16 @@ class Spectrum {
    * @param {array} y
    * @param {string} id
    * @param {object} [options={}]
+   * @param {object} [options.meta={}]
+   * @param {object} [options.normalization]
+   * @param {object} [options.normalized]
    */
   constructor(x, y, id, options = {}) {
     const _options$meta = options.meta,
           meta = _options$meta === void 0 ? {} : _options$meta,
           _options$normalizatio = options.normalization,
-          normalization = _options$normalizatio === void 0 ? {} : _options$normalizatio;
+          normalization = _options$normalizatio === void 0 ? {} : _options$normalizatio,
+          normalized = options.normalized;
 
     if (x && x.length > 1 && x[0] > x[1]) {
       this.x = x.reverse();
@@ -299,7 +303,7 @@ class Spectrum {
 
     this.id = id;
     this.meta = meta;
-    this.normalized = getNormalized(this, normalization);
+    this.normalized = normalized || getNormalized(this, normalization);
     this.updateMemory();
   }
 
@@ -414,13 +418,15 @@ function jcamp(jcamp) {
  */
 
 
-function tsv(text) {
-  let lines = text.split(/[\r\n]+/).filter(value => value);
+function text(text, options = {}) {
+  const lines = text.split(/[\r\n]+/).filter(value => value);
+  const _options$separator = options.separator,
+        separator = _options$separator === void 0 ? '\t' : _options$separator;
   let matrix = [];
   let ids = [];
   let meta = [];
   let x = [];
-  let headers = lines[0].split('\t');
+  let headers = lines[0].split(separator);
   let labels = [];
 
   for (let i = 0; i < headers.length; i++) {
@@ -959,20 +965,6 @@ class SpectraProcessor {
       id: options.id
     });
   }
-  /**
-   * Add normalized spectra from TSV
-   * @param {string} text
-   */
-
-
-  addFromTSV(text) {
-    let parsed = tsv(text);
-
-    if (!parsed) {
-      throw new Error('temp');
-    } //    console.log(parsed);
-
-  }
 
   updateRangesInfo(options) {
     for (let spectrum of this.spectra) {
@@ -981,9 +973,12 @@ class SpectraProcessor {
   }
   /**
    * Add a spectrum based on the data
-   * @param {object} data {x, y, id, {meta, normalization}}
+   * @param {object} data {x, y}}
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
+   * @param {object} [options.id]
+   * @param {object} [options.normalization={}]
+   * @param {object} [options.normalized]
    * @return {Spectrum}
    */
 
@@ -995,6 +990,7 @@ class SpectraProcessor {
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {
       meta: options.meta,
+      normalized: options.normalized,
       normalization: this.normalization
     });
     this.spectra[index] = spectrum;
@@ -1152,6 +1148,40 @@ class SpectraProcessor {
     memoryInfo.keepOriginal = this.keepOriginal;
     memoryInfo.maxMemory = this.maxMemory;
     return memoryInfo;
+  }
+  /**
+   * Create SpectraProcessor from normalized TSV
+   * @param {string} text
+   * @param {object} [options={}]
+   * @param {object} [options.separator='\t']
+   */
+
+
+  static fromNormalizedText(text$1, options = {}) {
+    let parsed = text(text$1, options);
+
+    if (!parsed) {
+      throw new Error('Can not parse TSV file');
+    }
+
+    let spectraProcessor = new SpectraProcessor();
+    spectraProcessor.keepOriginal = false;
+
+    for (let i = 0; i < parsed.ids.length; i++) {
+      spectraProcessor.addFromData({
+        x: [],
+        y: []
+      }, {
+        normalized: {
+          x: parsed.x,
+          y: parsed.matrix[i]
+        },
+        id: parsed.ids[i],
+        meta: parsed.meta[i]
+      });
+    }
+
+    return spectraProcessor;
   }
 
 }
