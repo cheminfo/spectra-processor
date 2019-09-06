@@ -1,6 +1,6 @@
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
-import tsv from './parser/tsv';
+import parseText from './parser/text';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
@@ -116,19 +116,6 @@ export class SpectraProcessor {
     this.addFromData(parsed.data, { meta, id: options.id });
   }
 
-  /**
-   * Add normalized spectra from TSV
-   * @param {string} text
-   */
-
-  addFromTSV(text) {
-    let parsed = tsv(text);
-    if (!parsed) {
-      throw new Error('temp');
-    }
-    //    console.log(parsed);
-  }
-
   updateRangesInfo(options) {
     for (let spectrum of this.spectra) {
       spectrum.updateRangesInfo(options);
@@ -137,9 +124,12 @@ export class SpectraProcessor {
 
   /**
    * Add a spectrum based on the data
-   * @param {object} data {x, y, id, {meta, normalization}}
+   * @param {object} data {x, y}}
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
+   * @param {object} [options.id]
+   * @param {object} [options.normalization={}]
+   * @param {object} [options.normalized]
    * @return {Spectrum}
    */
 
@@ -150,6 +140,7 @@ export class SpectraProcessor {
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {
       meta: options.meta,
+      normalized: options.normalized,
       normalization: this.normalization
     });
     this.spectra[index] = spectrum;
@@ -286,5 +277,36 @@ export class SpectraProcessor {
     memoryInfo.keepOriginal = this.keepOriginal;
     memoryInfo.maxMemory = this.maxMemory;
     return memoryInfo;
+  }
+
+  /**
+   * Create SpectraProcessor from normalized TSV
+   * @param {string} text
+   * @param {object} [options={}]
+   * @param {object} [options.separator='\t']
+   */
+  static fromNormalizedText(text, options = {}) {
+    let parsed = parseText(text, options);
+    if (!parsed) {
+      throw new Error('Can not parse TSV file');
+    }
+    let spectraProcessor = new SpectraProcessor();
+    spectraProcessor.keepOriginal = false;
+
+    for (let i = 0; i < parsed.ids.length; i++) {
+      spectraProcessor.addFromData(
+        { x: [], y: [] },
+        {
+          normalized: {
+            x: parsed.x,
+            y: parsed.matrix[i]
+          },
+          id: parsed.ids[i],
+          meta: parsed.meta[i]
+        }
+      );
+    }
+
+    return spectraProcessor;
   }
 }

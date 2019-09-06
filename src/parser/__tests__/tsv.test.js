@@ -1,10 +1,10 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import tsvParser from '../tsv';
+import textParser from '../text';
 
-test('tsvParser', () => {
+test('textParser', () => {
   const text = readFileSync(join(__dirname, 'data.tsv'), 'utf8');
-  tsvParser(text);
+  textParser(text);
   expect(true).toBe(true);
 });

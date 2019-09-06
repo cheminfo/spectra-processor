@@ -16,9 +16,12 @@ export class Spectrum {
    * @param {array} y
    * @param {string} id
    * @param {object} [options={}]
+   * @param {object} [options.meta={}]
+   * @param {object} [options.normalization]
+   * @param {object} [options.normalized]
    */
   constructor(x, y, id, options = {}) {
-    const { meta = {}, normalization = {} } = options;
+    const { meta = {}, normalization = {}, normalized } = options;
     if (x && x.length > 1 && x[0] > x[1]) {
       this.x = x.reverse();
       this.y = y.reverse();
@@ -28,7 +31,7 @@ export class Spectrum {
     }
     this.id = id;
     this.meta = meta;
-    this.normalized = getNormalized(this, normalization);
+    this.normalized = normalized || getNormalized(this, normalization);
     this.updateMemory();
   }
 

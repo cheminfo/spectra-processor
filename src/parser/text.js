@@ -3,15 +3,15 @@
  * @param {string} text - String containing the JCAMP data
  * @return {object} - {matrix, data, x, ids}
  */
-export default function tsv(text) {
-  let lines = text.split(/[\r\n]+/).filter((value) => value);
-
+export default function text(text, options = {}) {
+  const lines = text.split(/[\r\n]+/).filter((value) => value);
+  const { separator = '\t' } = options;
   let matrix = [];
   let ids = [];
   let meta = [];
   let x = [];
 
-  let headers = lines[0].split('\t');
+  let headers = lines[0].split(separator);
   let labels = [];
 
   for (let i = 0; i < headers.length; i++) {
