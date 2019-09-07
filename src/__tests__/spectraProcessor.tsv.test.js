@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, write } from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
