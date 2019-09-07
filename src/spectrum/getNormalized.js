@@ -8,13 +8,6 @@ import Stat from 'ml-stat/array';
  * @param {*} options
  */
 export function getNormalized(spectrum, options = {}) {
-  // did the options change ?
-  if (
-    JSON.stringify(spectrum.normalizationOptions) === JSON.stringify(options)
-  ) {
-    return spectrum.normalized;
-  }
-  spectrum.normalizationOptions = JSON.parse(JSON.stringify(options));
   if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
     throw new Error(
       'getNormalized: Can not get normalized data, missing original data.'

@@ -51,10 +51,17 @@ export class SpectraProcessor {
    * @param {object} [normalization.exclusions.X.to]
    */
   setNormalization(normalization = {}) {
+    if (JSON.stringify(this.normalization) === JSON.stringify(normalization)) {
+      return;
+    }
     this.normalization = normalization;
     for (let spectrum of this.spectra) {
       spectrum.updateNormalization(this.normalization);
     }
+  }
+
+  getNormalization() {
+    return this.normalization;
   }
 
   /**
@@ -291,6 +298,12 @@ export class SpectraProcessor {
       throw new Error('Can not parse TSV file');
     }
     let spectraProcessor = new SpectraProcessor();
+
+    spectraProcessor.setNormalization({
+      from: parsed.x[0],
+      to: parsed.x[parsed.x.length - 1],
+      numberOfPoints: parsed.x.length
+    });
     spectraProcessor.keepOriginal = false;
 
     for (let i = 0; i < parsed.ids.length; i++) {
