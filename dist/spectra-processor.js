@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.10.0
+ * @version v0.10.1
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -443,8 +443,8 @@ function jcamp(jcamp) {
 
 function text(text, options = {}) {
   const lines = text.split(/[\r\n]+/).filter(value => value);
-  const _options$separator = options.separator,
-        separator = _options$separator === void 0 ? '\t' : _options$separator;
+  const _options$fs = options.fs,
+        fs = _options$fs === void 0 ? '\t' : _options$fs;
   let matrix = [];
   let ids = [];
   let meta = [];
@@ -488,7 +488,7 @@ function text(text, options = {}) {
   };
 }
 
-function getNormalizationAnnotations(filter = {}) {
+function getNormalizationAnnotations(filter = {}, boundary) {
   let _filter$exclusions = filter.exclusions,
       exclusions = _filter$exclusions === void 0 ? [] : _filter$exclusions;
   let annotations = [];
@@ -666,7 +666,12 @@ function getNormalizedData(spectra) {
  */
 
 
-function getNormalizedTSV(spectra) {
+function getNormalizedText(spectra, options = {}) {
+  let _options$fs2 = options.fs,
+      fs = _options$fs2 === void 0 ? '\t' : _options$fs2,
+      _options$rs = options.rs,
+      rs = _options$rs === void 0 ? '\n' : _options$rs;
+
   let _getNormalizedData = getNormalizedData(spectra),
       matrix = _getNormalizedData.matrix,
       meta = _getNormalizedData.meta,
@@ -960,7 +965,7 @@ class SpectraProcessor {
    */
 
 
-  getNormalizedTSV(options = {}) {
+  getNormalizedText(options = {}) {
     const ids = options.ids;
     let spectra = this.getSpectra(ids);
     return getNormalizedText(spectra, options);
