@@ -45,11 +45,9 @@ export function getNormalized(spectrum, options = {}) {
         throw new Error(`Unknown process kind: ${process.kind}`);
     }
   }
-
   let result = equallySpaced(
     { x: spectrum.x, y },
     { from, to, numberOfPoints, exclusions }
   );
-
   return result;
 }

@@ -1,17 +1,19 @@
 /**
  * Creates a g
  * @param {string} text - String containing the JCAMP data
+ * @param {object} [options={}]
+ * @param {string} [options.fs='\t'] Field separator
  * @return {object} - {matrix, data, x, ids}
  */
 export default function text(text, options = {}) {
   const lines = text.split(/[\r\n]+/).filter((value) => value);
-  const { separator = '\t' } = options;
+  const { fs = '\t' } = options;
   let matrix = [];
   let ids = [];
   let meta = [];
   let x = [];
 
-  let headers = lines[0].split(separator);
+  let headers = lines[0].split(fs);
   let labels = [];
 
   for (let i = 0; i < headers.length; i++) {

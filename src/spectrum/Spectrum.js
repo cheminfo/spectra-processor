@@ -1,3 +1,5 @@
+import { minMax } from 'ml-stat/array';
+
 import { getData } from './getData';
 import { getNormalized } from './getNormalized';
 import { updateRangesInfo } from './updateRangesInfo';
@@ -22,6 +24,7 @@ export class Spectrum {
    */
   constructor(x, y, id, options = {}) {
     const { meta = {}, normalization = {}, normalized } = options;
+
     if (x && x.length > 1 && x[0] > x[1]) {
       this.x = x.reverse();
       this.y = y.reverse();
@@ -31,7 +34,14 @@ export class Spectrum {
     }
     this.id = id;
     this.meta = meta;
-    this.normalized = normalized || getNormalized(this, normalization);
+    this.normalizedBoundary = { x: { min: 0, max: 0 }, y: { min: 0, max: 0 } };
+    if (normalized) {
+      this.normalized = normalized;
+      this.updateNormalizedBoundary();
+    } else {
+      this.updateNormalization(normalization);
+    }
+
     this.updateMemory();
   }
 
@@ -63,8 +73,17 @@ Spectrum.prototype.updateNormalization = function (normalization) {
   this.normalized = getNormalized(this, normalization);
   this.ranges = {};
   this.updateMemory();
+  this.updateNormalizedBoundary();
 };
 
 Spectrum.prototype.updateRangesInfo = function (ranges) {
   updateRangesInfo(this, ranges);
+};
+
+Spectrum.prototype.updateNormalizedBoundary = function () {
+  this.normalizedBoundary.x = {
+    min: this.normalized.x[0],
+    max: this.normalized.x[this.normalized.x.length - 1]
+  };
+  this.normalizedBoundary.y = minMax(this.normalized.y);
 };

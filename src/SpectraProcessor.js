@@ -6,7 +6,7 @@ import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
 import { getNormalizedData } from './spectra/getNormalizedData';
-import { getNormalizedTSV } from './spectra/getNormalizedTSV';
+import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
 
 export class SpectraProcessor {
@@ -31,10 +31,19 @@ export class SpectraProcessor {
     this.maxMemory = options.maxMemory || 64 * 1024 * 1024;
     this.keepOriginal = true;
     this.spectra = [];
+    this.boundaries = {
+      minX: Number.MAX_VALUE,
+      maxX: Number.MIN_VALUE,
+      minY: Number.MAX_VALUE,
+      maxY: Number.MIN_VALUE
+    };
   }
 
   getNormalizationAnnotations() {
-    return getNormalizationAnnotations(this.normalization);
+    return getNormalizationAnnotations(
+      this.normalization,
+      this.getNormalizedBoundary()
+    );
   }
 
   /**
@@ -80,12 +89,14 @@ export class SpectraProcessor {
    * Returns a tab separated value containing the normalized data
    * @param {object} [options={}]
    * @param {Array} [options.ids] List of spectra ids to export, by default all
+   * @param {string} [options.fs='\t'] field separator
+   * @param {string} [options.rs='\n'] record (line) separator
    * @returns {string}
    */
-  getNormalizedTSV(options = {}) {
+  getNormalizedText(options = {}) {
     const { ids } = options;
     let spectra = this.getSpectra(ids);
-    return getNormalizedTSV(spectra);
+    return getNormalizedText(spectra, options);
   }
 
   /**
@@ -284,6 +295,28 @@ export class SpectraProcessor {
     memoryInfo.keepOriginal = this.keepOriginal;
     memoryInfo.maxMemory = this.maxMemory;
     return memoryInfo;
+  }
+
+  getNormalizedBoundary() {
+    let boundary = {
+      x: { min: Number.MAX_VALUE, max: Number.MIN_VALUE },
+      y: { min: Number.MAX_VALUE, max: Number.MIN_VALUE }
+    };
+    for (let spectrum of this.spectra) {
+      if (spectrum.normalizedBoundary.x.min < boundary.x.min) {
+        boundary.x.min = spectrum.normalizedBoundary.x.min;
+      }
+      if (spectrum.normalizedBoundary.x.max > boundary.x.max) {
+        boundary.x.max = spectrum.normalizedBoundary.x.max;
+      }
+      if (spectrum.normalizedBoundary.y.min < boundary.y.min) {
+        boundary.y.min = spectrum.normalizedBoundary.y.min;
+      }
+      if (spectrum.normalizedBoundary.y.max > boundary.y.max) {
+        boundary.y.max = spectrum.normalizedBoundary.y.max;
+      }
+    }
+    return boundary;
   }
 
   /**

@@ -14,7 +14,7 @@ describe('SpectraProcessor text', () => {
       'utf8'
     );
     const spectraProcessor = SpectraProcessor.fromNormalizedText(normalizedTSV);
-    const newNormalizedTSV = spectraProcessor.getNormalizedTSV();
+    const newNormalizedTSV = spectraProcessor.getNormalizedText();
     expect(normalizedTSV).toBe(newNormalizedTSV);
   });
 });

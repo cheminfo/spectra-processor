@@ -1,11 +1,14 @@
-export function getNormalizationAnnotations(filter = {}) {
+export function getNormalizationAnnotations(filter = {}, boundary) {
   let { exclusions = [] } = filter;
   let annotations = [];
   exclusions = exclusions.filter((exclusion) => !exclusion.ignore);
   annotations = exclusions.map((exclusion) => {
     var annotation = {
       type: 'rect',
-      position: [{ x: exclusion.from, y: -200 }, { x: exclusion.to, y: 200 }],
+      position: [
+        { x: exclusion.from, y: boundary.y.min },
+        { x: exclusion.to, y: boundary.y.max }
+      ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)'
     };
@@ -14,7 +17,10 @@ export function getNormalizationAnnotations(filter = {}) {
   if (filter.from !== undefined) {
     annotations.push({
       type: 'rect',
-      position: [{ x: 0, y: -200 }, { x: filter.from, y: 200 }],
+      position: [
+        { x: 0, y: boundary.y.min },
+        { x: filter.from, y: boundary.y.max }
+      ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)'
     });
@@ -22,7 +28,10 @@ export function getNormalizationAnnotations(filter = {}) {
   if (filter.to !== undefined) {
     annotations.push({
       type: 'rect',
-      position: [{ x: filter.to, y: -200 }, { x: 10000, y: 200 }],
+      position: [
+        { x: filter.to, y: boundary.y.min },
+        { x: 10000, y: boundary.y.max }
+      ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)'
     });

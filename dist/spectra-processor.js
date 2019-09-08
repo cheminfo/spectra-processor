@@ -136,11 +136,13 @@ function _interopDefault(ex) {
   return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
 }
 
+var Stat = __webpack_require__(3);
+
+var Stat__default = _interopDefault(Stat);
+
 var filterX = _interopDefault(__webpack_require__(8));
 
 var equallySpaced = _interopDefault(__webpack_require__(6));
-
-var Stat = _interopDefault(__webpack_require__(3));
 
 var mlSpectraProcessing = __webpack_require__(5);
 
@@ -202,7 +204,7 @@ function getNormalized(spectrum) {
     switch (filter.name) {
       case 'centerMean':
         {
-          let mean = Stat.mean(spectrum.y);
+          let mean = Stat__default.mean(spectrum.y);
 
           let meanFct = y => y - mean;
 
@@ -212,7 +214,7 @@ function getNormalized(spectrum) {
 
       case 'scaleSD':
         {
-          let std = Stat.standardDeviation(spectrum.y);
+          let std = Stat__default.standardDeviation(spectrum.y);
 
           let stdFct = y => y / std;
 
@@ -300,7 +302,24 @@ class Spectrum {
 
     this.id = id;
     this.meta = meta;
-    this.normalized = normalized || getNormalized(this, normalization);
+    this.normalizedBoundary = {
+      x: {
+        min: 0,
+        max: 0
+      },
+      y: {
+        min: 0,
+        max: 0
+      }
+    };
+
+    if (normalized) {
+      this.normalized = normalized;
+      this.updateNormalizedBoundary();
+    } else {
+      this.updateNormalization(normalization);
+    }
+
     this.updateMemory();
   }
 
@@ -341,10 +360,19 @@ Spectrum.prototype.updateNormalization = function (normalization) {
   this.normalized = getNormalized(this, normalization);
   this.ranges = {};
   this.updateMemory();
+  this.updateNormalizedBoundary();
 };
 
 Spectrum.prototype.updateRangesInfo = function (ranges) {
   updateRangesInfo(this, ranges);
+};
+
+Spectrum.prototype.updateNormalizedBoundary = function () {
+  this.normalizedBoundary.x = {
+    min: this.normalized.x[0],
+    max: this.normalized.x[this.normalized.x.length - 1]
+  };
+  this.normalizedBoundary.y = Stat.minMax(this.normalized.y);
 };
 
 function getJcampKind(data) {
@@ -411,6 +439,8 @@ function jcamp(jcamp) {
 /**
  * Creates a g
  * @param {string} text - String containing the JCAMP data
+ * @param {object} [options={}]
+ * @param {string} [options.fs='\t'] Field separator
  * @return {object} - {matrix, data, x, ids}
  */
 
@@ -419,13 +449,13 @@ function text(text) {
   let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   const lines = text.split(/[\r\n]+/).filter(value => value);
   const {
-    separator = '\t'
+    fs = '\t'
   } = options;
   let matrix = [];
   let ids = [];
   let meta = [];
   let x = [];
-  let headers = lines[0].split(separator);
+  let headers = lines[0].split(fs);
   let labels = [];
 
   for (let i = 0; i < headers.length; i++) {
@@ -466,6 +496,7 @@ function text(text) {
 
 function getNormalizationAnnotations() {
   let filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  let boundary = arguments.length > 1 ? arguments[1] : undefined;
   let {
     exclusions = []
   } = filter;
@@ -476,10 +507,10 @@ function getNormalizationAnnotations() {
       type: 'rect',
       position: [{
         x: exclusion.from,
-        y: -200
+        y: boundary.y.min
       }, {
         x: exclusion.to,
-        y: 200
+        y: boundary.y.max
       }],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)'
@@ -492,10 +523,10 @@ function getNormalizationAnnotations() {
       type: 'rect',
       position: [{
         x: 0,
-        y: -200
+        y: boundary.y.min
       }, {
         x: filter.from,
-        y: 200
+        y: boundary.y.max
       }],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)'
@@ -507,10 +538,10 @@ function getNormalizationAnnotations() {
       type: 'rect',
       position: [{
         x: filter.to,
-        y: -200
+        y: boundary.y.min
       }, {
         x: 10000,
-        y: 200
+        y: boundary.y.max
       }],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)'
@@ -645,11 +676,18 @@ function getNormalizedData(spectra) {
 /**
  * @private
  * @param {*} spectra
- * @param {*} options
+ * @param {object} [options={}]
+ * @param {string} [options.fs='\t'] field separator
+ * @param {string} [options.rs='\n'] record (line) separator
  */
 
 
-function getNormalizedTSV(spectra) {
+function getNormalizedText(spectra) {
+  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  let {
+    fs = '\t',
+    rs = '\n'
+  } = options;
   let {
     matrix,
     meta,
@@ -672,7 +710,7 @@ function getNormalizedTSV(spectra) {
   let lines = [];
   let line = [];
   line.push('id', ...allKeys, ...x);
-  lines.push(line.join('\t'));
+  lines.push(line.join(fs));
 
   for (let i = 0; i < ids.length; i++) {
     line = [];
@@ -683,10 +721,10 @@ function getNormalizedTSV(spectra) {
     }
 
     line.push(...matrix[i]);
-    lines.push(line.join('\t'));
+    lines.push(line.join(fs));
   }
 
-  return lines.join('\n');
+  return lines.join(rs);
 }
 
 function getFromToIndex(xs, range) {
@@ -889,10 +927,16 @@ class SpectraProcessor {
     this.maxMemory = options.maxMemory || 64 * 1024 * 1024;
     this.keepOriginal = true;
     this.spectra = [];
+    this.boundaries = {
+      minX: Number.MAX_VALUE,
+      maxX: Number.MIN_VALUE,
+      minY: Number.MAX_VALUE,
+      maxY: Number.MIN_VALUE
+    };
   }
 
   getNormalizationAnnotations() {
-    return getNormalizationAnnotations(this.normalization);
+    return getNormalizationAnnotations(this.normalization, this.getNormalizedBoundary());
   }
   /**
    * Recalculate the normalized data using the stored original data if available
@@ -946,17 +990,19 @@ class SpectraProcessor {
    * Returns a tab separated value containing the normalized data
    * @param {object} [options={}]
    * @param {Array} [options.ids] List of spectra ids to export, by default all
+   * @param {string} [options.fs='\t'] field separator
+   * @param {string} [options.rs='\n'] record (line) separator
    * @returns {string}
    */
 
 
-  getNormalizedTSV() {
+  getNormalizedText() {
     let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const {
       ids
     } = options;
     let spectra = this.getSpectra(ids);
-    return getNormalizedTSV(spectra);
+    return getNormalizedText(spectra, options);
   }
   /**
     * Returns an object contains 4 parameters with the scaled data
@@ -1185,6 +1231,39 @@ class SpectraProcessor {
     memoryInfo.keepOriginal = this.keepOriginal;
     memoryInfo.maxMemory = this.maxMemory;
     return memoryInfo;
+  }
+
+  getNormalizedBoundary() {
+    let boundary = {
+      x: {
+        min: Number.MAX_VALUE,
+        max: Number.MIN_VALUE
+      },
+      y: {
+        min: Number.MAX_VALUE,
+        max: Number.MIN_VALUE
+      }
+    };
+
+    for (let spectrum of this.spectra) {
+      if (spectrum.normalizedBoundary.x.min < boundary.x.min) {
+        boundary.x.min = spectrum.normalizedBoundary.x.min;
+      }
+
+      if (spectrum.normalizedBoundary.x.max > boundary.x.max) {
+        boundary.x.max = spectrum.normalizedBoundary.x.max;
+      }
+
+      if (spectrum.normalizedBoundary.y.min < boundary.y.min) {
+        boundary.y.min = spectrum.normalizedBoundary.y.min;
+      }
+
+      if (spectrum.normalizedBoundary.y.max > boundary.y.max) {
+        boundary.y.max = spectrum.normalizedBoundary.y.max;
+      }
+    }
+
+    return boundary;
   }
   /**
    * Create SpectraProcessor from normalized TSV
