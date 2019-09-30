@@ -1,5 +1,7 @@
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
+import normed from 'ml-array-normed';
+import rescale from 'ml-array-rescale';
 
 /**
  *
@@ -36,6 +38,14 @@ export function getNormalized(spectrum, options = {}) {
         let std = Stat.standardDeviation(spectrum.y);
         let stdFct = (y) => y / std;
         y = y.map(stdFct);
+        break;
+      }
+      case 'normalize': {
+        y = normed(y);
+        break;
+      }
+      case 'rescale': {
+        y = rescale(y);
         break;
       }
       case '':
