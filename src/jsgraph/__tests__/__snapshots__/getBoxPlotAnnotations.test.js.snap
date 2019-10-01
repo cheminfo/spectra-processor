@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getBoxPlotAnnotations check jsgraph annotations 1`] = `
+Array [
+  Object {
+    "layer": 0,
+    "properties": Object {
+      "fillColor": "#FF0",
+      "fillOpacity": 0.4,
+      "position": Array [
+        Object {
+          "x": 10,
+          "y": 1.5,
+        },
+        Object {
+          "x": 20,
+          "y": 2.5,
+        },
+        Object {
+          "x": 30,
+          "y": 3.5,
+        },
+        Object {
+          "x": 30,
+          "y": 7,
+        },
+        Object {
+          "x": 20,
+          "y": 6,
+        },
+        Object {
+          "x": 10,
+          "y": 5,
+        },
+      ],
+      "strokeWidth": 1e-7,
+    },
+    "type": "polygon",
+  },
+  Object {
+    "layer": 0,
+    "properties": Object {
+      "position": Array [
+        Object {
+          "x": 10,
+          "y": 3,
+        },
+        Object {
+          "x": 20,
+          "y": 4,
+        },
+        Object {
+          "x": 30,
+          "y": 5,
+        },
+        Object {
+          "x": 30,
+          "y": 5,
+        },
+        Object {
+          "x": 20,
+          "y": 4,
+        },
+        Object {
+          "x": 10,
+          "y": 3,
+        },
+      ],
+      "strokeColor": "red",
+      "strokeWidth": 3,
+    },
+    "type": "polygon",
+  },
+  Object {
+    "layer": 0,
+    "properties": Object {
+      "fillColor": "#FF0",
+      "fillOpacity": "0.2",
+      "position": Array [
+        Object {
+          "x": 10,
+          "y": 1,
+        },
+        Object {
+          "x": 20,
+          "y": 2,
+        },
+        Object {
+          "x": 30,
+          "y": 3,
+        },
+        Object {
+          "x": 30,
+          "y": 8,
+        },
+        Object {
+          "x": 20,
+          "y": 7,
+        },
+        Object {
+          "x": 10,
+          "y": 6,
+        },
+      ],
+      "strokeColor": "#FFF",
+      "strokeWidth": 1e-7,
+    },
+    "type": "polygon",
+  },
+]
+`;

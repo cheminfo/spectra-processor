@@ -34,16 +34,9 @@ let spectra = [
 ];
 
 describe('getBoxPlotAnnotations', () => {
-  it('Load set of data', () => {
+  it('check jsgraph annotations', () => {
     let result = getBoxPlotAnnotations(spectra);
-    console.log(JSON.stringify(result, undefined, 2));
-    expect(result).toEqual({
-      x: [10, 20, 30],
-      Q1: [1.5, 2.5, 3.5],
-      Q2: [3, 4, 5],
-      Q3: [5, 6, 7],
-      min: [1, 2, 3],
-      max: [6, 7, 8]
-    });
+
+    expect(result).toMatchSnapshot();
   });
 });

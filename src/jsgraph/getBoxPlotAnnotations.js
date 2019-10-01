@@ -12,7 +12,6 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
   let annotations = [];
 
   let data = getBoxPlotData(spectra);
-  console.log(data);
   let q13 = [];
   for (let i = 0; i < data.x.length; i++) {
     q13.push({
