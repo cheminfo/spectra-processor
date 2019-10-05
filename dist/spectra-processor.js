@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.10.1
+ * @version v0.11.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -97,7 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -117,6 +117,40 @@ module.exports = isAnyArray;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var is_any_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var is_any_array__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(is_any_array__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * Computes the maximum of the given values
+ * @param {Array<number>} input
+ * @return {number}
+ */
+
+function max(input) {
+  if (!is_any_array__WEBPACK_IMPORTED_MODULE_0___default()(input)) {
+    throw new TypeError('input must be an array');
+  }
+
+  if (input.length === 0) {
+    throw new TypeError('input must not be empty');
+  }
+
+  var maxValue = input[0];
+
+  for (var i = 1; i < input.length; i++) {
+    if (input[i] > maxValue) maxValue = input[i];
+  }
+
+  return maxValue;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (max);
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -134,19 +168,23 @@ function _interopDefault(ex) {
   return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
 }
 
-var Stat = __webpack_require__(3);
+var Stat = __webpack_require__(4);
 
 var Stat__default = _interopDefault(Stat);
 
-var filterX = _interopDefault(__webpack_require__(8));
+var filterX = _interopDefault(__webpack_require__(10));
 
-var equallySpaced = _interopDefault(__webpack_require__(6));
+var equallySpaced = _interopDefault(__webpack_require__(7));
 
-var mlSpectraProcessing = __webpack_require__(5);
+var normed = _interopDefault(__webpack_require__(11));
 
-var jcampconverter = __webpack_require__(4);
+var rescale = _interopDefault(__webpack_require__(9));
 
-var SimpleLinearRegression = _interopDefault(__webpack_require__(7));
+var mlSpectraProcessing = __webpack_require__(6);
+
+var jcampconverter = __webpack_require__(5);
+
+var SimpleLinearRegression = _interopDefault(__webpack_require__(8));
 /**
  *
  * @private
@@ -217,6 +255,18 @@ function getNormalized(spectrum, options = {}) {
           let stdFct = y => y / std;
 
           y = y.map(stdFct);
+          break;
+        }
+
+      case 'normalize':
+        {
+          y = normed(y);
+          break;
+        }
+
+      case 'rescale':
+        {
+          y = rescale(y);
           break;
         }
 
@@ -539,6 +589,146 @@ function getNormalizationAnnotations(filter = {}, boundary) {
     });
   }
 
+  return annotations;
+}
+/**
+ * @private
+ * @param {*} spectra
+ */
+
+
+function getBoxPlotData(spectra) {
+  let matrix = [];
+  let x = spectra[0].normalized.x;
+
+  for (let spectrum of spectra) {
+    matrix.push(spectrum.normalized.y);
+  }
+
+  let nbRow = matrix.length;
+  let nbColumn = matrix[0].length;
+  let result;
+  let aColumn = new Float64Array(nbRow);
+
+  for (let column = 0; column < nbColumn; column++) {
+    for (let row = 0; row < nbRow; row++) {
+      aColumn[row] = matrix[row][column];
+    }
+
+    let info = mlSpectraProcessing.X.boxPlot(aColumn);
+
+    if (!result) {
+      result = {
+        x
+      };
+
+      for (let key in info) {
+        result[key] = [];
+      }
+    }
+
+    for (let key in info) {
+      result[key].push(info[key]);
+    }
+  }
+
+  return result;
+}
+
+function getBoxPlotAnnotations(spectra, options = {}) {
+  const _options$q13FillColor = options.q13FillColor,
+        q13FillColor = _options$q13FillColor === void 0 ? '#FF0' : _options$q13FillColor,
+        _options$q13FillOpaci = options.q13FillOpacity,
+        q13FillOpacity = _options$q13FillOpaci === void 0 ? 0.4 : _options$q13FillOpaci,
+        _options$q2StrokeColo = options.q2StrokeColor,
+        q2StrokeColor = _options$q2StrokeColo === void 0 ? 'red' : _options$q2StrokeColo,
+        _options$q2StrokeWidt = options.q2StrokeWidth,
+        q2StrokeWidth = _options$q2StrokeWidt === void 0 ? 3 : _options$q2StrokeWidt,
+        _options$minMaxFillCo = options.minMaxFillColor,
+        minMaxFillColor = _options$minMaxFillCo === void 0 ? '#FF0' : _options$minMaxFillCo,
+        _options$minMaxFillOp = options.minMaxFillOpacity,
+        minMaxFillOpacity = _options$minMaxFillOp === void 0 ? '0.2' : _options$minMaxFillOp;
+  let annotations = [];
+  let data = getBoxPlotData(spectra);
+  let q13 = [];
+
+  for (let i = 0; i < data.x.length; i++) {
+    q13.push({
+      x: data.x[i],
+      y: data.Q1[i]
+    });
+  }
+
+  for (let i = data.x.length - 1; i >= 0; i--) {
+    q13.push({
+      x: data.x[i],
+      y: data.Q3[i]
+    });
+  }
+
+  annotations.push({
+    type: 'polygon',
+    layer: 0,
+    properties: {
+      fillColor: q13FillColor,
+      fillOpacity: q13FillOpacity,
+      strokeWidth: 0.0000001,
+      position: q13
+    }
+  });
+  let q2 = [];
+
+  for (let i = 0; i < data.x.length; i++) {
+    q2.push({
+      x: data.x[i],
+      y: data.Q2[i]
+    });
+  } // Temp code because polyline is not working
+
+
+  for (let i = data.x.length - 1; i >= 0; i--) {
+    q2.push({
+      x: data.x[i],
+      y: data.Q2[i]
+    });
+  }
+
+  annotations.push({
+    type: 'polygon',
+    layer: 0,
+    properties: {
+      strokeWidth: q2StrokeWidth,
+      strokeColor: q2StrokeColor,
+      position: q2
+    }
+  });
+  let minMax = [];
+
+  for (let i = 0; i < data.x.length; i++) {
+    minMax.push({
+      x: data.x[i],
+      y: data.min[i]
+    });
+  }
+
+  for (let i = data.x.length - 1; i >= 0; i--) {
+    minMax.push({
+      x: data.x[i],
+      y: data.max[i]
+    });
+  }
+
+  annotations.push({
+    type: 'polygon',
+    layer: 0,
+    properties: {
+      fillColor: minMaxFillColor,
+      fillOpacity: minMaxFillOpacity,
+      strokeWidth: 0.0000001,
+      strokeColor: '#FFF',
+      position: minMax
+    }
+  });
   return annotations;
 }
 
@@ -1153,6 +1343,15 @@ class SpectraProcessor {
     return getChart(this.spectra);
   }
   /**
+   * Returns a JSGraph annotation object for box plot
+   * @returns {object}
+   */
+
+
+  getBoxPlotAnnotations() {
+    return getBoxPlotAnnotations(this.spectra);
+  }
+  /**
    * Returns a JSGraph chart object for all the normalized spectra
    * @param {object} [options={}]
    * @param {Array} [options.ids] ids of the spectra to select, by default all
@@ -1271,10 +1470,10 @@ class SpectraProcessor {
 }
 
 exports.SpectraProcessor = SpectraProcessor;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(3)))
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1487,7 +1686,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2032,7 +2231,7 @@ exports.cumulativeSum = function cumulativeSum(array) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3114,7 +3313,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3848,6 +4047,154 @@ const ReIm = {
   absolute: absolute,
   phaseCorrection: phaseCorrection
 };
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/add.js
+/**
+
+/**
+ * This function add the first array by the second array or a constant value to each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function add(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] + constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] + array2[i];
+    }
+  }
+
+  return array3;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/boxPlot.js
+/**
+ * This function subtract the first array by the second array or a constant value from each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @return {object}
+ */
+function boxPlot(array) {
+  array = array.slice(0).sort((a, b) => a - b);
+
+  if (array.length < 5) {
+    throw Error('boxPlot: can not calculate info if array contains less than 3 elements');
+  }
+
+  let info = {
+    Q1: 0.0,
+    Q2: 0.0,
+    Q3: 0.0,
+    min: array[0],
+    max: array[array.length - 1]
+  };
+  let q1max, q3min;
+
+  if (array.length % 2 === 1) {
+    // odd
+    let middle = (array.length - 1) / 2;
+    info.Q2 = array[middle];
+    q1max = middle - 1;
+    q3min = middle + 1;
+  } else {
+    // even
+    q3min = array.length / 2;
+    q1max = q3min - 1;
+    info.Q2 = (array[q1max] + array[q3min]) / 2;
+  }
+
+  if (q1max % 2 === 0) {
+    info.Q1 = array[q1max / 2];
+    info.Q3 = array[(array.length + q3min - 1) / 2];
+  } else {
+    info.Q1 = (array[(q1max + 1) / 2] + array[(q1max - 1) / 2]) / 2;
+    let middleOver = (array.length + q3min) / 2;
+    info.Q3 = (array[middleOver] + array[middleOver - 1]) / 2;
+  }
+
+  return info;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/divide.js
+/**
+
+/**
+ * This function divide the first array by the second array or a constant value to each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function divide(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] / constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] / array2[i];
+    }
+  }
+
+  return array3;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/multiply.js
+/**
+
+/**
+ * This function multiply the first array by the second array or a constant value to each element of the first array
+ * @param {Array} array1 - the array that will be rotated
+ * @param {Array|Number} array2
+ * @return {Array}
+ */
+function multiply(array1, array2) {
+  let isConstant = false;
+  let constant;
+
+  if (Array.isArray(array2)) {
+    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+  } else {
+    isConstant = true;
+    constant = Number(array2);
+  }
+
+  let array3 = new Array(array1.length);
+
+  if (isConstant) {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] * constant;
+    }
+  } else {
+    for (let i = 0; i < array1.length; i++) {
+      array3[i] = array1[i] * array2[i];
+    }
+  }
+
+  return array3;
+}
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/rotate.js
 /**
  * This function performs a circular shift to a new array
@@ -3895,108 +4242,6 @@ function subtract(array1, array2) {
 
   return array3;
 }
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/add.js
-/**
-
-/**
- * This function add the first array by the second array or a constant value to each element of the first array
- * @param {Array} array1 - the array that will be rotated
- * @param {Array|Number} array2
- * @return {Array}
- */
-function add(array1, array2) {
-  let isConstant = false;
-  let constant;
-
-  if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
-  } else {
-    isConstant = true;
-    constant = Number(array2);
-  }
-
-  let array3 = new Array(array1.length);
-
-  if (isConstant) {
-    for (let i = 0; i < array1.length; i++) {
-      array3[i] = array1[i] + constant;
-    }
-  } else {
-    for (let i = 0; i < array1.length; i++) {
-      array3[i] = array1[i] + array2[i];
-    }
-  }
-
-  return array3;
-}
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/multiply.js
-/**
-
-/**
- * This function multiply the first array by the second array or a constant value to each element of the first array
- * @param {Array} array1 - the array that will be rotated
- * @param {Array|Number} array2
- * @return {Array}
- */
-function multiply(array1, array2) {
-  let isConstant = false;
-  let constant;
-
-  if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
-  } else {
-    isConstant = true;
-    constant = Number(array2);
-  }
-
-  let array3 = new Array(array1.length);
-
-  if (isConstant) {
-    for (let i = 0; i < array1.length; i++) {
-      array3[i] = array1[i] * constant;
-    }
-  } else {
-    for (let i = 0; i < array1.length; i++) {
-      array3[i] = array1[i] * array2[i];
-    }
-  }
-
-  return array3;
-}
-// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/divide.js
-/**
-
-/**
- * This function divide the first array by the second array or a constant value to each element of the first array
- * @param {Array} array1 - the array that will be rotated
- * @param {Array|Number} array2
- * @return {Array}
- */
-function divide(array1, array2) {
-  let isConstant = false;
-  let constant;
-
-  if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
-  } else {
-    isConstant = true;
-    constant = Number(array2);
-  }
-
-  let array3 = new Array(array1.length);
-
-  if (isConstant) {
-    for (let i = 0; i < array1.length; i++) {
-      array3[i] = array1[i] / constant;
-    }
-  } else {
-    for (let i = 0; i < array1.length; i++) {
-      array3[i] = array1[i] / array2[i];
-    }
-  }
-
-  return array3;
-}
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/index.js
 
 
@@ -4005,14 +4250,16 @@ function divide(array1, array2) {
 
 
 
+
 const X = {
-  findClosestIndex: findClosestIndex,
-  rotate: rotate,
-  subtract: subtract,
   add: add,
-  multiply: multiply,
+  boxPlot: boxPlot,
   divide: divide,
-  getTargetIndex: getTargetIndex
+  findClosestIndex: findClosestIndex,
+  getTargetIndex: getTargetIndex,
+  multiply: multiply,
+  rotate: rotate,
+  subtract: subtract
 };
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/index.js
 /* concated harmony reexport XY */__webpack_require__.d(__webpack_exports__, "XY", function() { return XY; });
@@ -4025,7 +4272,7 @@ const X = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4498,7 +4745,7 @@ function processZone(x, y, from, to, numberOfPoints, variant) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4711,7 +4958,101 @@ function regress(slr, x, y) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/ml-array-max/lib-es6/index.js
+var lib_es6 = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/is-any-array/src/index.js
+var src = __webpack_require__(0);
+var src_default = /*#__PURE__*/__webpack_require__.n(src);
+
+// CONCATENATED MODULE: ./node_modules/ml-array-min/lib-es6/index.js
+
+/**
+ * Computes the minimum of the given values
+ * @param {Array<number>} input
+ * @return {number}
+ */
+
+function min(input) {
+  if (!src_default()(input)) {
+    throw new TypeError('input must be an array');
+  }
+
+  if (input.length === 0) {
+    throw new TypeError('input must not be empty');
+  }
+
+  var minValue = input[0];
+
+  for (var i = 1; i < input.length; i++) {
+    if (input[i] < minValue) minValue = input[i];
+  }
+
+  return minValue;
+}
+
+/* harmony default export */ var ml_array_min_lib_es6 = (min);
+// CONCATENATED MODULE: ./node_modules/ml-array-rescale/lib-es6/index.js
+
+
+
+
+function rescale(input) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  if (!src_default()(input)) {
+    throw new TypeError('input must be an array');
+  } else if (input.length === 0) {
+    throw new TypeError('input must not be empty');
+  }
+
+  var output;
+
+  if (options.output !== undefined) {
+    if (!src_default()(options.output)) {
+      throw new TypeError('output option must be an array if specified');
+    }
+
+    output = options.output;
+  } else {
+    output = new Array(input.length);
+  }
+
+  var currentMin = ml_array_min_lib_es6(input);
+  var currentMax = Object(lib_es6["a" /* default */])(input);
+
+  if (currentMin === currentMax) {
+    throw new RangeError('minimum and maximum input values are equal. Cannot rescale a constant array');
+  }
+
+  var _options$min = options.min,
+      minValue = _options$min === void 0 ? options.autoMinMax ? currentMin : 0 : _options$min,
+      _options$max = options.max,
+      maxValue = _options$max === void 0 ? options.autoMinMax ? currentMax : 1 : _options$max;
+
+  if (minValue >= maxValue) {
+    throw new RangeError('min option must be smaller than max option');
+  }
+
+  var factor = (maxValue - minValue) / (currentMax - currentMin);
+
+  for (var i = 0; i < input.length; i++) {
+    output[i] = (input[i] - currentMin) * factor + minValue;
+  }
+
+  return output;
+}
+
+/* harmony default export */ var ml_array_rescale_lib_es6 = __webpack_exports__["default"] = (rescale);
+
+/***/ }),
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4830,6 +5171,116 @@ function filterX(points, options = {}) {
     y: newY
   };
 }
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/ml-array-max/lib-es6/index.js
+var lib_es6 = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/is-any-array/src/index.js
+var src = __webpack_require__(0);
+var src_default = /*#__PURE__*/__webpack_require__.n(src);
+
+// CONCATENATED MODULE: ./node_modules/ml-array-sum/lib-es6/index.js
+
+/**
+ * Computes the mean of the given values
+ * @param {Array<number>} input
+ * @return {number}
+ */
+
+function sum(input) {
+  if (!src_default()(input)) {
+    throw new TypeError('input must be an array');
+  }
+
+  if (input.length === 0) {
+    throw new TypeError('input must not be empty');
+  }
+
+  var sumValue = 0;
+
+  for (var i = 0; i < input.length; i++) {
+    sumValue += input[i];
+  }
+
+  return sumValue;
+}
+
+/* harmony default export */ var ml_array_sum_lib_es6 = (sum);
+// CONCATENATED MODULE: ./node_modules/ml-array-normed/lib-es6/index.js
+
+
+/**
+ * Computes the norm of the given values
+ * @param {Array<number>} input
+ * @param {object} [options={}]
+ * @param {string} [options.algorithm='absolute'] absolute, sum or max
+ * @return {number}
+ */
+
+function norm(input) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var _options$algorithm = options.algorithm,
+      algorithm = _options$algorithm === void 0 ? 'absolute' : _options$algorithm;
+
+  if (!Array.isArray(input)) {
+    throw new Error('input must be an array');
+  }
+
+  if (input.length === 0) {
+    throw new Error('input must not be empty');
+  }
+
+  switch (algorithm.toLowerCase()) {
+    case 'absolute':
+      {
+        var absoluteSumValue = absoluteSum(input);
+        if (absoluteSumValue === 0) return input.slice(0);
+        return input.map(function (element) {
+          return element / absoluteSumValue;
+        });
+      }
+
+    case 'max':
+      {
+        var maxValue = Object(lib_es6["a" /* default */])(input);
+        if (maxValue === 0) return input.slice(0);
+        return input.map(function (element) {
+          return element / maxValue;
+        });
+      }
+
+    case 'sum':
+      {
+        var sumValue = ml_array_sum_lib_es6(input);
+        if (sumValue === 0) return input.slice(0);
+        return input.map(function (element) {
+          return element / sumValue;
+        });
+      }
+
+    default:
+      throw new Error("norm: unknown algorithm: ".concat(algorithm));
+  }
+}
+
+function absoluteSum(input) {
+  var sumValue = 0;
+
+  for (var i = 0; i < input.length; i++) {
+    sumValue += Math.abs(input[i]);
+  }
+
+  return sumValue;
+}
+
+/* harmony default export */ var ml_array_normed_lib_es6 = __webpack_exports__["default"] = (norm);
 
 /***/ })
 /******/ ]);
