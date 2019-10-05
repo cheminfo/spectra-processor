@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.11.0
+ * @version v0.12.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -637,17 +637,17 @@ function getBoxPlotData(spectra) {
 
 function getBoxPlotAnnotations(spectra, options = {}) {
   const _options$q13FillColor = options.q13FillColor,
-        q13FillColor = _options$q13FillColor === void 0 ? '#FF0' : _options$q13FillColor,
+        q13FillColor = _options$q13FillColor === void 0 ? '#000' : _options$q13FillColor,
         _options$q13FillOpaci = options.q13FillOpacity,
-        q13FillOpacity = _options$q13FillOpaci === void 0 ? 0.4 : _options$q13FillOpaci,
+        q13FillOpacity = _options$q13FillOpaci === void 0 ? 0.3 : _options$q13FillOpaci,
         _options$q2StrokeColo = options.q2StrokeColor,
-        q2StrokeColor = _options$q2StrokeColo === void 0 ? 'red' : _options$q2StrokeColo,
+        q2StrokeColor = _options$q2StrokeColo === void 0 ? '#000' : _options$q2StrokeColo,
         _options$q2StrokeWidt = options.q2StrokeWidth,
         q2StrokeWidth = _options$q2StrokeWidt === void 0 ? 3 : _options$q2StrokeWidt,
         _options$minMaxFillCo = options.minMaxFillColor,
-        minMaxFillColor = _options$minMaxFillCo === void 0 ? '#FF0' : _options$minMaxFillCo,
+        minMaxFillColor = _options$minMaxFillCo === void 0 ? '#000' : _options$minMaxFillCo,
         _options$minMaxFillOp = options.minMaxFillOpacity,
-        minMaxFillOpacity = _options$minMaxFillOp === void 0 ? '0.2' : _options$minMaxFillOp;
+        minMaxFillOpacity = _options$minMaxFillOp === void 0 ? 0.15 : _options$minMaxFillOp;
   let annotations = [];
   let data = getBoxPlotData(spectra);
   let q13 = [];
@@ -1348,8 +1348,8 @@ class SpectraProcessor {
    */
 
 
-  getBoxPlotAnnotations() {
-    return getBoxPlotAnnotations(this.spectra);
+  getBoxPlotAnnotations(options) {
+    return getBoxPlotAnnotations(this.spectra, options);
   }
   /**
    * Returns a JSGraph chart object for all the normalized spectra
