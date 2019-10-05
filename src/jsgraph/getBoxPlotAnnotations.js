@@ -2,12 +2,12 @@ import { getBoxPlotData } from '../spectra/getBoxPlotData';
 
 export function getBoxPlotAnnotations(spectra, options = {}) {
   const {
-    q13FillColor = '#FF0',
-    q13FillOpacity = 0.4,
-    q2StrokeColor = 'red',
+    q13FillColor = '#000',
+    q13FillOpacity = 0.3,
+    q2StrokeColor = '#000',
     q2StrokeWidth = 3,
-    minMaxFillColor = '#FF0',
-    minMaxFillOpacity = '0.2'
+    minMaxFillColor = '#000',
+    minMaxFillOpacity = 0.15
   } = options;
   let annotations = [];
 

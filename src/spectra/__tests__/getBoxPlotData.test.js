@@ -36,7 +36,7 @@ let spectra = [
 describe('getBoxPlotData', () => {
   it('Load set of data', () => {
     let result = getBoxPlotData(spectra);
-    expect(result).toEqual({
+    expect(result).toStrictEqual({
       x: [10, 20, 30],
       Q1: [1.5, 2.5, 3.5],
       Q2: [3, 4, 5],
