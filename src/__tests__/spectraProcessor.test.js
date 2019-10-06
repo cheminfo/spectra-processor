@@ -57,7 +57,7 @@ describe('SpectraProcessor', () => {
     );
   });
 
-  it('test getScaleddData undefined method', () => {
+  it('test getScaleddData', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let scaled = spectraProcessor.getScaledData({
@@ -112,6 +112,13 @@ describe('SpectraProcessor', () => {
 
     expect(spectra).toMatchSnapshot();
   });
+
+  it('test getNormalizedData of non uniform data', () => {
+    let spectraProcessor = getNonUniformDataProcessor();
+
+    let spectra = spectraProcessor.getNormalizedData();
+    expect(spectra).toMatchSnapshot();
+  });
 });
 
 function getSimpleDataProcessor() {
@@ -125,6 +132,21 @@ function getSimpleDataProcessor() {
 
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [1, 2, 3, 4] }, { id: 1 });
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [2, 3, 4, 5] }, { id: 2 });
+  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 4, 5, 6] }, { id: 3 });
+  return spectraProcessor;
+}
+
+function getNonUniformDataProcessor() {
+  const spectraProcessor = new SpectraProcessor({
+    normalization: {
+      from: 0,
+      to: 5,
+      numberOfPoints: 6
+    }
+  });
+
+  spectraProcessor.addFromData({ x: [0, 1, 2, 4], y: [1, 2, 3, 4] }, { id: 1 });
+  spectraProcessor.addFromData({ x: [0, 1, 2, 5], y: [2, 3, 4, 5] }, { id: 2 });
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 4, 5, 6] }, { id: 3 });
   return spectraProcessor;
 }
