@@ -231,7 +231,7 @@ export class SpectraProcessor {
    * @returns {Array<Spectrum}
    */
   getSpectra(ids) {
-    if (!ids || !Array.isArray(ids) || ids.length === 0) return this.spectra;
+    if (!ids || !Array.isArray(ids)) return this.spectra;
     let spectra = [];
     for (let id of ids) {
       let index = this.getSpectrumIndex(id);
