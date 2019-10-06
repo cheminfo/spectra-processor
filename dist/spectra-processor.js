@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.12.0
+ * @version v0.13.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -650,85 +650,95 @@ function getBoxPlotAnnotations(spectra, options = {}) {
         minMaxFillOpacity = _options$minMaxFillOp === void 0 ? 0.15 : _options$minMaxFillOp;
   let annotations = [];
   let data = getBoxPlotData(spectra);
-  let q13 = [];
 
-  for (let i = 0; i < data.x.length; i++) {
-    q13.push({
-      x: data.x[i],
-      y: data.Q1[i]
-    });
-  }
+  if (q13FillOpacity && q13FillColor) {
+    let q13 = [];
 
-  for (let i = data.x.length - 1; i >= 0; i--) {
-    q13.push({
-      x: data.x[i],
-      y: data.Q3[i]
-    });
-  }
-
-  annotations.push({
-    type: 'polygon',
-    layer: 0,
-    properties: {
-      fillColor: q13FillColor,
-      fillOpacity: q13FillOpacity,
-      strokeWidth: 0.0000001,
-      position: q13
+    for (let i = 0; i < data.x.length; i++) {
+      q13.push({
+        x: data.x[i],
+        y: data.Q1[i]
+      });
     }
-  });
-  let q2 = [];
 
-  for (let i = 0; i < data.x.length; i++) {
-    q2.push({
-      x: data.x[i],
-      y: data.Q2[i]
-    });
-  } // Temp code because polyline is not working
-
-
-  for (let i = data.x.length - 1; i >= 0; i--) {
-    q2.push({
-      x: data.x[i],
-      y: data.Q2[i]
-    });
-  }
-
-  annotations.push({
-    type: 'polygon',
-    layer: 0,
-    properties: {
-      strokeWidth: q2StrokeWidth,
-      strokeColor: q2StrokeColor,
-      position: q2
+    for (let i = data.x.length - 1; i >= 0; i--) {
+      q13.push({
+        x: data.x[i],
+        y: data.Q3[i]
+      });
     }
-  });
-  let minMax = [];
 
-  for (let i = 0; i < data.x.length; i++) {
-    minMax.push({
-      x: data.x[i],
-      y: data.min[i]
+    annotations.push({
+      type: 'polygon',
+      layer: 0,
+      properties: {
+        fillColor: q13FillColor,
+        fillOpacity: q13FillOpacity,
+        strokeWidth: 0.0000001,
+        position: q13
+      }
     });
   }
 
-  for (let i = data.x.length - 1; i >= 0; i--) {
-    minMax.push({
-      x: data.x[i],
-      y: data.max[i]
-    });
-  }
+  if (q2StrokeColor && q2StrokeWidth) {
+    let q2 = [];
 
-  annotations.push({
-    type: 'polygon',
-    layer: 0,
-    properties: {
-      fillColor: minMaxFillColor,
-      fillOpacity: minMaxFillOpacity,
-      strokeWidth: 0.0000001,
-      strokeColor: '#FFF',
-      position: minMax
+    for (let i = 0; i < data.x.length; i++) {
+      q2.push({
+        x: data.x[i],
+        y: data.Q2[i]
+      });
+    } // Temp code because polyline is not working
+
+
+    for (let i = data.x.length - 1; i >= 0; i--) {
+      q2.push({
+        x: data.x[i],
+        y: data.Q2[i]
+      });
     }
-  });
+
+    annotations.push({
+      type: 'polygon',
+      layer: 0,
+      properties: {
+        strokeWidth: q2StrokeWidth,
+        strokeColor: q2StrokeColor,
+        position: q2
+      }
+    });
+  }
+
+  if (minMaxFillColor && minMaxFillOpacity) {
+    let minMax = [];
+
+    for (let i = 0; i < data.x.length; i++) {
+      minMax.push({
+        x: data.x[i],
+        y: data.min[i]
+      });
+    }
+
+    for (let i = data.x.length - 1; i >= 0; i--) {
+      minMax.push({
+        x: data.x[i],
+        y: data.max[i]
+      });
+    }
+
+    annotations.push({
+      type: 'polygon',
+      layer: 0,
+      properties: {
+        fillColor: minMaxFillColor,
+        fillOpacity: minMaxFillOpacity,
+        strokeWidth: 0.0000001,
+        strokeColor: '#FFF',
+        position: minMax
+      }
+    });
+  }
+
   return annotations;
 }
 
@@ -1308,7 +1318,7 @@ class SpectraProcessor {
 
 
   getSpectra(ids) {
-    if (!ids || !Array.isArray(ids) || ids.length === 0) return this.spectra;
+    if (!ids || !Array.isArray(ids)) return this.spectra;
     let spectra = [];
 
     for (let id of ids) {
