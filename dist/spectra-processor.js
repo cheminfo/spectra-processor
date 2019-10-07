@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.13.0
+ * @version v0.14.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -1171,7 +1171,7 @@ class SpectraProcessor {
     return getNormalizedText(spectra, options);
   }
   /**
-    * Returns an object contains 4 parameters with the scaled data
+   * Returns an object contains 4 parameters with the scaled data
    * @param {object} [options={}] scale spectra based on various parameters
    * @param {object} [options.range] from - to
    * @param {Array} [options.ids] ids of selected spectra, by default all
@@ -1238,7 +1238,16 @@ class SpectraProcessor {
       meta: options.meta,
       normalized: options.normalized,
       normalization: this.normalization
-    });
+    }); // ensure that the normalization is the same for all the spectra
+
+    if (!this.normalization.from) {
+      this.normalization.from = spectrum.normalizedBoundary.x.min;
+    }
+
+    if (!this.normalization.to) {
+      this.normalization.to = spectrum.normalizedBoundary.x.max;
+    }
+
     this.spectra[index] = spectrum;
 
     if (!this.keepOriginal) {
