@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.14.0
+ * @version v0.15.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -367,6 +367,14 @@ class Spectrum {
     }
 
     this.updateMemory();
+  }
+
+  get minX() {
+    return this.x[0];
+  }
+
+  get maxX() {
+    return this.x[this.x.length - 1];
   }
 
   updateMemory() {
@@ -1170,8 +1178,23 @@ class SpectraProcessor {
     let spectra = this.getSpectra(ids);
     return getNormalizedText(spectra, options);
   }
+
+  getMinMaxX() {
+    let min = Number.MAX_VALUE;
+    let max = Number.MIN_VALUE;
+
+    for (let spectrum of this.spectra) {
+      if (spectrum.minX < min) min = spectrum.minX;
+      if (spectrum.maxX > max) max = spectrum.maxX;
+    }
+
+    return {
+      min,
+      max
+    };
+  }
   /**
-   * Returns an object contains 4 parameters with the scaled data
+    * Returns an object contains 4 parameters with the scaled data
    * @param {object} [options={}] scale spectra based on various parameters
    * @param {object} [options.range] from - to
    * @param {Array} [options.ids] ids of selected spectra, by default all
@@ -1238,16 +1261,7 @@ class SpectraProcessor {
       meta: options.meta,
       normalized: options.normalized,
       normalization: this.normalization
-    }); // ensure that the normalization is the same for all the spectra
-
-    if (!this.normalization.from) {
-      this.normalization.from = spectrum.normalizedBoundary.x.min;
-    }
-
-    if (!this.normalization.to) {
-      this.normalization.to = spectrum.normalizedBoundary.x.max;
-    }
-
+    });
     this.spectra[index] = spectrum;
 
     if (!this.keepOriginal) {
