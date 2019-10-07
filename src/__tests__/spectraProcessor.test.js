@@ -11,7 +11,7 @@ const testFilesDir = '../../testFiles/xtc';
 
 describe('SpectraProcessor', () => {
   it('Load set of data', () => {
-    let files = readdirSync(join(__dirname, testFilesDir)).filter((file) =>
+    let files = readdirSync(join(__dirname, testFilesDir)).filter(file =>
       file.match(/0140|0189|0235/)
     );
     let spectraProcessor = new SpectraProcessor();
@@ -118,6 +118,13 @@ describe('SpectraProcessor', () => {
 
     let spectra = spectraProcessor.getNormalizedData();
     expect(spectra).toMatchSnapshot();
+  });
+
+  it('test getMinMaxX of non uniform data', () => {
+    let spectraProcessor = getNonUniformDataProcessor();
+
+    let minMaxX = spectraProcessor.getMinMaxX();
+    expect(minMaxX).toEqual({ min: 0, max: 5 });
   });
 });
 

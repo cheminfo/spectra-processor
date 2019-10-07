@@ -100,6 +100,16 @@ export class SpectraProcessor {
     return getNormalizedText(spectra, options);
   }
 
+  getMinMaxX() {
+    let min = Number.MAX_VALUE;
+    let max = Number.MIN_VALUE;
+    for (let spectrum of this.spectra) {
+      if (spectrum.minX < min) min = spectrum.minX;
+      if (spectrum.maxX > max) max = spectrum.maxX;
+    }
+    return { min, max };
+  }
+
   /**
 
    * Returns an object contains 4 parameters with the scaled data
@@ -195,7 +205,7 @@ export class SpectraProcessor {
    * @param {Array} [ids] Array of ids of the spectra to keep
    */
   removeSpectraNotIn(ids) {
-    let currentIDs = this.spectra.map((spectrum) => spectrum.id);
+    let currentIDs = this.spectra.map(spectrum => spectrum.id);
     for (let id of currentIDs) {
       if (!ids.includes(id)) {
         this.removeSpectrum(id);
@@ -295,7 +305,7 @@ export class SpectraProcessor {
 
   getMemoryInfo() {
     let memoryInfo = { original: 0, normalized: 0, total: 0 };
-    this.spectra.forEach((spectrum) => {
+    this.spectra.forEach(spectrum => {
       let memory = spectrum.memory;
       memoryInfo.original += memory.original;
       memoryInfo.normalized += memory.normalized;
