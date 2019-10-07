@@ -101,6 +101,7 @@ export class SpectraProcessor {
   }
 
   /**
+
    * Returns an object contains 4 parameters with the scaled data
    * @param {object} [options={}] scale spectra based on various parameters
    * @param {object} [options.range] from - to
@@ -161,13 +162,6 @@ export class SpectraProcessor {
       normalized: options.normalized,
       normalization: this.normalization
     });
-    // ensure that the normalization is the same for all the spectra
-    if (!this.normalization.from) {
-      this.normalization.from = spectrum.normalizedBoundary.x.min;
-    }
-    if (!this.normalization.to) {
-      this.normalization.to = spectrum.normalizedBoundary.x.max;
-    }
     this.spectra[index] = spectrum;
     if (!this.keepOriginal) {
       spectrum.removeOriginal();
