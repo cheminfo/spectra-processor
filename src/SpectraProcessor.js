@@ -6,6 +6,7 @@ import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
 import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
+import { getAutocorrelation } from './spectra/getAutocorrelation';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
@@ -72,6 +73,15 @@ export class SpectraProcessor {
 
   getNormalization() {
     return this.normalization;
+  }
+
+  /**
+   * Returns an object {x:[], y:[]} containing the autocorrelation for the
+   * specified index
+   * @param {integer} [index] point of the spectrum to autocorrelate
+   */
+  getAutocorrelation(index, options) {
+    return getAutocorrelation(this.getNormalizedData(options), index);
   }
 
   /**
