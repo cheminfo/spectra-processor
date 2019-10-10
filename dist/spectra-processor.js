@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.15.0
+ * @version v0.16.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -840,6 +840,36 @@ function getScaledChart(spectraProcessor, options = {}) {
 }
 /**
  * @private
+ */
+
+
+function getAutocorrelation(normalized, index) {
+  let matrix = normalized.matrix;
+  let nbRow = matrix.length;
+  let nbColumn = matrix[0].length;
+  let array1 = new Float64Array(nbRow);
+  let array2 = new Float64Array(nbRow);
+  let result = new Array(nbColumn);
+
+  for (let j = 0; j < nbRow; j++) {
+    array1[j] = matrix[j][index];
+  }
+
+  for (let i = 0; i < nbColumn; i++) {
+    for (let j = 0; j < nbRow; j++) {
+      array2[j] = matrix[j][i];
+    }
+
+    result[i] = mlSpectraProcessing.X.correlation(array1, array2);
+  }
+
+  return {
+    x: normalized.x,
+    y: result
+  };
+}
+/**
+ * @private
  * @param {*} spectra
  * @param {*} options
  */
@@ -1149,6 +1179,16 @@ class SpectraProcessor {
 
   getNormalization() {
     return this.normalization;
+  }
+  /**
+   * Returns an object {x:[], y:[]} containing the autocorrelation for the
+   * specified index
+   * @param {integer} [index] point of the spectrum to autocorrelate
+   */
+
+
+  getAutocorrelation(index, options) {
+    return getAutocorrelation(this.getNormalizedData(options), index);
   }
   /**
    * Returns an object contains 4 parameters with the normalized data
@@ -3920,7 +3960,171 @@ function realMaxYPoint(points, options = {}) {
     };
   }
 }
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/maximaY.js
+
+/**
+ * Finds all the max values
+ * If the values are equal the middle
+ * of the equal part will be the position of the signal!
+ *
+ * @param {object} [points={}] - Object of points contains property x (an ordered increasing array) and y (an array)
+ * @return {Array} Array of points
+ */
+
+function maximaY(points = {}) {
+  check(points);
+  const x = points.x,
+        y = points.y;
+  if (x.length < 3) return [];
+  let maxima = [];
+  let startEqualIndex = -1;
+
+  for (let i = 1; i < x.length - 1; i++) {
+    if (y[i - 1] < y[i] && y[i + 1] < y[i]) {
+      maxima.push({
+        x: x[i],
+        y: y[i],
+        index: i
+      });
+    } else if (y[i - 1] < y[i] && y[i + 1] === y[i]) {
+      startEqualIndex = i;
+    } else if (y[i - 1] === y[i] && y[i + 1] < y[i]) {
+      let index = (i + startEqualIndex) / 2 >> 0;
+      maxima.push({
+        x: x[index],
+        y: y[index],
+        index
+      });
+    }
+  }
+
+  return maxima;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/minimaY.js
+
+/**
+ * Finds all the min values
+ * If the values are equal the middle
+ * of the equal part will be the position of the signal!
+ *
+ * @param {object} [points={}] - Object of points contains property x (an ordered increasing array) and y (an array)
+ * @return {Array} Array of points
+ */
+
+function minimaY(points = {}) {
+  check(points);
+  const x = points.x,
+        y = points.y;
+  if (x.length < 3) return [];
+  let maxima = [];
+  let startEqualIndex = -1;
+
+  for (let i = 1; i < x.length - 1; i++) {
+    if (y[i - 1] > y[i] && y[i + 1] > y[i]) {
+      maxima.push({
+        x: x[i],
+        y: y[i],
+        index: i
+      });
+    } else if (y[i - 1] > y[i] && y[i + 1] === y[i]) {
+      startEqualIndex = i;
+    } else if (y[i - 1] === y[i] && y[i + 1] > y[i]) {
+      let index = (i + startEqualIndex) / 2 >> 0;
+      maxima.push({
+        x: x[index],
+        y: y[index],
+        index
+      });
+    }
+  }
+
+  return maxima;
+}
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/peakInfo.js
+
+
+/**
+ * Returns an information about a signal
+ *
+ * We expect ordered data and equidistant X axis
+ * You can use the method helper if required:
+ * ML.ArrayXY.uniqueX
+ * ML.ArrayXY.sortX
+ * ML.ArrayXY.equallySpaced
+ *
+ * @param {object} [points={}] - Object of points contains property x (an ordered increasing array) and y (an array)
+ * @param {object} [options={}]
+ * @param {number} [options.target]
+ * @param {number} [options.targetIndex]
+ * @return {object} Information about signal
+ */
+
+function peakInfo(points = {}, options = {}) {
+  check(points);
+  const x = points.x,
+        y = points.y;
+  if (x.length < 3) return undefined;
+  let targetIndex = options.targetIndex,
+      target = options.target;
+
+  if (targetIndex === undefined) {
+    if (target !== undefined) {
+      targetIndex = findClosestIndex(x, target);
+    }
+  }
+
+  if (targetIndex === undefined) {
+    throw new Error('peakInfo: need to specify target or targetIndex');
+  }
+
+  let i = targetIndex;
+  let currentDiff = y[i] - y[i + 1];
+  let multiplier = currentDiff < 0 ? -1 : 1;
+  currentDiff *= multiplier;
+
+  while (i < x.length - 1) {
+    i++;
+    let newDiff = (y[i] - y[i + 1]) * multiplier;
+    if (newDiff < currentDiff) break;
+    currentDiff = newDiff;
+  }
+
+  let after = {
+    x: x[i],
+    y: y[i]
+  };
+  i = targetIndex;
+  currentDiff = (y[i] - y[i - 1]) * multiplier;
+
+  while (i > 1) {
+    i--;
+    let newDiff = (y[i] - y[i - 1]) * multiplier;
+    if (newDiff < currentDiff) break;
+    currentDiff = newDiff;
+  }
+
+  let before = {
+    x: x[i],
+    y: y[i]
+  };
+  return {
+    inflectionBefore: before,
+    inflectionAfter: after,
+    extrema: {
+      x: x[targetIndex],
+      y: y[targetIndex]
+    },
+    inflectionMiddle: {
+      x: (before.x + after.x) / 2,
+      y: (before.y + after.y) / 2
+    },
+    width: Math.abs(before.x - after.x)
+  };
+}
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xy/index.js
+
+
+
 
 
 
@@ -3938,14 +4142,17 @@ const XY = {
   integral: integral_integral,
   integration: integration_integration,
   maxY: maxY_maxY,
+  maximaY: maximaY,
   maxYPoint: maxYPoint,
+  minimaY: minimaY,
   minYPoint: minYPoint,
   reduce: reduce,
   sortX: sortX,
   minClosestYPoint: minClosestYPoint,
   maxClosestYPoint: maxClosestYPoint,
   realMaxYPoint: realMaxYPoint,
-  realMinYPoint: realMinYPoint
+  realMinYPoint: realMinYPoint,
+  peakInfo: peakInfo
 };
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/xreim/zeroFilling.js
 /**
@@ -4094,7 +4301,9 @@ function add(array1, array2) {
   let constant;
 
   if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+    if (array1.length !== array2.length) {
+      throw new Error('sub: size of array1 and array2 must be identical');
+    }
   } else {
     isConstant = true;
     constant = Number(array2);
@@ -4174,7 +4383,9 @@ function divide(array1, array2) {
   let constant;
 
   if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+    if (array1.length !== array2.length) {
+      throw new Error('sub: size of array1 and array2 must be identical');
+    }
   } else {
     isConstant = true;
     constant = Number(array2);
@@ -4208,7 +4419,9 @@ function multiply(array1, array2) {
   let constant;
 
   if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+    if (array1.length !== array2.length) {
+      throw new Error('sub: size of array1 and array2 must be identical');
+    }
   } else {
     isConstant = true;
     constant = Number(array2);
@@ -4255,7 +4468,9 @@ function subtract(array1, array2) {
   let constant;
 
   if (Array.isArray(array2)) {
-    if (array1.length !== array2.length) throw new Error('sub: size of array1 and array2 must be identical');
+    if (array1.length !== array2.length) {
+      throw new Error('sub: size of array1 and array2 must be identical');
+    }
   } else {
     isConstant = true;
     constant = Number(array2);
@@ -4275,7 +4490,39 @@ function subtract(array1, array2) {
 
   return array3;
 }
+// CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/correlation.js
+/**
+
+/**
+ * Calculates the correlation between 2 vectors
+ * https://en.wikipedia.org/wiki/Correlation_and_dependence
+ *
+ * @param {Array} [A] - the array that will be rotated
+ * @param {Array} [B]
+ * @return {Array}
+ */
+function correlation(A, B) {
+  let n = A.length;
+  let sumA = 0;
+  let sumA2 = 0;
+  let sumB = 0;
+  let sumB2 = 0;
+  let sumAB = 0;
+
+  for (let i = 0; i < n; i++) {
+    let a = A[i];
+    let b = B[i];
+    sumA += a;
+    sumA2 += a ** 2;
+    sumB += b;
+    sumB2 += b ** 2;
+    sumAB += a * b;
+  }
+
+  return (n * sumAB - sumA * sumB) / (Math.sqrt(n * sumA2 - sumA ** 2) * Math.sqrt(n * sumB2 - sumB ** 2));
+}
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/x/index.js
+
 
 
 
@@ -4292,7 +4539,8 @@ const X = {
   getTargetIndex: getTargetIndex,
   multiply: multiply,
   rotate: rotate,
-  subtract: subtract
+  subtract: subtract,
+  correlation: correlation
 };
 // CONCATENATED MODULE: ./node_modules/ml-spectra-processing/src/index.js
 /* concated harmony reexport XY */__webpack_require__.d(__webpack_exports__, "XY", function() { return XY; });
