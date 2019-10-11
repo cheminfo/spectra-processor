@@ -1,0 +1,5 @@
+# Binning: 2 channels
+# Deadtime Correction: on
+Channel m/z     Intensity
+1   2   3
+4   5   6

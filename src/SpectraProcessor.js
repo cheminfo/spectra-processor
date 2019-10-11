@@ -1,6 +1,6 @@
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
-import parseText from './parser/text';
+import parseMatrix from './parser/matrix';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
 import { getChart } from './jsgraph/getChart';
@@ -133,6 +133,28 @@ export class SpectraProcessor {
    */
   getScaledData(options) {
     return getScaledData(this, options);
+  }
+
+/**
+   * Add jcamp
+   * By default TITLE from the jcamp will be in the meta information
+   * @param {string} text
+   * @param {object} [options={}]
+   * @param {object} [options.parserOptions={}] XY parser options
+   * @param {object} [options.meta={}]
+   * @param {string} [options.meta.color]
+   * @param {object} [options.id={}]
+   * @param {object} [options.kind]
+   * @param {boolean} [options.force=false] replace existing spectrum (same ID)
+   */
+
+  addFromText(text, options = {}) {
+    if (options.force !== true && options.id && this.contains(options.id)) {
+      return;
+    }
+    let parsed = parseText(text, options);
+    let meta = { ...parsed.meta, ...(options.meta || {}) };
+    this.addFromData(parsed.data, { meta, id: options.id });
   }
 
   /**
@@ -354,8 +376,8 @@ export class SpectraProcessor {
    * @param {object} [options={}]
    * @param {object} [options.separator='\t']
    */
-  static fromNormalizedText(text, options = {}) {
-    let parsed = parseText(text, options);
+  static fromNormalizedMatrix(text, options = {}) {
+    let parsed = parseMatrix(text, options);
     if (!parsed) {
       throw new Error('Can not parse TSV file');
     }

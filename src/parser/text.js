@@ -1,45 +1,23 @@
+import { parseXY } from 'xy-parser';
+
+
 /**
- * Creates a g
+ * Create a spectrum from a text file
  * @param {string} text - String containing the JCAMP data
- * @param {object} [options={}]
- * @param {string} [options.fs='\t'] Field separator
- * @return {object} - {matrix, data, x, ids}
+ * @return {Spectrum} - new instance of Spectrum with the provided data
  */
-export default function text(text, options = {}) {
-  const lines = text.split(/[\r\n]+/).filter((value) => value);
-  const { fs = '\t' } = options;
-  let matrix = [];
-  let ids = [];
-  let meta = [];
-  let x = [];
+export default function text(text, options={}) {
+  const {
+    kind,
+    parserOptions={}
+  }=options;
 
-  let headers = lines[0].split(fs);
-  let labels = [];
+  const data = parseXY(text, parserOptions);
 
-  for (let i = 0; i < headers.length; i++) {
-    let header = headers[i];
-    if (isNaN(header)) {
-      labels[i] = header;
-    } else {
-      x = headers.slice(i).map((value) => Number(value));
-      break;
-    }
+  // we convert the data
+  if (kind && kind.importation && kind.importation.converter) {
+    data.y = data.y.map(kind.importation.converter);
   }
 
-  for (let i = 1; i < lines.length; i++) {
-    let line = lines[i];
-    let parts = line.split('\t');
-    ids.push(parts[0]);
-    let oneMeta = {};
-    meta.push(oneMeta);
-    for (let j = 1; j < parts.length; j++) {
-      if (j < labels.length) {
-        oneMeta[labels[j]] = parts[j];
-      } else {
-        matrix.push(parts.slice(labels.length).map((value) => Number(value)));
-        break;
-      }
-    }
-  }
-  return { x, meta, matrix, ids };
+  return { data };
 }

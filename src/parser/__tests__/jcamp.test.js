@@ -6,7 +6,7 @@ import jcampParser from '../jcamp';
 test('jcampParser absorbance', () => {
   const path = join(__dirname, '../../../testFiles/absorbance.jdx');
   const jcamp = readFileSync(path, 'utf8');
-  const spectrum = jcampParser(jcamp, 'test');
+  const spectrum = jcampParser(jcamp);
 
   expect(spectrum.data.x).toHaveLength(1738);
   expect(spectrum.data.y).toHaveLength(1738);

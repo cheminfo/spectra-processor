@@ -5,8 +5,8 @@ Array [
   Object {
     "layer": 0,
     "properties": Object {
-      "fillColor": "#FF0",
-      "fillOpacity": 0.4,
+      "fillColor": "#000",
+      "fillOpacity": 0.3,
       "position": Array [
         Object {
           "x": 10,
@@ -66,7 +66,7 @@ Array [
           "y": 3,
         },
       ],
-      "strokeColor": "red",
+      "strokeColor": "#000",
       "strokeWidth": 3,
     },
     "type": "polygon",
@@ -74,8 +74,8 @@ Array [
   Object {
     "layer": 0,
     "properties": Object {
-      "fillColor": "#FF0",
-      "fillOpacity": "0.2",
+      "fillColor": "#000",
+      "fillOpacity": 0.15,
       "position": Array [
         Object {
           "x": 10,
