@@ -1,5 +1,6 @@
 import { Spectrum } from './spectrum/Spectrum';
 import parseJcamp from './parser/jcamp';
+import parseText from './parser/text';
 import parseMatrix from './parser/matrix';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
@@ -7,6 +8,7 @@ import { getChart } from './jsgraph/getChart';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
+import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
@@ -79,9 +81,20 @@ export class SpectraProcessor {
    * Returns an object {x:[], y:[]} containing the autocorrelation for the
    * specified index
    * @param {integer} [index] point of the spectrum to autocorrelate
+   * @param {object} [options={}]
+   * @param {array} [options.ids=[]] list of ids, by default all spectra 
    */
   getAutocorrelation(index, options) {
     return getAutocorrelation(this.getNormalizedData(options), index);
+  }
+
+  /**
+   * Returns a {x:[], y:[]} containg the average of specified spectra
+   * @param {object} [options={}]
+   * @param {array} [options.ids=[]] list of ids, by default all spectra 
+   */
+  getMeanData(options) {
+    return getMeanData(this.getNormalizedData(options));
   }
 
   /**
@@ -196,7 +209,8 @@ export class SpectraProcessor {
 
   addFromData(data, options = {}) {
     if (this.spectra.length === 0) this.keepOriginal = true;
-    const id = options.id || Math.random(0).toString(36).substring;
+    const id = options.id || Math.random().toString(36).substring(2,10);
+    console.log(id);
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {
