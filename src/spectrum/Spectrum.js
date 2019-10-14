@@ -91,7 +91,7 @@ Spectrum.prototype.updateRangesInfo = function(ranges) {
 Spectrum.prototype.updateNormalizedBoundary = function() {
   this.normalizedBoundary.x = {
     min: this.normalized.x[0],
-    max: this.normalized.x[this.normalized.x.length - 1]
+    max: this.normalized.x[this.normalized.x.length - 1],
   };
   this.normalizedBoundary.y = minMax(this.normalized.y);
 };

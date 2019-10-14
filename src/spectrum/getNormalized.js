@@ -12,7 +12,7 @@ import rescale from 'ml-array-rescale';
 export function getNormalized(spectrum, options = {}) {
   if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
     throw new Error(
-      'getNormalized: Can not get normalized data, missing original data.'
+      'getNormalized: Can not get normalized data, missing original data.',
     );
   }
 
@@ -21,7 +21,7 @@ export function getNormalized(spectrum, options = {}) {
     to = spectrum.x[spectrum.x.length - 1],
     numberOfPoints = 1024,
     filters = [],
-    exclusions = []
+    exclusions = [],
   } = options;
 
   let y = spectrum.y.slice(0);
@@ -57,7 +57,7 @@ export function getNormalized(spectrum, options = {}) {
   }
   let result = equallySpaced(
     { x: spectrum.x, y },
-    { from, to, numberOfPoints, exclusions }
+    { from, to, numberOfPoints, exclusions },
   );
   return result;
 }

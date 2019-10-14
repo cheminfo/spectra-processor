@@ -8,7 +8,7 @@ export function range(spectra, targetSpectrum, range = {}) {
   let targetValue = XY.integration(targetSpectrum.normalized, fromToIndex);
 
   let values = spectra.map((spectrum) =>
-    XY.integration(spectrum.normalized, fromToIndex)
+    XY.integration(spectrum.normalized, fromToIndex),
   );
 
   let matrix = [];

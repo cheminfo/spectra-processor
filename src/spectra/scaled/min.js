@@ -8,7 +8,7 @@ export function min(spectra, targetSpectrum, range = {}) {
   let targetValue = XY.minYPoint(targetSpectrum.normalized, fromToIndex).y;
 
   let values = spectra.map(
-    (spectrum) => XY.minYPoint(spectrum.normalized, fromToIndex).y
+    (spectrum) => XY.minYPoint(spectrum.normalized, fromToIndex).y,
   );
 
   let matrix = [];

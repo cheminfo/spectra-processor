@@ -61,7 +61,7 @@ export function getScaledData(spectraProcessor, options = {}) {
     for (let i = 0; i < result.matrix.length; i++) {
       result.matrix[i] = X.subtract(
         result.matrix[i],
-        targetSpectrum.normalized.y
+        targetSpectrum.normalized.y,
       );
     }
   }

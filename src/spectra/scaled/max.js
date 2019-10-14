@@ -8,7 +8,7 @@ export function max(spectra, targetSpectrum, range = {}) {
   let targetValue = XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y;
 
   let values = spectra.map(
-    (spectrum) => XY.maxYPoint(spectrum.normalized, fromToIndex).y
+    (spectrum) => XY.maxYPoint(spectrum.normalized, fromToIndex).y,
   );
 
   let matrix = [];

@@ -8,13 +8,13 @@ export function minMax(spectra, targetSpectrum, range = {}) {
 
   let targetValue = {
     min: XY.minYPoint(targetSpectrum.normalized, fromToIndex).y,
-    max: XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y
+    max: XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y,
   };
 
   let values = spectra.map((spectrum) => {
     return {
       min: XY.minYPoint(spectrum.normalized, fromToIndex).y,
-      max: XY.maxYPoint(spectrum.normalized, fromToIndex).y
+      max: XY.maxYPoint(spectrum.normalized, fromToIndex).y,
     };
   });
 
@@ -23,7 +23,7 @@ export function minMax(spectra, targetSpectrum, range = {}) {
     let spectrum = spectra[i];
     const regression = new SimpleLinearRegression(
       [targetValue.min, targetValue.max],
-      [values[i].min, values[i].max]
+      [values[i].min, values[i].max],
     );
 
     let length = spectrum.normalized.y.length;

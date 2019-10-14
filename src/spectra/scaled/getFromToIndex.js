@@ -11,6 +11,6 @@ export function getFromToIndex(xs, range) {
 
   return {
     fromIndex: X.findClosestIndex(xs, from),
-    toIndex: X.findClosestIndex(xs, to)
+    toIndex: X.findClosestIndex(xs, to),
   };
 }

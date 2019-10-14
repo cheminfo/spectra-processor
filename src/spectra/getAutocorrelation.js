@@ -22,6 +22,6 @@ export function getAutocorrelation(normalized, index) {
   }
   return {
     x: normalized.x,
-    y: result
+    y: result,
   };
 }

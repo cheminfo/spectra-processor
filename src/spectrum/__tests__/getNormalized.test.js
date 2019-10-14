@@ -7,13 +7,13 @@ describe('getNormalized', () => {
     let result = getNormalized(
       {
         x,
-        y
+        y,
       },
       {
         from: 1,
         to: 9,
-        numberOfPoints: 5
-      }
+        numberOfPoints: 5,
+      },
     );
 
     expect(result.x).toStrictEqual([1, 3, 5, 7, 9]);
@@ -25,14 +25,14 @@ describe('getNormalized', () => {
     let result = getNormalized(
       {
         x,
-        y
+        y,
       },
       {
         from: 1,
         to: 9,
         numberOfPoints: 5,
-        filters: [{ name: 'centerMean' }, { name: 'scaleSD' }]
-      }
+        filters: [{ name: 'centerMean' }, { name: 'scaleSD' }],
+      },
     );
 
     expect(result.x).toStrictEqual([1, 3, 5, 7, 9]);
@@ -41,7 +41,7 @@ describe('getNormalized', () => {
       0.4332242888591059,
       1.3267493846310112,
       0.4332242888591029,
-      -0.7581425055034343
+      -0.7581425055034343,
     ]);
   });
 });

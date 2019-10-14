@@ -7,7 +7,7 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
     q2StrokeColor = '#000',
     q2StrokeWidth = 3,
     minMaxFillColor = '#000',
-    minMaxFillOpacity = 0.15
+    minMaxFillOpacity = 0.15,
   } = options;
   let annotations = [];
 
@@ -17,13 +17,13 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
     for (let i = 0; i < data.x.length; i++) {
       q13.push({
         x: data.x[i],
-        y: data.Q1[i]
+        y: data.Q1[i],
       });
     }
     for (let i = data.x.length - 1; i >= 0; i--) {
       q13.push({
         x: data.x[i],
-        y: data.Q3[i]
+        y: data.Q3[i],
       });
     }
     annotations.push({
@@ -33,8 +33,8 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
         fillColor: q13FillColor,
         fillOpacity: q13FillOpacity,
         strokeWidth: 0.0000001,
-        position: q13
-      }
+        position: q13,
+      },
     });
   }
 
@@ -43,14 +43,14 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
     for (let i = 0; i < data.x.length; i++) {
       q2.push({
         x: data.x[i],
-        y: data.Q2[i]
+        y: data.Q2[i],
       });
     }
     // Temp code because polyline is not working
     for (let i = data.x.length - 1; i >= 0; i--) {
       q2.push({
         x: data.x[i],
-        y: data.Q2[i]
+        y: data.Q2[i],
       });
     }
 
@@ -60,8 +60,8 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
       properties: {
         strokeWidth: q2StrokeWidth,
         strokeColor: q2StrokeColor,
-        position: q2
-      }
+        position: q2,
+      },
     });
   }
 
@@ -70,13 +70,13 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
     for (let i = 0; i < data.x.length; i++) {
       minMax.push({
         x: data.x[i],
-        y: data.min[i]
+        y: data.min[i],
       });
     }
     for (let i = data.x.length - 1; i >= 0; i--) {
       minMax.push({
         x: data.x[i],
-        y: data.max[i]
+        y: data.max[i],
       });
     }
 
@@ -88,8 +88,8 @@ export function getBoxPlotAnnotations(spectra, options = {}) {
         fillOpacity: minMaxFillOpacity,
         strokeWidth: 0.0000001,
         strokeColor: '#FFF',
-        position: minMax
-      }
+        position: minMax,
+      },
     });
   }
 

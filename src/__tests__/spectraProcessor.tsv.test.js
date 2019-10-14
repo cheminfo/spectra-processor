@@ -11,9 +11,11 @@ describe('SpectraProcessor text', () => {
   it('Parse normalized matrix text', () => {
     const normalizedTSV = readFileSync(
       join(__dirname, 'normalized.tsv'),
-      'utf8'
+      'utf8',
     );
-    const spectraProcessor = SpectraProcessor.fromNormalizedMatrix(normalizedTSV);
+    const spectraProcessor = SpectraProcessor.fromNormalizedMatrix(
+      normalizedTSV,
+    );
     const newNormalizedTSV = spectraProcessor.getNormalizedText();
     expect(normalizedTSV).toBe(newNormalizedTSV);
   });

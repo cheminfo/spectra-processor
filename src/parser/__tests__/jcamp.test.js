@@ -16,8 +16,8 @@ test('jcampParser absorbance', () => {
     display: {
       xLabel: 'wavelength [cm-1]',
       xInverted: true,
-      yLabel: 'Absorbance'
-    }
+      yLabel: 'Absorbance',
+    },
   });
 });
 

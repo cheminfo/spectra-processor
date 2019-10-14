@@ -10,7 +10,7 @@ describe('recale minMax', () => {
       { normalized: { x: [0, 1, 2, 3], y: [1, 2, 3, 4] } },
       { normalized: { x: [0, 1, 2, 3], y: [2, 3, 4, 5] } },
       { normalized: { x: [0, 1, 2, 3], y: [2, 4, 6, 8] } },
-      { normalized: { x: [0, 1, 2, 3], y: [3, 5, 7, 9] } }
+      { normalized: { x: [0, 1, 2, 3], y: [3, 5, 7, 9] } },
     ];
 
     let targetSpectrum = { normalized: { x: [0, 1, 2, 3], y: [1, 2, 3, 4] } };
@@ -19,7 +19,7 @@ describe('recale minMax', () => {
 
     expect(result).toBeDeepCloseTo(
       [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]],
-      2
+      2,
     );
   });
 });

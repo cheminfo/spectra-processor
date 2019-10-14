@@ -3,7 +3,7 @@ import { addChartDataStyle } from './addChartDataStyle';
 export function getNormalizedChart(spectra, options = {}) {
   const { ids } = options;
   let chart = {
-    data: []
+    data: [],
   };
   for (let spectrum of spectra) {
     if (!ids || ids.includes(spectrum.id)) {

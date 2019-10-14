@@ -13,13 +13,13 @@ export function getScaledChart(spectraProcessor, options = {}) {
   let scaled = spectraProcessor.getScaledData(options);
 
   let chart = {
-    data: []
+    data: [],
   };
 
   for (let i = 0; i < scaled.matrix.length; i++) {
     let data = {
       x: scaled.x,
-      y: scaled.matrix[i]
+      y: scaled.matrix[i],
     };
     addChartDataStyle(data, { meta: scaled.meta[i], id: scaled.ids[i] });
     chart.data.push(data);

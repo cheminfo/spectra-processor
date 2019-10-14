@@ -7,21 +7,21 @@ describe('updateRangesInfo', () => {
     let spectrum = {
       normalized: {
         x,
-        y
-      }
+        y,
+      },
     };
 
     updateRangesInfo(spectrum, [
       {
         label: 'A',
         from: 0,
-        to: 3
+        to: 3,
       },
       {
         label: 'B',
         from: 4,
-        to: 6
-      }
+        to: 6,
+      },
     ]);
     expect(spectrum.ranges).toStrictEqual({
       A: {
@@ -29,15 +29,15 @@ describe('updateRangesInfo', () => {
         from: 0,
         to: 3,
         integration: 4.5,
-        maxPoint: { x: 3, y: 3 }
+        maxPoint: { x: 3, y: 3 },
       },
       B: {
         label: 'B',
         from: 4,
         to: 6,
         integration: 9,
-        maxPoint: { x: 5, y: 5 }
-      }
+        maxPoint: { x: 5, y: 5 },
+      },
     });
   });
 });

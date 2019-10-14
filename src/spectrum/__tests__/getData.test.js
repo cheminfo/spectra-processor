@@ -7,13 +7,13 @@ describe('getData', () => {
     let result = getData(
       {
         x,
-        y
+        y,
       },
       {
         from: 1,
         to: 9,
-        exclusions: [{ from: 1.9, to: 3.1 }, { from: 4.9, to: 6.1 }]
-      }
+        exclusions: [{ from: 1.9, to: 3.1 }, { from: 4.9, to: 6.1 }],
+      },
     );
 
     expect(result.x).toStrictEqual([1, 4, 7, 8, 9]);

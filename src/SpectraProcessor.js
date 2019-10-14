@@ -39,14 +39,14 @@ export class SpectraProcessor {
       minX: Number.MAX_VALUE,
       maxX: Number.MIN_VALUE,
       minY: Number.MAX_VALUE,
-      maxY: Number.MIN_VALUE
+      maxY: Number.MIN_VALUE,
     };
   }
 
   getNormalizationAnnotations() {
     return getNormalizationAnnotations(
       this.normalization,
-      this.getNormalizedBoundary()
+      this.getNormalizedBoundary(),
     );
   }
 
@@ -82,7 +82,7 @@ export class SpectraProcessor {
    * specified index
    * @param {integer} [index] point of the spectrum to autocorrelate
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]] list of ids, by default all spectra 
+   * @param {array} [options.ids=[]] list of ids, by default all spectra
    */
   getAutocorrelation(index, options) {
     return getAutocorrelation(this.getNormalizedData(options), index);
@@ -91,7 +91,7 @@ export class SpectraProcessor {
   /**
    * Returns a {x:[], y:[]} containg the average of specified spectra
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]] list of ids, by default all spectra 
+   * @param {array} [options.ids=[]] list of ids, by default all spectra
    */
   getMeanData(options) {
     return getMeanData(this.getNormalizedData(options));
@@ -148,7 +148,7 @@ export class SpectraProcessor {
     return getScaledData(this, options);
   }
 
-/**
+  /**
    * Add jcamp
    * By default TITLE from the jcamp will be in the meta information
    * @param {string} text
@@ -209,14 +209,17 @@ export class SpectraProcessor {
 
   addFromData(data, options = {}) {
     if (this.spectra.length === 0) this.keepOriginal = true;
-    const id = options.id || Math.random().toString(36).substring(2,10);
-    console.log(id);
+    const id =
+      options.id ||
+      Math.random()
+        .toString(36)
+        .substring(2, 10);
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {
       meta: options.meta,
       normalized: options.normalized,
-      normalization: this.normalization
+      normalization: this.normalization,
     });
     this.spectra[index] = spectrum;
     if (!this.keepOriginal) {
@@ -251,7 +254,7 @@ export class SpectraProcessor {
    * @param {Array} [ids] Array of ids of the spectra to keep
    */
   removeSpectraNotIn(ids) {
-    let currentIDs = this.spectra.map(spectrum => spectrum.id);
+    let currentIDs = this.spectra.map((spectrum) => spectrum.id);
     for (let id of currentIDs) {
       if (!ids.includes(id)) {
         this.removeSpectrum(id);
@@ -351,7 +354,7 @@ export class SpectraProcessor {
 
   getMemoryInfo() {
     let memoryInfo = { original: 0, normalized: 0, total: 0 };
-    this.spectra.forEach(spectrum => {
+    this.spectra.forEach((spectrum) => {
       let memory = spectrum.memory;
       memoryInfo.original += memory.original;
       memoryInfo.normalized += memory.normalized;
@@ -365,7 +368,7 @@ export class SpectraProcessor {
   getNormalizedBoundary() {
     let boundary = {
       x: { min: Number.MAX_VALUE, max: Number.MIN_VALUE },
-      y: { min: Number.MAX_VALUE, max: Number.MIN_VALUE }
+      y: { min: Number.MAX_VALUE, max: Number.MIN_VALUE },
     };
     for (let spectrum of this.spectra) {
       if (spectrum.normalizedBoundary.x.min < boundary.x.min) {
@@ -400,7 +403,7 @@ export class SpectraProcessor {
     spectraProcessor.setNormalization({
       from: parsed.x[0],
       to: parsed.x[parsed.x.length - 1],
-      numberOfPoints: parsed.x.length
+      numberOfPoints: parsed.x.length,
     });
     spectraProcessor.keepOriginal = false;
 
@@ -410,11 +413,11 @@ export class SpectraProcessor {
         {
           normalized: {
             x: parsed.x,
-            y: parsed.matrix[i]
+            y: parsed.matrix[i],
           },
           id: parsed.ids[i],
-          meta: parsed.meta[i]
-        }
+          meta: parsed.meta[i],
+        },
       );
     }
 

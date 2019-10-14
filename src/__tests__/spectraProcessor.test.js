@@ -11,15 +11,15 @@ const testFilesDir = '../../testFiles/xtc';
 
 describe('SpectraProcessor', () => {
   it('Load set of data', () => {
-    let files = readdirSync(join(__dirname, testFilesDir)).filter(file =>
-      file.match(/0140|0189|0235/)
+    let files = readdirSync(join(__dirname, testFilesDir)).filter((file) =>
+      file.match(/0140|0189|0235/),
     );
     let spectraProcessor = new SpectraProcessor();
     spectraProcessor.setNormalization({
       from: 1000,
       to: 2600,
       numberOfPoints: 16,
-      filters: [{ name: 'centerMean' }, { name: 'scaleSD' }]
+      filters: [{ name: 'centerMean' }, { name: 'scaleSD' }],
     });
     for (let file of files) {
       let jcamp = readFileSync(join(__dirname, testFilesDir, file), 'utf8');
@@ -31,7 +31,7 @@ describe('SpectraProcessor', () => {
     expect(normalized.ids).toHaveLength(45);
     expect(normalized.matrix[0]).toHaveLength(16);
     let normalizedSelection = spectraProcessor.getNormalizedData({
-      ids: ['0140_1a.jdx', '0140_1b.jdx', '0140_1c.jdx', 'asdf']
+      ids: ['0140_1a.jdx', '0140_1b.jdx', '0140_1c.jdx', 'asdf'],
     });
     expect(normalizedSelection.ids).toHaveLength(3);
     expect(normalizedSelection.matrix[0]).toHaveLength(16);
@@ -50,10 +50,10 @@ describe('SpectraProcessor', () => {
         from: 1000,
         to: 2600,
         numberOfPoints: 16,
-        applySNV: true
+        applySNV: true,
       });
     }).toThrow(
-      'getNormalized: Can not get normalized data, missing original data'
+      'getNormalized: Can not get normalized data, missing original data',
     );
   });
 
@@ -61,13 +61,13 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let scaled = spectraProcessor.getScaledData({
-      range: { from: 0.9, to: 2.1 }
+      range: { from: 0.9, to: 2.1 },
     });
 
     expect(scaled.matrix).toStrictEqual([
       [1, 2, 3, 3.375],
       [1.875, 3, 4, 4.25],
-      [2.75, 4, 5, 5.125]
+      [2.75, 4, 5, 5.125],
     ]);
   });
 
@@ -76,12 +76,12 @@ describe('SpectraProcessor', () => {
 
     let scaled = spectraProcessor.getScaledData({
       range: { from: 0.9, to: 2.1 },
-      relative: true
+      relative: true,
     });
     expect(scaled.matrix).toStrictEqual([
       [0, 0, 0, 0],
       [0.875, 1, 1, 0.875],
-      [1.75, 2, 2, 1.75]
+      [1.75, 2, 2, 1.75],
     ]);
   });
 
@@ -91,13 +91,13 @@ describe('SpectraProcessor', () => {
     let scaled = spectraProcessor.getScaledData({
       range: { from: 0.9, to: 2.1 },
       method: 'minMax',
-      relative: true
+      relative: true,
     });
 
     expect(scaled.matrix).toStrictEqual([
       [0, 0, 0, 0],
       [-0.125, 0, 0, -0.125],
-      [-0.25, 0, 0, -0.25]
+      [-0.25, 0, 0, -0.25],
     ]);
   });
 
@@ -107,7 +107,7 @@ describe('SpectraProcessor', () => {
     let spectra = spectraProcessor.getScaledChart({
       range: { from: 0.9, to: 2.1 },
       method: 'minMax',
-      relative: true
+      relative: true,
     });
 
     expect(spectra).toMatchSnapshot();
@@ -124,7 +124,7 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getNonUniformDataProcessor();
 
     let minMaxX = spectraProcessor.getMinMaxX();
-    expect(minMaxX).toEqual({ min: 0, max: 5 });
+    expect(minMaxX).toStrictEqual({ min: 0, max: 5 });
   });
 });
 
@@ -133,8 +133,8 @@ function getSimpleDataProcessor() {
     normalization: {
       from: 0,
       to: 3,
-      numberOfPoints: 4
-    }
+      numberOfPoints: 4,
+    },
   });
 
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [1, 2, 3, 4] }, { id: 1 });
@@ -148,8 +148,8 @@ function getNonUniformDataProcessor() {
     normalization: {
       from: 0,
       to: 5,
-      numberOfPoints: 6
-    }
+      numberOfPoints: 6,
+    },
   });
 
   spectraProcessor.addFromData({ x: [0, 1, 2, 4], y: [1, 2, 3, 4] }, { id: 1 });

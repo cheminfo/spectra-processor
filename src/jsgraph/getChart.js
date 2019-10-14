@@ -8,7 +8,7 @@ import { addChartDataStyle } from './addChartDataStyle';
 export function getChart(spectra, options = {}) {
   const { ids } = options;
   let chart = {
-    data: []
+    data: [],
   };
   for (let spectrum of spectra) {
     if (!ids || ids.includes(spectrum.id)) {
