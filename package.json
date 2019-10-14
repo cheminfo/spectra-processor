@@ -9,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "build": "rollup -c && cheminfo build --root SpectraProcessor --no-uglify",
+    "build": "rollup -c && cheminfo-build",
     "build-doc": "cheminfo doc",
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
@@ -33,8 +33,6 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
-    "@babel/types": "^7.6.3",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "cheminfo-build": "^1.0.3",
     "codecov": "^3.6.1",
     "eslint": "^6.5.1",
@@ -60,6 +58,7 @@
     "ml-array-xy-filter-x": "1.0.1",
     "ml-array-xy-sort-x": "^1.0.1",
     "ml-gsd": "^2.0.6",
+    "ml-matrix": "^6.4.1",
     "ml-pca": "^4.0.0",
     "ml-regression-simple-linear": "^2.0.2",
     "ml-spectra-processing": "0.5.0",

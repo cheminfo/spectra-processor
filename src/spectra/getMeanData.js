@@ -1,4 +1,4 @@
-import Matrix from 'ml-matrix';
+import { Matrix } from 'ml-matrix';
 
 /**
  * @private
@@ -6,6 +6,7 @@ import Matrix from 'ml-matrix';
 
 export function getMeanData(normalized) {
   let matrix = new Matrix(normalized.matrix);
+  debugger;
   return {
     x: normalized.x,
     y: matrix.mean('column')
