@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getTrackAnnotation check jsgraph annotations 1`] = `
+Array [
+  Object {
+    "label": Object {
+      "position": Object {
+        "x": "130px",
+        "y": "20px",
+      },
+      "size": 16,
+      "text": "x: 20.0000",
+    },
+    "position": Array [
+      Object {
+        "x": "70px",
+        "y": "15px",
+      },
+      Object {
+        "x": "85px",
+        "y": "15px",
+      },
+    ],
+    "strokeWidth": 1e-7,
+    "type": "line",
+  },
+  Object {
+    "label": Object {
+      "position": Object {
+        "x": "90px",
+        "y": "35px",
+      },
+      "text": "2.000 - 1",
+    },
+    "position": Array [
+      Object {
+        "x": "70px",
+        "y": "30px",
+      },
+      Object {
+        "x": "85px",
+        "y": "30px",
+      },
+    ],
+    "strokeColor": "red",
+    "strokeWidth": 2,
+    "type": "line",
+  },
+  Object {
+    "label": Object {
+      "position": Object {
+        "x": "90px",
+        "y": "50px",
+      },
+      "text": "3.000 - 2",
+    },
+    "position": Array [
+      Object {
+        "x": "70px",
+        "y": "45px",
+      },
+      Object {
+        "x": "85px",
+        "y": "45px",
+      },
+    ],
+    "strokeColor": "green",
+    "strokeWidth": 2,
+    "type": "line",
+  },
+]
+`;
