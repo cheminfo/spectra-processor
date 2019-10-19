@@ -1,5 +1,3 @@
-import arrayMax from 'ml-array-max';
-import arrayMin from 'ml-array-min';
 import chroma from 'chroma-js';
 
 /**
