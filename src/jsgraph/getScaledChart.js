@@ -15,6 +15,7 @@ export function getScaledChart(spectraProcessor, options = {}) {
   let chart = {
     data: [],
   };
+  if (!scaled || !scaled.matrix) return chart;
 
   for (let i = 0; i < scaled.matrix.length; i++) {
     let data = {
