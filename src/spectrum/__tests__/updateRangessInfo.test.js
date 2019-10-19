@@ -30,6 +30,8 @@ describe('updateRangesInfo', () => {
         to: 3,
         integration: 4.5,
         maxPoint: { x: 3, y: 3 },
+        x: [0, 1, 2, 3],
+        y: [0, 1, 2, 3],
       },
       B: {
         label: 'B',
@@ -37,6 +39,8 @@ describe('updateRangesInfo', () => {
         to: 6,
         integration: 9,
         maxPoint: { x: 5, y: 5 },
+        x: [4, 5, 6],
+        y: [4, 5, 4],
       },
     });
   });
