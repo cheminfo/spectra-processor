@@ -10,13 +10,18 @@ import chroma from 'chroma-js';
  * @param {Array} [options.autocorrelation] precalculated autocorrelation {x,y}
  * @param {Array} [options.maxDataPoints=]
  */
-export function getChart(spectraProcessor, index, options = {}) {
+export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
   const {
     autocorrelation = spectraProcessor.getAutocorrelation(index),
   } = options;
 
-  let max = arrayMax(autocorrelation.y);
-  let min = arrayMin(autocorrelation.y);
+  let max = autocorrelation.y.reduce(function(a, b) {
+    return isNaN(b) ? a : Math.max(a, b);
+  }, Number.MIN_VALUE);
+
+  let min = autocorrelation.y.reduce(function(a, b) {
+    return isNaN(b) ? a : Math.min(a, b);
+  }, Number.MAX_VALUE);
 
   let colorCallback = chroma
     .scale(['blue', 'cyan', 'yellow', 'red'])

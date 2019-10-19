@@ -5,6 +5,7 @@ import parseMatrix from './parser/matrix';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
 import { getChart } from './jsgraph/getChart';
+import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart';
 import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
@@ -319,6 +320,14 @@ export class SpectraProcessor {
    */
   getChart() {
     return getChart(this.spectra);
+  }
+
+  /**
+   * Returns a JSGraph chart object for all the spectra
+   * @returns {object}
+   */
+  getAutocorrelationChart(index, options) {
+    return getAutocorrelationChart(this, index, options);
   }
 
   /**
