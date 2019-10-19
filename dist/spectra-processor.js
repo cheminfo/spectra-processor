@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.17.0
+ * @version v0.18.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -2566,6 +2566,8 @@
         };
         range.integration = XY.integration(spectrum.normalized, fromToIndex);
         range.maxPoint = XY.maxYPoint(spectrum.normalized, fromToIndex);
+        range.x = spectrum.normalized.x.slice(fromToIndex.fromIndex, fromToIndex.toIndex + 1);
+        range.y = spectrum.normalized.y.slice(fromToIndex.fromIndex, fromToIndex.toIndex + 1);
       }
     }
     /**
