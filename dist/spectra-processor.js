@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.19.1
+ * @version v0.19.2
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -8068,6 +8068,7 @@
       let chart = {
         data: []
       };
+      if (!scaled || !scaled.matrix) return chart;
 
       for (let i = 0; i < scaled.matrix.length; i++) {
         let data = {
