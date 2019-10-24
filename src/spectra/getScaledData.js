@@ -30,7 +30,7 @@ export function getScaledData(spectraProcessor, options = {}) {
   if (method === '' || method === undefined) {
     result = getNormalizedData(spectra);
   } else {
-    let matrix;
+    let matrix = [];
     switch (method.toLowerCase()) {
       case 'min':
         matrix = min(spectra, targetSpectrum, range);
