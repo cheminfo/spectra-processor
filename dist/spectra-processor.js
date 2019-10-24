@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.19.2
+ * @version v0.19.3
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -8,7 +8,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = global || self, factory(global.spectraProcessor = {}));
-}(this, function (exports) { 'use strict';
+}(this, (function (exports) { 'use strict';
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -11587,7 +11587,7 @@
       if (method === '' || method === undefined) {
         result = getNormalizedData(spectra);
       } else {
-        let matrix;
+        let matrix = [];
 
         switch (method.toLowerCase()) {
           case 'min':
@@ -12144,5 +12144,5 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=spectra-processor.js.map
