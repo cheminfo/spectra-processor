@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.19.3
+ * @version v0.19.4
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -7947,20 +7947,23 @@
       const {
         ids
       } = options;
-      if (!spectra || !spectra[0]) return {};
       let matrix = [];
       let meta = [];
       let currentIDs = [];
+      let x = [];
 
-      for (let spectrum of spectra) {
-        if (!ids || ids.includes(spectrum.id)) {
-          currentIDs.push(spectrum.id);
-          matrix.push(spectrum.normalized.y);
-          meta.push(spectrum.meta);
+      if (Array.isArray(spectra) && spectra.length > 0) {
+        for (let spectrum of spectra) {
+          if (!ids || ids.includes(spectrum.id)) {
+            currentIDs.push(spectrum.id);
+            matrix.push(spectrum.normalized.y);
+            meta.push(spectrum.meta);
+          }
         }
+
+        x = spectra[0].normalized.x;
       }
 
-      let x = spectra[0].normalized.x;
       return {
         ids: currentIDs,
         matrix,
@@ -11587,7 +11590,7 @@
       if (method === '' || method === undefined) {
         result = getNormalizedData(spectra);
       } else {
-        let matrix = [];
+        let matrix;
 
         switch (method.toLowerCase()) {
           case 'min':
