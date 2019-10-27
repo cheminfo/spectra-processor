@@ -1,4 +1,4 @@
-import { X } from 'ml-spectra-processing';
+import { X, XY } from 'ml-spectra-processing';
 
 import { getNormalizedData } from './getNormalizedData';
 import { min } from './scaled/min';
@@ -15,18 +15,27 @@ import { range as rangeFct } from './scaled/range';
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
  * @param {boolean} [options.relative=false]
- * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
+ * @param {Array} [options.ranges] Array of object containing {from:'', to:'', labe:''}
+ * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
+ * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
  */
 
 export function getScaledData(spectraProcessor, options = {}) {
   if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
-  const { range, targetID, relative, method, ids } = options;
-
+  const {
+    range,
+    targetID,
+    relative,
+    method,
+    ids,
+    ranges,
+    calculations,
+  } = options;
   let targetSpectrum =
     spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
   let spectra = spectraProcessor.getSpectra(ids);
-
   let result;
+
   if (method === '' || method === undefined) {
     result = getNormalizedData(spectra);
   } else {
@@ -63,6 +72,48 @@ export function getScaledData(spectraProcessor, options = {}) {
         result.matrix[i],
         targetSpectrum.normalized.y,
       );
+    }
+  }
+
+  if (ranges) {
+    result.ranges = [];
+    for (let i = 0; i < result.matrix.length; i++) {
+      let rangesCopy = JSON.parse(JSON.stringify(ranges));
+      let yNormalized = result.matrix[i];
+      let resultRanges = {};
+      result.ranges.push(resultRanges);
+      for (let currentRange of rangesCopy) {
+        if (currentRange.label) {
+          let fromToIndex = {
+            fromIndex: X.findClosestIndex(result.x, currentRange.from),
+            toIndex: X.findClosestIndex(result.x, currentRange.to),
+          };
+          currentRange.integration = XY.integration(
+            { x: result.x, y: yNormalized },
+            fromToIndex,
+          );
+          currentRange.maxPoint = XY.maxYPoint(
+            { x: result.x, y: yNormalized },
+            fromToIndex,
+          );
+          resultRanges[currentRange.label] = currentRange;
+        }
+      }
+    }
+  }
+
+  if (calculations && result.ranges) {
+    const parameters = Object.keys(result.ranges[0]);
+    for (let calculation of calculations) {
+      // eslint-disable-next-line no-new-func
+      const callback = new Function(
+        ...parameters,
+        `return ${calculation.formula}`,
+      );
+      for (let oneRanges of result.ranges) {
+        let values = parameters.map((key) => oneRanges[key].integration);
+        oneRanges[calculation.label] = callback(...values);
+      }
     }
   }
 

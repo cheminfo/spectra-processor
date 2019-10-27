@@ -1,7 +1,7 @@
 import { XY, X } from 'ml-spectra-processing';
 
 /**
- *  @private
+ * @private
  * @param {*} spectrum
  * @param {*} ranges
  */
