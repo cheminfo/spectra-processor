@@ -96,6 +96,8 @@ describe('getScaledData', () => {
         integration: 35,
         maxPoint: { x: 30, y: 4 },
       },
+    });
+    expect(result.calculations[1]).toStrictEqual({
       sum: 35,
       difference: -35,
     });

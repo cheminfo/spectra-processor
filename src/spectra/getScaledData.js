@@ -15,7 +15,7 @@ import { range as rangeFct } from './scaled/range';
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
  * @param {boolean} [options.relative=false]
- * @param {Array} [options.ranges] Array of object containing {from:'', to:'', labe:''}
+ * @param {Array} [options.ranges] Array of object containing {from:'', to:'', label:''}
  * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
  * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
  */
@@ -103,6 +103,9 @@ export function getScaledData(spectraProcessor, options = {}) {
   }
 
   if (calculations && result.ranges) {
+    result.calculations = result.ranges.map(() => {
+      return {};
+    });
     const parameters = Object.keys(result.ranges[0]);
     for (let calculation of calculations) {
       // eslint-disable-next-line no-new-func
@@ -110,9 +113,10 @@ export function getScaledData(spectraProcessor, options = {}) {
         ...parameters,
         `return ${calculation.formula}`,
       );
-      for (let oneRanges of result.ranges) {
+      for (let i = 0; i < result.ranges.length; i++) {
+        let oneRanges = result.ranges[i];
         let values = parameters.map((key) => oneRanges[key].integration);
-        oneRanges[calculation.label] = callback(...values);
+        result.calculations[i][calculation.label] = callback(...values);
       }
     }
   }

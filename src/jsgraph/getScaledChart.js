@@ -7,6 +7,8 @@ import { addChartDataStyle } from './addChartDataStyle';
  * @param {Array} [options.ids] ids of selected spectra
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
+ * @param {Array} [options.ranges] Array of object containing {from:'', to:'', label:''}
+ * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
  * @param {boolean} [options.relative=false]
  */
 export function getScaledChart(spectraProcessor, options = {}) {
