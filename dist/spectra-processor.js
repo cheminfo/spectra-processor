@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.19.4
+ * @version v0.20.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -2551,7 +2551,7 @@
       correlation
     };
     /**
-     *  @private
+     * @private
      * @param {*} spectrum
      * @param {*} ranges
      */
@@ -4496,7 +4496,7 @@
         };
 
         chroma.Color = Color_1;
-        chroma.version = '2.0.6';
+        chroma.version = '2.1.0';
         var chroma_1 = chroma;
         var unpack$1 = utils.unpack;
         var max = Math.max;
@@ -5136,7 +5136,7 @@
 
         var rgb2hex_1 = rgb2hex;
         var RE_HEX = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-        var RE_HEXA = /^#?([A-Fa-f0-9]{8})$/;
+        var RE_HEXA = /^#?([A-Fa-f0-9]{8}|[A-Fa-f0-9]{4})$/;
 
         var hex2rgb = function hex2rgb(hex) {
           if (hex.match(RE_HEX)) {
@@ -5160,9 +5160,15 @@
 
 
           if (hex.match(RE_HEXA)) {
-            if (hex.length === 9) {
+            if (hex.length === 5 || hex.length === 9) {
               // remove optional leading #
               hex = hex.substr(1);
+            } // expand short-notation to full eight-digit
+
+
+            if (hex.length === 4) {
+              hex = hex.split('');
+              hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
             }
 
             var u$1 = parseInt(hex, 16);
@@ -5204,7 +5210,7 @@
 
             while (len-- > 0) rest[len] = arguments[len + 1];
 
-            if (!rest.length && type$5(h) === 'string' && [3, 4, 6, 7, 8, 9].includes(h.length)) {
+            if (!rest.length && type$5(h) === 'string' && [3, 4, 5, 6, 7, 8, 9].indexOf(h.length) >= 0) {
               return 'hex';
             }
           }
@@ -6639,16 +6645,31 @@
         var sin$1 = Math.sin;
         var atan2$1 = Math.atan2;
 
-        var average = function average(colors, mode) {
+        var average = function average(colors, mode, weights) {
           if (mode === void 0) mode = 'lrgb';
-          var l = colors.length; // convert colors to Color objects
+          if (weights === void 0) weights = null;
+          var l = colors.length;
+
+          if (!weights) {
+            weights = Array.from(new Array(l)).map(function () {
+              return 1;
+            });
+          } // normalize weights
+
+
+          var k = l / weights.reduce(function (a, b) {
+            return a + b;
+          });
+          weights.forEach(function (w, i) {
+            weights[i] *= k;
+          }); // convert colors to Color objects
 
           colors = colors.map(function (c) {
             return new Color_1(c);
           });
 
           if (mode === 'lrgb') {
-            return _average_lrgb(colors);
+            return _average_lrgb(colors, weights);
           }
 
           var first = colors.shift();
@@ -6658,31 +6679,31 @@
           var dy = 0; // initial color
 
           for (var i = 0; i < xyz.length; i++) {
-            xyz[i] = xyz[i] || 0;
-            cnt.push(isNaN(xyz[i]) ? 0 : 1);
+            xyz[i] = (xyz[i] || 0) * weights[0];
+            cnt.push(isNaN(xyz[i]) ? 0 : weights[0]);
 
             if (mode.charAt(i) === 'h' && !isNaN(xyz[i])) {
               var A = xyz[i] / 180 * PI$1;
-              dx += cos$2(A);
-              dy += sin$1(A);
+              dx += cos$2(A) * weights[0];
+              dy += sin$1(A) * weights[0];
             }
           }
 
-          var alpha = first.alpha();
-          colors.forEach(function (c) {
+          var alpha = first.alpha() * weights[0];
+          colors.forEach(function (c, ci) {
             var xyz2 = c.get(mode);
-            alpha += c.alpha();
+            alpha += c.alpha() * weights[ci + 1];
 
             for (var i = 0; i < xyz.length; i++) {
               if (!isNaN(xyz2[i])) {
-                cnt[i]++;
+                cnt[i] += weights[ci + 1];
 
                 if (mode.charAt(i) === 'h') {
                   var A = xyz2[i] / 180 * PI$1;
-                  dx += cos$2(A);
-                  dy += sin$1(A);
+                  dx += cos$2(A) * weights[ci + 1];
+                  dy += sin$1(A) * weights[ci + 1];
                 } else {
-                  xyz[i] += xyz2[i];
+                  xyz[i] += xyz2[i] * weights[ci + 1];
                 }
               }
             }
@@ -6710,13 +6731,13 @@
           return new Color_1(xyz, mode).alpha(alpha > 0.99999 ? 1 : alpha, true);
         };
 
-        var _average_lrgb = function _average_lrgb(colors) {
+        var _average_lrgb = function _average_lrgb(colors, weights) {
           var l = colors.length;
-          var f = 1 / l;
           var xyz = [0, 0, 0, 0];
 
-          for (var i = 0, list = colors; i < list.length; i += 1) {
-            var col = list[i];
+          for (var i = 0; i < colors.length; i++) {
+            var col = colors[i];
+            var f = weights[i] / l;
             var rgb = col._rgb;
             xyz[0] += pow$4(rgb[0], 2) * f;
             xyz[1] += pow$4(rgb[1], 2) * f;
@@ -8061,6 +8082,8 @@
      * @param {Array} [options.ids] ids of selected spectra
      * @param {string} [options.targetID=spectra[0].id]
      * @param {string} [options.method='max'] min, max, range, minMax
+     * @param {Array} [options.ranges] Array of object containing {from:'', to:'', label:''}
+     * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
      * @param {boolean} [options.relative=false]
      */
 
@@ -11569,7 +11592,9 @@
      * @param {string} [options.targetID=spectra[0].id]
      * @param {string} [options.method='max'] min, max, range, minMax
      * @param {boolean} [options.relative=false]
-     * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
+     * @param {Array} [options.ranges] Array of object containing {from:'', to:'', label:''}
+     * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
+     * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
      */
 
 
@@ -11581,7 +11606,9 @@
         targetID,
         relative,
         method,
-        ids
+        ids,
+        ranges,
+        calculations
       } = options;
       let targetSpectrum = spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
       let spectra = spectraProcessor.getSpectra(ids);
@@ -11633,6 +11660,53 @@
       if (relative) {
         for (let i = 0; i < result.matrix.length; i++) {
           result.matrix[i] = X.subtract(result.matrix[i], targetSpectrum.normalized.y);
+        }
+      }
+
+      if (ranges) {
+        result.ranges = [];
+
+        for (let i = 0; i < result.matrix.length; i++) {
+          let rangesCopy = JSON.parse(JSON.stringify(ranges));
+          let yNormalized = result.matrix[i];
+          let resultRanges = {};
+          result.ranges.push(resultRanges);
+
+          for (let currentRange of rangesCopy) {
+            if (currentRange.label) {
+              let fromToIndex = {
+                fromIndex: X.findClosestIndex(result.x, currentRange.from),
+                toIndex: X.findClosestIndex(result.x, currentRange.to)
+              };
+              currentRange.integration = XY.integration({
+                x: result.x,
+                y: yNormalized
+              }, fromToIndex);
+              currentRange.maxPoint = XY.maxYPoint({
+                x: result.x,
+                y: yNormalized
+              }, fromToIndex);
+              resultRanges[currentRange.label] = currentRange;
+            }
+          }
+        }
+      }
+
+      if (calculations && result.ranges) {
+        result.calculations = result.ranges.map(() => {
+          return {};
+        });
+        const parameters = Object.keys(result.ranges[0]);
+
+        for (let calculation of calculations) {
+          // eslint-disable-next-line no-new-func
+          const callback = new Function(...parameters, "return ".concat(calculation.formula));
+
+          for (let i = 0; i < result.ranges.length; i++) {
+            let oneRanges = result.ranges[i];
+            let values = parameters.map(key => oneRanges[key].integration);
+            result.calculations[i][calculation.label] = callback(...values);
+          }
         }
       }
 
