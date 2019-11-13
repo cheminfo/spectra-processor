@@ -5,7 +5,7 @@ import { min } from './scaled/min';
 import { max } from './scaled/max';
 import { minMax } from './scaled/minMax';
 import { range as rangeFct } from './scaled/range';
-
+import { getFromToIndex } from './scaled/getFromToIndex';
 /**
  * @private
  * @param {Array<Spectrum>} spectra
@@ -84,10 +84,10 @@ export function getScaledData(spectraProcessor, options = {}) {
       result.ranges.push(resultRanges);
       for (let currentRange of rangesCopy) {
         if (currentRange.label) {
-          let fromToIndex = {
-            fromIndex: X.findClosestIndex(result.x, currentRange.from),
-            toIndex: X.findClosestIndex(result.x, currentRange.to),
-          };
+          let fromToIndex = getFromToIndex(
+            targetSpectrum.normalized.x,
+            currentRange,
+          );
           currentRange.integration = XY.integration(
             { x: result.x, y: yNormalized },
             fromToIndex,
