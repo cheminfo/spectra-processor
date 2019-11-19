@@ -16,6 +16,7 @@ export function updateRangesInfo(spectrum, ranges = []) {
     };
     range.integration = XY.integration(spectrum.normalized, fromToIndex);
     range.maxPoint = XY.maxYPoint(spectrum.normalized, fromToIndex);
+    range.minPoint = XY.minYPoint(spectrum.normalized, fromToIndex);
     range.x = spectrum.normalized.x.slice(
       fromToIndex.fromIndex,
       fromToIndex.toIndex + 1,
