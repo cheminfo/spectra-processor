@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v0.20.0
+ * @version v0.21.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -2569,6 +2569,7 @@
         };
         range.integration = XY.integration(spectrum.normalized, fromToIndex);
         range.maxPoint = XY.maxYPoint(spectrum.normalized, fromToIndex);
+        range.minPoint = XY.minYPoint(spectrum.normalized, fromToIndex);
         range.x = spectrum.normalized.x.slice(fromToIndex.fromIndex, fromToIndex.toIndex + 1);
         range.y = spectrum.normalized.y.slice(fromToIndex.fromIndex, fromToIndex.toIndex + 1);
       }
@@ -11674,10 +11675,7 @@
 
           for (let currentRange of rangesCopy) {
             if (currentRange.label) {
-              let fromToIndex = {
-                fromIndex: X.findClosestIndex(result.x, currentRange.from),
-                toIndex: X.findClosestIndex(result.x, currentRange.to)
-              };
+              let fromToIndex = getFromToIndex$1(targetSpectrum.normalized.x, currentRange);
               currentRange.integration = XY.integration({
                 x: result.x,
                 y: yNormalized
