@@ -10,13 +10,30 @@ describe('getData', () => {
         y,
       },
       {
-        from: 1,
-        to: 9,
-        exclusions: [{ from: 1.9, to: 3.1 }, { from: 4.9, to: 6.1 }],
+        xFilter: {
+          from: 1,
+          to: 9,
+          exclusions: [{ from: 1.9, to: 3.1 }, { from: 4.9, to: 6.1 }],
+        },
       },
     );
-
     expect(result.x).toStrictEqual([1, 4, 7, 8, 9]);
     expect(result.y).toStrictEqual([1, 4, 3, 2, 1]);
+  });
+
+  it('check yFactor', () => {
+    let x = [0, 1, 2, 3, 4];
+    let y = [1, 2, 3, 4, 5];
+    let result = getData(
+      {
+        x,
+        y,
+      },
+      {
+        yFactor: -100,
+      },
+    );
+    expect(result.x).toStrictEqual([0, 1, 2, 3, 4]);
+    expect(result.y).toStrictEqual([-100, -200, -300, -400, -500]);
   });
 });

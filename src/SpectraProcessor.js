@@ -151,7 +151,7 @@ export class SpectraProcessor {
   }
 
   /**
-   * Add jcamp
+   * Add from text
    * By default TITLE from the jcamp will be in the meta information
    * @param {string} text
    * @param {object} [options={}]
@@ -287,7 +287,7 @@ export class SpectraProcessor {
   }
 
   /**
-   * Returns a spectrum from its ID
+   * Returns an array of spectrum from their ids
    * @param {Array} ids
    * @returns {Array<Spectrum}
    */
@@ -318,8 +318,8 @@ export class SpectraProcessor {
    * Returns a JSGraph chart object for all the spectra
    * @returns {object}
    */
-  getChart() {
-    return getChart(this.spectra);
+  getChart(options) {
+    return getChart(this.spectra, options);
   }
 
   /**
