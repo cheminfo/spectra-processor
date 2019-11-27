@@ -29,12 +29,20 @@ spectraProcessor.spectra = [
 describe('getScaledData', () => {
   it('No options', () => {
     let result = getScaledData(spectraProcessor);
-    expect(result.matrix).toStrictEqual([[1, 2, 3], [2, 3, 4], [3, 4, 5]]);
+    expect(result.matrix).toStrictEqual([
+      [1, 2, 3],
+      [2, 3, 4],
+      [3, 4, 5],
+    ]);
   });
 
   it('min', () => {
     let result = getScaledData(spectraProcessor, { method: 'minMax' });
-    expect(result.matrix).toStrictEqual([[1, 2, 3], [1, 2, 3], [1, 2, 3]]);
+    expect(result.matrix).toStrictEqual([
+      [1, 2, 3],
+      [1, 2, 3],
+      [1, 2, 3],
+    ]);
   });
 
   it('ranges', () => {
@@ -44,21 +52,25 @@ describe('getScaledData', () => {
         { label: 'B', from: 16, to: 34 },
       ],
     });
-    expect(result.matrix).toStrictEqual([[1, 2, 3], [2, 3, 4], [3, 4, 5]]);
+    expect(result.matrix).toStrictEqual([
+      [1, 2, 3],
+      [2, 3, 4],
+      [3, 4, 5],
+    ]);
     expect(result.ranges[1]).toStrictEqual({
       A: {
         label: 'A',
         from: 6,
         to: 14,
         integration: 0,
-        maxPoint: { x: 10, y: 2 },
+        maxPoint: { x: 10, y: 2, index: 0 },
       },
       B: {
         label: 'B',
         from: 16,
         to: 34,
         integration: 35,
-        maxPoint: { x: 30, y: 4 },
+        maxPoint: { x: 30, y: 4, index: 2 },
       },
     });
   });
@@ -80,21 +92,25 @@ describe('getScaledData', () => {
         },
       ],
     });
-    expect(result.matrix).toStrictEqual([[1, 2, 3], [2, 3, 4], [3, 4, 5]]);
+    expect(result.matrix).toStrictEqual([
+      [1, 2, 3],
+      [2, 3, 4],
+      [3, 4, 5],
+    ]);
     expect(result.ranges[1]).toStrictEqual({
       A: {
         label: 'A',
         from: 6,
         to: 14,
         integration: 0,
-        maxPoint: { x: 10, y: 2 },
+        maxPoint: { x: 10, y: 2, index: 0 },
       },
       B: {
         label: 'B',
         from: 16,
         to: 34,
         integration: 35,
-        maxPoint: { x: 30, y: 4 },
+        maxPoint: { x: 30, y: 4, index: 2 },
       },
     });
     expect(result.calculations[1]).toStrictEqual({

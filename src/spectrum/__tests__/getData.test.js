@@ -13,7 +13,10 @@ describe('getData', () => {
         xFilter: {
           from: 1,
           to: 9,
-          exclusions: [{ from: 1.9, to: 3.1 }, { from: 4.9, to: 6.1 }],
+          exclusions: [
+            { from: 1.9, to: 3.1 },
+            { from: 4.9, to: 6.1 },
+          ],
         },
       },
     );

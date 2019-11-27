@@ -6,7 +6,11 @@ expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 let normalized = {
   x: [1, 2],
-  matrix: [[1, 3], [2, 2], [3, 1]],
+  matrix: [
+    [1, 3],
+    [2, 2],
+    [3, 1],
+  ],
 };
 
 describe('getAutocorrelation', () => {

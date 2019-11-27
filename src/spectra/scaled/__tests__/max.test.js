@@ -17,7 +17,11 @@ describe('recale max', () => {
     let result = max(spectra, targetSpectrum, { from: 0.9, to: 2.1 });
 
     expect(result).toBeDeepCloseTo(
-      [[1, 2, 3, 4], [1.5, 2.25, 3, 3.75], [1.8, 2.4, 3, 3.6]],
+      [
+        [1, 2, 3, 4],
+        [1.5, 2.25, 3, 3.75],
+        [1.8, 2.4, 3, 3.6],
+      ],
       3,
     );
   });

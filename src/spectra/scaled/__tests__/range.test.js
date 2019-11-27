@@ -16,7 +16,11 @@ describe('recale range', () => {
 
     let result = range(spectra, targetSpectrum, { from: 0.9, to: 2.1 });
     expect(result).toBeDeepCloseTo(
-      [[1.4, 2.8, 4.2, 5.6], [2, 3, 4, 5], [2.33, 3.11, 3.89, 4.67]],
+      [
+        [1.4, 2.8, 4.2, 5.6],
+        [2, 3, 4, 5],
+        [2.33, 3.11, 3.89, 4.67],
+      ],
       2,
     );
   });

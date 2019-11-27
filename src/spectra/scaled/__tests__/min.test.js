@@ -16,7 +16,11 @@ describe('recale min', () => {
 
     let result = min(spectra, targetSpectrum, { from: 0.9, to: 2.1 });
     expect(result).toBeDeepCloseTo(
-      [[1, 2, 3, 4], [1.33, 2, 2.67, 3.33], [1.5, 2, 2.5, 3]],
+      [
+        [1, 2, 3, 4],
+        [1.33, 2, 2.67, 3.33],
+        [1.5, 2, 2.5, 3],
+      ],
       2,
     );
   });
