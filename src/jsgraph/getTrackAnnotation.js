@@ -1,7 +1,7 @@
 import { getNormalizedData } from '../spectra/getNormalizedData';
 
 export function getTrackAnnotation(spectra, index, options = {}) {
-  const { ids } = options;
+  const { ids, showSpectrumID = true } = options;
   let annotations = [];
 
   let normalized = getNormalizedData(spectra, { ids });
@@ -38,7 +38,7 @@ export function getTrackAnnotation(spectra, index, options = {}) {
       strokeColor: meta.color,
       strokeWidth: 2,
       label: {
-        text: `${y.toPrecision(4)} - ${id}`,
+        text: `${y.toPrecision(4)}${showSpectrumID ? ` - ${id}` : ''}`,
         position: { x: `${90}px`, y: `${20 + 15 * line}px` },
       },
     });

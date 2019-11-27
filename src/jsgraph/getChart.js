@@ -10,6 +10,7 @@ export function getChart(spectra, options = {}) {
   let chart = {
     data: [],
   };
+
   for (let spectrum of spectra) {
     if (!ids || ids.includes(spectrum.id)) {
       let data = spectrum.getData({ yFactor, xFilter });
