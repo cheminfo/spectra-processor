@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v1.0.0
+ * @version v1.1.0
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
