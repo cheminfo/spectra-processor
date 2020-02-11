@@ -1,7 +1,7 @@
 /**
  * @private
  * @param {*} spectra
- * @param {*} options
+ * @param {object} options
  */
 
 export function getNormalizedData(spectra, options = {}) {

@@ -14,6 +14,8 @@ import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
+import { getClass } from './metadata/getClass';
+import { getCategoriesStats } from './metadata/getCategoriesStats';
 
 export class SpectraProcessor {
   /**
@@ -196,6 +198,24 @@ export class SpectraProcessor {
     for (let spectrum of this.spectra) {
       spectrum.updateRangesInfo(options);
     }
+  }
+
+  /**
+   *
+   * @param {object} [options={}]
+   * @param {string} [options.propertyName="category"]
+   */
+  getClass(options) {
+    getClass(this, options);
+  }
+
+  /**
+   *
+   * @param {object} [options={}]
+   * @param {string} [options.propertyName="category"]
+   */
+  getCategoriesStats(options) {
+    getCategoriesStats(this, options);
   }
 
   /**
