@@ -211,7 +211,7 @@ export class SpectraProcessor {
    * @param {string} [options.propertyName="category"]
    */
   getClasses(options) {
-    getClasses(this.getMetadata(), options);
+    return getClasses(this.getMetadata(), options);
   }
 
   /**
@@ -220,7 +220,7 @@ export class SpectraProcessor {
    * @param {string} [options.propertyName="category"]
    */
   getCategoriesStats(options) {
-    getCategoriesStats(this.getMetadata(), options);
+    return getCategoriesStats(this.getMetadata(), options);
   }
 
   /**
