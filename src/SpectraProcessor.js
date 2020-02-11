@@ -14,7 +14,7 @@ import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
-import { getClass } from './metadata/getClass';
+import { getClasses } from './metadata/getClasses';
 import { getCategoriesStats } from './metadata/getCategoriesStats';
 
 export class SpectraProcessor {
@@ -205,8 +205,8 @@ export class SpectraProcessor {
    * @param {object} [options={}]
    * @param {string} [options.propertyName="category"]
    */
-  getClass(options) {
-    getClass(this, options);
+  getClasses(options) {
+    getClasses(this.metadata, options);
   }
 
   /**
@@ -215,7 +215,7 @@ export class SpectraProcessor {
    * @param {string} [options.propertyName="category"]
    */
   getCategoriesStats(options) {
-    getCategoriesStats(this, options);
+    getCategoriesStats(this.metadata, options);
   }
 
   /**

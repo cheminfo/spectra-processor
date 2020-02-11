@@ -7,7 +7,7 @@ import { getCategoriesStats } from './getCategoriesStats';
  * @param {string} [options.propertyName="category"]
  */
 
-export function getClass(metadata, options = {}) {
+export function getClasses(metadata, options = {}) {
   const { propertyName = 'category' } = options;
   const categoriesStats = getCategoriesStats(metadata, options);
   const result = new Array(metadata.length);

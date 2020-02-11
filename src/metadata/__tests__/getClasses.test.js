@@ -1,4 +1,4 @@
-import { getClass } from '../getClass';
+import { getClasses } from '../getClasses';
 
 let metadata = [
   {
@@ -12,7 +12,7 @@ let metadata = [
   },
 ];
 
-test('getClass', () => {
-  let result = getClass(metadata);
+test('getClasses', () => {
+  let result = getClasses(metadata);
   expect(result).toEqual([0, 1, 0]);
 });
