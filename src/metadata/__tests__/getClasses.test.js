@@ -14,5 +14,5 @@ let metadata = [
 
 test('getClasses', () => {
   let result = getClasses(metadata);
-  expect(result).toEqual([0, 1, 0]);
+  expect(result).toStrictEqual([0, 1, 0]);
 });

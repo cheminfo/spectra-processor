@@ -73,22 +73,22 @@ export class Spectrum {
   }
 }
 
-Spectrum.prototype.getData = function(options) {
+Spectrum.prototype.getData = function (options) {
   return getData(this, options);
 };
 
-Spectrum.prototype.updateNormalization = function(normalization) {
+Spectrum.prototype.updateNormalization = function (normalization) {
   this.normalized = getNormalized(this, normalization);
   this.ranges = {};
   this.updateMemory();
   this.updateNormalizedBoundary();
 };
 
-Spectrum.prototype.updateRangesInfo = function(ranges) {
+Spectrum.prototype.updateRangesInfo = function (ranges) {
   updateRangesInfo(this, ranges);
 };
 
-Spectrum.prototype.updateNormalizedBoundary = function() {
+Spectrum.prototype.updateNormalizedBoundary = function () {
   this.normalizedBoundary.x = {
     min: this.normalized.x[0],
     max: this.normalized.x[this.normalized.x.length - 1],

@@ -13,11 +13,11 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     autocorrelation = spectraProcessor.getAutocorrelation(index),
   } = options;
 
-  let max = autocorrelation.y.reduce(function(a, b) {
+  let max = autocorrelation.y.reduce(function (a, b) {
     return isNaN(b) ? a : Math.max(a, b);
   }, Number.MIN_VALUE);
 
-  let min = autocorrelation.y.reduce(function(a, b) {
+  let min = autocorrelation.y.reduce(function (a, b) {
     return isNaN(b) ? a : Math.min(a, b);
   }, Number.MAX_VALUE);
 

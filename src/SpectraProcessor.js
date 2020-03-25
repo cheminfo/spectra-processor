@@ -236,11 +236,7 @@ export class SpectraProcessor {
 
   addFromData(data, options = {}) {
     if (this.spectra.length === 0) this.keepOriginal = true;
-    const id =
-      options.id ||
-      Math.random()
-        .toString(36)
-        .substring(2, 10);
+    const id = options.id || Math.random().toString(36).substring(2, 10);
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {

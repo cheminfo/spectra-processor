@@ -14,7 +14,7 @@ let metadata = [
 
 test('getCategoriesStats', () => {
   let result = getCategoriesStats(metadata);
-  expect(result).toEqual({
+  expect(result).toStrictEqual({
     A: { classNumber: 0, counter: 2 },
     B: { classNumber: 1, counter: 1 },
   });
