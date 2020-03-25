@@ -1,3 +1,4 @@
+// CURRENTLY NOT USED !!!
 export function getFilterAnnotations(filter = {}) {
   let { exclusions = [] } = filter;
   let annotations = [];
@@ -6,8 +7,8 @@ export function getFilterAnnotations(filter = {}) {
     let annotation = {
       type: 'rect',
       position: [
-        { x: exclusion.from, y: -200 },
-        { x: exclusion.to, y: 200 },
+        { x: exclusion.from, y: '0px' },
+        { x: exclusion.to, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
@@ -18,8 +19,8 @@ export function getFilterAnnotations(filter = {}) {
     annotations.push({
       type: 'rect',
       position: [
-        { x: 0, y: -200 },
-        { x: filter.from, y: 200 },
+        { x: Number.MIN_SAFE_INTEGER, y: '0px' },
+        { x: filter.from, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
@@ -29,8 +30,8 @@ export function getFilterAnnotations(filter = {}) {
     annotations.push({
       type: 'rect',
       position: [
-        { x: filter.to, y: -200 },
-        { x: 10000, y: 200 },
+        { x: filter.to, y: '0px' },
+        { x: Number.MAX_SAFE_INTEGER, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',

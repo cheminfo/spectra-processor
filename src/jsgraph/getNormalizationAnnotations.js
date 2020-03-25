@@ -18,7 +18,7 @@ export function getNormalizationAnnotations(filter = {}, boundary) {
     annotations.push({
       type: 'rect',
       position: [
-        { x: 0, y: boundary.y.min },
+        { x: Number.MIN_SAFE_INTEGER, y: boundary.y.min },
         { x: filter.from, y: boundary.y.max },
       ],
       strokeWidth: 0,
@@ -30,7 +30,7 @@ export function getNormalizationAnnotations(filter = {}, boundary) {
       type: 'rect',
       position: [
         { x: filter.to, y: boundary.y.min },
-        { x: 10000, y: boundary.y.max },
+        { x: Number.MAX_SAFE_INTEGER, y: boundary.y.max },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
