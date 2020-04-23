@@ -22,7 +22,7 @@ export function getScaledChart(spectraProcessor, options = {}) {
   for (let i = 0; i < scaled.matrix.length; i++) {
     let data = {
       x: scaled.x,
-      y: scaled.matrix[i],
+      y: Array.from(scaled.matrix[i]), // need to ensure not a typed array
     };
     addChartDataStyle(data, { meta: scaled.meta[i], id: scaled.ids[i] });
     chart.data.push(data);
