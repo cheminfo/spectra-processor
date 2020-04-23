@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v1.1.1
+ * @version v1.1.2
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -1530,12 +1530,15 @@
 	  return result;
 	}
 
-	const isAnyArray$2 = require('is-any-array');
+	const toString$2 = Object.prototype.toString;
+	function isAnyArray$2(object) {
+	  return toString$2.call(object).endsWith('Array]');
+	}
+
 	/**
 	 * Throw an error in no an object of x,y arrays
 	 * @param {object} [points={}]
 	 */
-
 
 	function check(points = {}) {
 	  if (!isAnyArray$2(points.x) || !isAnyArray$2(points.y)) {
@@ -1920,7 +1923,9 @@
 
 	/**
 	 * Reduce the number of points while keeping visually the same noise. Practical to
-	 * display many spectra as SVG
+	 * display many spectra as SVG.
+	 * SHOULD NOT BE USED FOR DATA PROCESSING !!!
+	 * You should rather use ml-xy-equally-spaced to make further processing
 	 * @param {object} [points={}] - Object of points contains property x (an ordered increasing array) and y (an array)
 	 * @param {object} [options={}]
 	 * @param {number} [options.from=x[0]]
