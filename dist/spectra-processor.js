@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v1.1.2
+ * @version v1.1.3
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -1267,6 +1267,11 @@
 	  };
 	}
 
+	const toString$1 = Object.prototype.toString;
+	function isAnyArray$1(object) {
+	  return toString$1.call(object).endsWith('Array]');
+	}
+
 	/**
 	 * Computes the maximum of the given values
 	 * @param {Array<number>} input
@@ -1315,26 +1320,40 @@
 	  return sumValue;
 	}
 
-	const toString$1 = Object.prototype.toString;
-	function isAnyArray$1(object) {
-	  return toString$1.call(object).endsWith('Array]');
-	}
-
 	/**
 	 * Computes the norm of the given values
 	 * @param {Array<number>} input
 	 * @param {object} [options={}]
 	 * @param {string} [options.algorithm='absolute'] absolute, sum or max
+	 * @param {number} [options.maxValue=1] new max value for algo max
+	 * @param {number} [options.sumValue=1] new max value for algo absolute and sum
+	 * @param {Array} [options.output=[]] specify the output array, can be the input array for in place modification
 	 * @return {number}
 	 */
 
 	function norm(input) {
 	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	  var _options$algorithm = options.algorithm,
-	      algorithm = _options$algorithm === void 0 ? 'absolute' : _options$algorithm;
+	      algorithm = _options$algorithm === void 0 ? 'absolute' : _options$algorithm,
+	      _options$sumValue = options.sumValue,
+	      sumValue = _options$sumValue === void 0 ? 1 : _options$sumValue,
+	      _options$maxValue = options.maxValue,
+	      maxValue = _options$maxValue === void 0 ? 1 : _options$maxValue;
 
 	  if (!isAnyArray$1(input)) {
 	    throw new Error('input must be an array');
+	  }
+
+	  var output;
+
+	  if (options.output !== undefined) {
+	    if (!isAnyArray$1(options.output)) {
+	      throw new TypeError('output option must be an array if specified');
+	    }
+
+	    output = options.output;
+	  } else {
+	    output = new Array(input.length);
 	  }
 
 	  if (input.length === 0) {
@@ -1344,29 +1363,39 @@
 	  switch (algorithm.toLowerCase()) {
 	    case 'absolute':
 	      {
-	        var absoluteSumValue = absoluteSum(input);
+	        var absoluteSumValue = absoluteSum(input) / sumValue;
 	        if (absoluteSumValue === 0) return input.slice(0);
-	        return input.map(function (element) {
-	          return element / absoluteSumValue;
-	        });
+
+	        for (var i = 0; i < input.length; i++) {
+	          output[i] = input[i] / absoluteSumValue;
+	        }
+
+	        return output;
 	      }
 
 	    case 'max':
 	      {
-	        var maxValue = max(input);
-	        if (maxValue === 0) return input.slice(0);
-	        return input.map(function (element) {
-	          return element / maxValue;
-	        });
+	        var currentMaxValue = max(input);
+	        if (currentMaxValue === 0) return input.slice(0);
+	        var factor = maxValue / currentMaxValue;
+
+	        for (var _i = 0; _i < input.length; _i++) {
+	          output[_i] = input[_i] * factor;
+	        }
+
+	        return output;
 	      }
 
 	    case 'sum':
 	      {
-	        var sumValue = sum(input);
-	        if (sumValue === 0) return input.slice(0);
-	        return input.map(function (element) {
-	          return element / sumValue;
-	        });
+	        var sumFactor = sum(input) / sumValue;
+	        if (sumFactor === 0) return input.slice(0);
+
+	        for (var _i2 = 0; _i2 < input.length; _i2++) {
+	          output[_i2] = input[_i2] / sumFactor;
+	        }
+
+	        return output;
 	      }
 
 	    default:
@@ -1407,6 +1436,13 @@
 
 	  return minValue;
 	}
+
+	/**
+	 *
+	 * @param {Array} input
+	 * @param {object} [options={}]
+	 * @param {Array} [options.output=[]] specify the output array, can be the input array for in place modification
+	 */
 
 	function rescale(input) {
 	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -3346,7 +3382,7 @@
 	        for (let i = 0; i < spectra.length; i++) {
 	          spectrum = spectra[i];
 
-	          if (spectrum.data.length > 0) {
+	          if (spectrum.data && spectrum.data.length > 0) {
 	            for (let j = 0; j < spectrum.data.length; j++) {
 	              let data = spectrum.data[j];
 	              let newData = {
@@ -8373,7 +8409,8 @@
 	  for (let i = 0; i < scaled.matrix.length; i++) {
 	    let data = {
 	      x: scaled.x,
-	      y: scaled.matrix[i]
+	      y: Array.from(scaled.matrix[i]) // need to ensure not a typed array
+
 	    };
 	    addChartDataStyle(data, {
 	      meta: scaled.meta[i],
