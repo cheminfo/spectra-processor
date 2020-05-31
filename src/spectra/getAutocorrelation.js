@@ -1,4 +1,4 @@
-import { X } from 'ml-spectra-processing';
+import { xCorrelation } from 'ml-spectra-processing';
 
 /**
  * @private
@@ -18,7 +18,7 @@ export function getAutocorrelation(normalized, index) {
     for (let j = 0; j < nbRow; j++) {
       array2[j] = matrix[j][i];
     }
-    result[i] = X.correlation(array1, array2);
+    result[i] = xCorrelation(array1, array2);
   }
   return {
     x: normalized.x,

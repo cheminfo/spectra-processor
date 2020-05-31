@@ -1,5 +1,5 @@
-import { getScaledData } from '../getScaledData';
 import { SpectraProcessor } from '../../SpectraProcessor';
+import { getScaledData } from '../getScaledData';
 
 let spectraProcessor = new SpectraProcessor();
 spectraProcessor.spectra = [

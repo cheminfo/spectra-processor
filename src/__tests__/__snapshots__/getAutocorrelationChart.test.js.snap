@@ -3,38 +3,10 @@
 exports[`getAutocorrelationChart check jsgraph chart 1`] = `
 Object {
   "color": Array [
-    Color {
-      "_rgb": Array [
-        204,
-        204,
-        204,
-        1,
-      ],
-    },
-    Color {
-      "_rgb": Array [
-        204,
-        204,
-        204,
-        1,
-      ],
-    },
-    Color {
-      "_rgb": Array [
-        204,
-        204,
-        204,
-        1,
-      ],
-    },
-    Color {
-      "_rgb": Array [
-        204,
-        204,
-        204,
-        1,
-      ],
-    },
+    "rgb(255,0,0)",
+    "rgb(255,0,0)",
+    "rgb(255,35,0)",
+    "rgb(0,0,255)",
   ],
   "styles": Object {
     "selected": Object {
@@ -54,10 +26,10 @@ Object {
     3,
   ],
   "y": Array [
-    1.875,
-    3,
+    2,
     4,
-    4.25,
+    5.5,
+    3.75,
   ],
 }
 `;

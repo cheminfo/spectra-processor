@@ -1,5 +1,5 @@
-import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart';
 import { SpectraProcessor } from '../SpectraProcessor';
+import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart';
 
 describe('getAutocorrelationChart', () => {
   it('check jsgraph chart', () => {
@@ -16,11 +16,11 @@ describe('getAutocorrelationChart', () => {
       { id: 1 },
     );
     spectraProcessor.addFromData(
-      { x: [0, 1, 2, 3], y: [2, 3, 4, 5] },
+      { x: [0, 1, 2, 3], y: [2, 4, 6, 8] },
       { id: 2 },
     );
     spectraProcessor.addFromData(
-      { x: [0, 1, 2, 3], y: [3, 4, 5, 6] },
+      { x: [0, 1, 2, 3], y: [3, 6, 9, 0] },
       { id: 3 },
     );
 

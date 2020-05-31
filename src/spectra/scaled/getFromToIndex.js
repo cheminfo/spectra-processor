@@ -1,4 +1,4 @@
-import { X } from 'ml-spectra-processing';
+import { xFindClosestIndex } from 'ml-spectra-processing';
 
 export function getFromToIndex(xs, range) {
   let { from, to } = range;
@@ -10,7 +10,7 @@ export function getFromToIndex(xs, range) {
   }
 
   return {
-    fromIndex: X.findClosestIndex(xs, from),
-    toIndex: X.findClosestIndex(xs, to),
+    fromIndex: xFindClosestIndex(xs, from),
+    toIndex: xFindClosestIndex(xs, to),
   };
 }

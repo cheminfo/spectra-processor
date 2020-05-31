@@ -14,9 +14,12 @@ describe('recale max', () => {
 
     let targetSpectrum = { normalized: { x: [0, 1, 2, 3], y: [1, 2, 3, 4] } };
 
-    let result = max(spectra, targetSpectrum, { from: 0.9, to: 2.1 });
+    let results = max(spectra, targetSpectrum, {
+      from: 0.9,
+      to: 2.1,
+    }).map((result) => Array.from(result));
 
-    expect(result).toBeDeepCloseTo(
+    expect(results).toBeDeepCloseTo(
       [
         [1, 2, 3, 4],
         [1.5, 2.25, 3, 3.75],

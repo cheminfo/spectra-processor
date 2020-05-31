@@ -1,4 +1,4 @@
-import { X } from 'ml-spectra-processing';
+import { xBoxPlot } from 'ml-spectra-processing';
 
 /**
  * @private
@@ -20,7 +20,7 @@ export function getBoxPlotData(spectra) {
     for (let row = 0; row < nbRow; row++) {
       aColumn[row] = matrix[row][column];
     }
-    let info = X.boxPlot(aColumn);
+    let info = xBoxPlot(aColumn);
     if (!result) {
       result = { x };
       for (let key in info) {

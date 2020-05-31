@@ -14,8 +14,12 @@ describe('recale min', () => {
 
     let targetSpectrum = { normalized: { x: [0, 1, 2, 3], y: [1, 2, 3, 4] } };
 
-    let result = min(spectra, targetSpectrum, { from: 0.9, to: 2.1 });
-    expect(result).toBeDeepCloseTo(
+    let results = min(spectra, targetSpectrum, {
+      from: 0.9,
+      to: 2.1,
+    }).map((result) => Array.from(result));
+
+    expect(results).toBeDeepCloseTo(
       [
         [1, 2, 3, 4],
         [1.33, 2, 2.67, 3.33],

@@ -1,22 +1,22 @@
-import { Spectrum } from './spectrum/Spectrum';
+import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart';
+import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
+import { getChart } from './jsgraph/getChart';
+import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
+import { getNormalizedChart } from './jsgraph/getNormalizedChart';
+import { getScaledChart } from './jsgraph/getScaledChart';
+import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
+import { getClasses } from './metadata/getClasses';
+import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
 import parseText from './parser/text';
 import parseMatrix from './parser/matrix';
-import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
-import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
-import { getChart } from './jsgraph/getChart';
-import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart';
-import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
-import { getNormalizedChart } from './jsgraph/getNormalizedChart';
-import { getScaledChart } from './jsgraph/getScaledChart';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
 import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
-import { getMetadata } from './metadata/getMetadata';
-import { getClasses } from './metadata/getClasses';
 import { getCategoriesStats } from './metadata/getCategoriesStats';
+import { Spectrum } from './spectrum/Spectrum';
 
 export class SpectraProcessor {
   /**
@@ -88,8 +88,12 @@ export class SpectraProcessor {
    * @param {integer} [index] point of the spectrum to autocorrelate
    * @param {object} [options={}]
    * @param {array} [options.ids=[]] list of ids, by default all spectra
+   * @param {array} [options.x] x value if index if undefined
    */
   getAutocorrelation(index, options) {
+    if (index === undefined) {
+      index = 0;
+    }
     return getAutocorrelation(this.getNormalizedData(options), index);
   }
 

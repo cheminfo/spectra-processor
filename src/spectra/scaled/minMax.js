@@ -1,5 +1,5 @@
-import { XY } from 'ml-spectra-processing';
 import SimpleLinearRegression from 'ml-regression-simple-linear';
+import { xyMinYPoint, xyMaxYPoint } from 'ml-spectra-processing';
 
 import { getFromToIndex } from './getFromToIndex';
 
@@ -7,14 +7,14 @@ export function minMax(spectra, targetSpectrum, range = {}) {
   let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
 
   let targetValue = {
-    min: XY.minYPoint(targetSpectrum.normalized, fromToIndex).y,
-    max: XY.maxYPoint(targetSpectrum.normalized, fromToIndex).y,
+    min: xyMinYPoint(targetSpectrum.normalized, fromToIndex).y,
+    max: xyMaxYPoint(targetSpectrum.normalized, fromToIndex).y,
   };
 
   let values = spectra.map((spectrum) => {
     return {
-      min: XY.minYPoint(spectrum.normalized, fromToIndex).y,
-      max: XY.maxYPoint(spectrum.normalized, fromToIndex).y,
+      min: xyMinYPoint(spectrum.normalized, fromToIndex).y,
+      max: xyMaxYPoint(spectrum.normalized, fromToIndex).y,
     };
   });
 

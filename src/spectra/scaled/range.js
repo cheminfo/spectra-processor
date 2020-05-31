@@ -1,21 +1,21 @@
-import { XY, X } from 'ml-spectra-processing';
+import { xyIntegration, xMultiply } from 'ml-spectra-processing';
 
 import { getFromToIndex } from './getFromToIndex';
 
-export function range(spectra, targetSpectrum, range = {}) {
-  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
+export function range(spectra, targetSpectrum, currentrange = {}) {
+  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, currentrange);
 
-  let targetValue = XY.integration(targetSpectrum.normalized, fromToIndex);
+  let targetValue = xyIntegration(targetSpectrum.normalized, fromToIndex);
 
   let values = spectra.map((spectrum) =>
-    XY.integration(spectrum.normalized, fromToIndex),
+    xyIntegration(spectrum.normalized, fromToIndex),
   );
 
   let matrix = [];
   for (let i = 0; i < spectra.length; i++) {
     let spectrum = spectra[i];
     let factor = targetValue / values[i];
-    matrix.push(X.multiply(spectrum.normalized.y, factor));
+    matrix.push(xMultiply(spectrum.normalized.y, factor));
   }
 
   return matrix;

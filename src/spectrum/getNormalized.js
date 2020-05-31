@@ -1,7 +1,7 @@
-import equallySpaced from 'ml-array-xy-equally-spaced';
-import Stat from 'ml-stat/array';
 import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
+import equallySpaced from 'ml-array-xy-equally-spaced';
+import Stat from 'ml-stat/array';
 
 /**
  *

@@ -7,9 +7,10 @@ import { getJcampKind } from '../Kinds';
  * @return {Spectrum} - new instance of Spectrum with the provided data
  */
 export default function jcamp(jcamp) {
-  const parsed = convert(jcamp, { xy: true, keepRecordsRegExp: /TITLE/ });
+  const parsed = convert(jcamp, { xy: true, keepRecordsRegExp: /TITLE/ })
+    .flatten[0];
   const kind = getJcampKind(parsed);
-  const data = parsed.spectra[0].data[0];
+  const data = parsed.spectra[0].data;
   const meta = parsed.info;
   // we convert the data
   if (kind && kind.importation && kind.importation.converter) {

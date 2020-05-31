@@ -26,7 +26,9 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     .domain([min, max])
     .mode('lch');
 
-  let colorScale = autocorrelation.y.map((y) => colorCallback(y));
+  let colorScale = autocorrelation.y.map(
+    (y) => 'rgb(' + colorCallback(y).rgb().join() + ')',
+  );
 
   let mean = spectraProcessor.getMeanData();
 

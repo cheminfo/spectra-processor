@@ -1,11 +1,11 @@
-import { X, XY } from 'ml-spectra-processing';
+import { xSubtract, xyMaxYPoint, xyIntegration } from 'ml-spectra-processing';
 
 import { getNormalizedData } from './getNormalizedData';
-import { min } from './scaled/min';
+import { getFromToIndex } from './scaled/getFromToIndex';
 import { max } from './scaled/max';
+import { min } from './scaled/min';
 import { minMax } from './scaled/minMax';
 import { range as rangeFct } from './scaled/range';
-import { getFromToIndex } from './scaled/getFromToIndex';
 /**
  * @private
  * @param {Array<Spectrum>} spectra
@@ -68,7 +68,7 @@ export function getScaledData(spectraProcessor, options = {}) {
 
   if (relative) {
     for (let i = 0; i < result.matrix.length; i++) {
-      result.matrix[i] = X.subtract(
+      result.matrix[i] = xSubtract(
         result.matrix[i],
         targetSpectrum.normalized.y,
       );
@@ -88,11 +88,11 @@ export function getScaledData(spectraProcessor, options = {}) {
             targetSpectrum.normalized.x,
             currentRange,
           );
-          currentRange.integration = XY.integration(
+          currentRange.integration = xyIntegration(
             { x: result.x, y: yNormalized },
             fromToIndex,
           );
-          currentRange.maxPoint = XY.maxYPoint(
+          currentRange.maxPoint = xyMaxYPoint(
             { x: result.x, y: yNormalized },
             fromToIndex,
           );
