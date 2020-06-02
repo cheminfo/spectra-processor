@@ -7,10 +7,14 @@ import chroma from 'chroma-js';
  * @param {object} [options={}]
  * @param {Array} [options.autocorrelation] precalculated autocorrelation {x,y}
  * @param {Array} [options.maxDataPoints=]
+ * @param {array} [options.xFilter.from]
+ * @param {array} [options.xFilter.to]
+ * @param {array} [options.xFilter.exclusions=[]]
  */
 export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
   const {
     autocorrelation = spectraProcessor.getAutocorrelation(index),
+    xFilter,
   } = options;
 
   let max = autocorrelation.y.reduce(function (a, b) {
@@ -27,10 +31,13 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     .mode('lch');
 
   let colorScale = autocorrelation.y.map(
-    (y) => 'rgb(' + colorCallback(y).rgb().join() + ')',
+    (y) => `rgb(${colorCallback(y).rgb().join()})`,
   );
 
   let mean = spectraProcessor.getMeanData();
+  if (xFilter) {
+    mean = filterX({ x: mean.x, y: mean.y }, xFilter);
+  }
 
   let colorSpectrum = {
     type: 'color',
