@@ -2,13 +2,13 @@ import { parseXY } from 'xy-parser';
 
 /**
  * Create a spectrum from a text file
- * @param {string} text - String containing the JCAMP data
+ * @param {string} value - String containing the JCAMP data
  * @return {Spectrum} - new instance of Spectrum with the provided data
  */
-export default function text(text, options = {}) {
+export default function text(value, options = {}) {
   const { kind, parserOptions = {} } = options;
 
-  const data = parseXY(text, parserOptions);
+  const data = parseXY(value, parserOptions);
 
   // we convert the data
   if (kind && kind.importation && kind.importation.converter) {

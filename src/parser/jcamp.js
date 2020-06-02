@@ -3,11 +3,11 @@ import { convert } from 'jcampconverter';
 import { getJcampKind } from '../Kinds';
 /**
  * Create a spectrum from a jcamp
- * @param {string} jcamp - String containing the JCAMP data
+ * @param {string} jcampText - String containing the JCAMP data
  * @return {Spectrum} - new instance of Spectrum with the provided data
  */
-export default function jcamp(jcamp) {
-  const parsed = convert(jcamp, { xy: true, keepRecordsRegExp: /TITLE/ })
+export default function jcamp(jcampText) {
+  const parsed = convert(jcampText, { xy: true, keepRecordsRegExp: /TITLE/ })
     .flatten[0];
   const kind = getJcampKind(parsed);
   const data = parsed.spectra[0].data;

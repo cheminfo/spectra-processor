@@ -24,28 +24,28 @@ export function getNormalized(spectrum, options = {}) {
     exclusions = [],
   } = options;
 
-  let y = spectrum.y.slice(0);
+  let ys = spectrum.y.slice(0);
 
   for (let filter of filters) {
     switch (filter.name) {
       case 'centerMean': {
         let mean = Stat.mean(spectrum.y);
         let meanFct = (y) => y - mean;
-        y = y.map(meanFct);
+        ys = ys.map(meanFct);
         break;
       }
       case 'scaleSD': {
         let std = Stat.standardDeviation(spectrum.y);
         let stdFct = (y) => y / std;
-        y = y.map(stdFct);
+        ys = ys.map(stdFct);
         break;
       }
       case 'normalize': {
-        y = normed(y);
+        ys = normed(ys);
         break;
       }
       case 'rescale': {
-        y = rescale(y);
+        ys = rescale(ys);
         break;
       }
       case '':
@@ -56,7 +56,7 @@ export function getNormalized(spectrum, options = {}) {
     }
   }
   let result = equallySpaced(
-    { x: spectrum.x, y },
+    { x: spectrum.x, y: ys },
     { from, to, numberOfPoints, exclusions },
   );
   return result;

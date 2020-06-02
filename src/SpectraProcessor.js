@@ -5,18 +5,19 @@ import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotatio
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getScaledChart } from './jsgraph/getScaledChart';
 import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
+import { getCategoriesStats } from './metadata/getCategoriesStats';
 import { getClasses } from './metadata/getClasses';
 import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
-import parseText from './parser/text';
 import parseMatrix from './parser/matrix';
+import parseText from './parser/text';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
 import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
-import { getCategoriesStats } from './metadata/getCategoriesStats';
 import { Spectrum } from './spectrum/Spectrum';
+import { xFindClosestIndex } from 'ml-spectra-processing';
 
 export class SpectraProcessor {
   /**
@@ -85,16 +86,18 @@ export class SpectraProcessor {
   /**
    * Returns an object {x:[], y:[]} containing the autocorrelation for the
    * specified index
-   * @param {integer} [index] point of the spectrum to autocorrelate
+   * @param {integer} [index|undefined] x index of the spectrum to autocorrelate
    * @param {object} [options={}]
    * @param {array} [options.ids=[]] list of ids, by default all spectra
-   * @param {array} [options.x] x value if index if undefined
+   * @param {array} [options.x] x value if index is undefined
    */
-  getAutocorrelation(index, options) {
-    if (index === undefined) {
-      index = 0;
+  getAutocorrelation(index, options = {}) {
+    const { x } = options;
+    const normalizedData = this.getNormalizedData(options);
+    if (index === undefined && x !== undefined) {
+      index = xFindClosestIndex(normalizedData.x, x);
     }
-    return getAutocorrelation(this.getNormalizedData(options), index);
+    return getAutocorrelation(normalizedData, index);
   }
 
   /**

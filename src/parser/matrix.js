@@ -8,7 +8,7 @@
 export default function matrix(text, options = {}) {
   const lines = text.split(/[\r\n]+/).filter((value) => value);
   const { fs = '\t' } = options;
-  let matrix = [];
+  let currentMatrix = [];
   let ids = [];
   let meta = [];
   let x = [];
@@ -36,10 +36,12 @@ export default function matrix(text, options = {}) {
       if (j < labels.length) {
         oneMeta[labels[j]] = parts[j];
       } else {
-        matrix.push(parts.slice(labels.length).map((value) => Number(value)));
+        currentMatrix.push(
+          parts.slice(labels.length).map((value) => Number(value)),
+        );
         break;
       }
     }
   }
-  return { x, meta, matrix, ids };
+  return { x, meta, matrix: currentMatrix, ids };
 }

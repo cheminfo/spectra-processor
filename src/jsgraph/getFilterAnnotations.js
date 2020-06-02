@@ -1,4 +1,3 @@
-// CURRENTLY NOT USED !!!
 export function getFilterAnnotations(filter = {}) {
   let { exclusions = [] } = filter;
   let annotations = [];
@@ -11,7 +10,7 @@ export function getFilterAnnotations(filter = {}) {
         { x: exclusion.to, y: '2000px' },
       ],
       strokeWidth: 0,
-      fillColor: 'rgba(255,255,224,1)',
+      fillColor: 'rgba(255,255,128,1)',
     };
     return annotation;
   });
