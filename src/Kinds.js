@@ -1,9 +1,9 @@
 export function getJcampKind(data) {
-  let datatype = data.dataType.toLowerCase();
-  let yUnit = data.spectra[0].yUnit.toLowerCase();
+  let dataType = data.dataType.toLowerCase();
+  let yUnits = data.spectra[0].yUnits.toLowerCase();
 
-  if (datatype.match(/infrared/)) {
-    if (yUnit.match(/absorbance/)) {
+  if (dataType.match(/infrared/)) {
+    if (yUnits.match(/absorbance/)) {
       return IR_ABSORBANCE;
     } else {
       return IR_TRANSMITTANCE;
