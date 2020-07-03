@@ -1,4 +1,5 @@
 import chroma from 'chroma-js';
+import filterX from 'ml-array-xy-filter-x';
 
 /**
  * Retrieve a chart with autocorrelation color
