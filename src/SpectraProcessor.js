@@ -1,3 +1,5 @@
+import { xFindClosestIndex } from 'ml-spectra-processing';
+
 import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart';
 import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
 import { getChart } from './jsgraph/getChart';
@@ -17,7 +19,6 @@ import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
 import { Spectrum } from './spectrum/Spectrum';
-import { xFindClosestIndex } from 'ml-spectra-processing';
 
 export class SpectraProcessor {
   /**

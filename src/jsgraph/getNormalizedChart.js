@@ -1,5 +1,6 @@
-import { addChartDataStyle } from './addChartDataStyle';
 import filterX from 'ml-array-xy-filter-x';
+
+import { addChartDataStyle } from './addChartDataStyle';
 
 /**
  * @param {Array<Spectrum>} spectra

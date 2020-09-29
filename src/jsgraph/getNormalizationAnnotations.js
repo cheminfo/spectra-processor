@@ -1,4 +1,4 @@
-export function getNormalizationAnnotations(filter = {}, boundary) {
+export function getNormalizationAnnotations(filter = {}, boundary = {}) {
   let { exclusions = [] } = filter;
   let annotations = [];
   exclusions = exclusions.filter((exclusion) => !exclusion.ignore);
