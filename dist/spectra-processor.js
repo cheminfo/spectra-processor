@@ -1,6 +1,6 @@
 /**
  * spectra-processor
- * @version v1.3.0
+ * @version v1.3.1
  * @link https://github.com/cheminfo/spectra-processor#readme
  * @license MIT
  */
@@ -10116,7 +10116,7 @@ ${indent}columns: ${matrix.columns}
   }
 
   function checkArraySize(x, y) {
-    if (!Array.isArray(x) || !Array.isArray(y)) {
+    if (!src(x) || !src(y)) {
       throw new TypeError('x and y must be arrays');
     }
 
@@ -10135,7 +10135,7 @@ ${indent}columns: ${matrix.columns}
     predict(x) {
       if (typeof x === 'number') {
         return this._predict(x);
-      } else if (Array.isArray(x)) {
+      } else if (src(x)) {
         const y = [];
 
         for (let i = 0; i < x.length; i++) {
@@ -10171,7 +10171,7 @@ ${indent}columns: ${matrix.columns}
 
 
     score(x, y) {
-      if (!Array.isArray(x) || !Array.isArray(y) || x.length !== y.length) {
+      if (!src(x) || !src(y) || x.length !== y.length) {
         throw new Error('x and y must be arrays of the same length');
       }
 
