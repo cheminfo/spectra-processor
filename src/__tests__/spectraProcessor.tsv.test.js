@@ -16,6 +16,7 @@ describe('SpectraProcessor text', () => {
     const spectraProcessor = SpectraProcessor.fromNormalizedMatrix(
       normalizedTSV,
     );
+    expect(spectraProcessor.getMemoryInfo().keepOriginal).toBe(false);
     const newNormalizedTSV = spectraProcessor.getNormalizedText();
     expect(normalizedTSV).toBe(newNormalizedTSV);
   });
