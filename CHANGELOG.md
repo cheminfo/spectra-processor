@@ -1,3 +1,5 @@
+# Changelog
+
 ### [1.3.2](https://github.com/cheminfo/spectra-processor/compare/v1.3.1...v1.3.2) (2020-10-16)
 
 
