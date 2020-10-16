@@ -452,7 +452,6 @@ export class SpectraProcessor {
       to: parsed.x[parsed.x.length - 1],
       numberOfPoints: parsed.x.length,
     });
-    spectraProcessor.keepOriginal = false;
 
     for (let i = 0; i < parsed.ids.length; i++) {
       spectraProcessor.addFromData(
@@ -467,6 +466,8 @@ export class SpectraProcessor {
         },
       );
     }
+
+    spectraProcessor.keepOriginal = false;
 
     return spectraProcessor;
   }
