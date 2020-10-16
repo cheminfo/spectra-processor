@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://www.github.com/cheminfo/spectra-processor/compare/v1.3.2...v1.4.0) (2020-10-16)
+
+
+### Features
+
+* remove docs ([07aca1e](https://www.github.com/cheminfo/spectra-processor/commit/07aca1ea08b5774a20575235d78a6abec8a5515f))
+
 ### [1.3.2](https://github.com/cheminfo/spectra-processor/compare/v1.3.1...v1.3.2) (2020-10-16)
 
 
