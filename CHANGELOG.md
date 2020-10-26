@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://www.github.com/cheminfo/spectra-processor/compare/v1.4.0...v1.5.0) (2020-10-26)
+
+
+### Features
+
+* allow filtering by ids ([6fd8198](https://www.github.com/cheminfo/spectra-processor/commit/6fd819814c066e56534a76b2bf8a75cf518f9aa9))
+
 ## [1.4.0](https://www.github.com/cheminfo/spectra-processor/compare/v1.3.2...v1.4.0) (2020-10-16)
 
 
