@@ -14,7 +14,7 @@ import filterX from 'ml-array-xy-filter-x';
  */
 export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
   const {
-    autocorrelation = spectraProcessor.getAutocorrelation(index),
+    autocorrelation = spectraProcessor.getAutocorrelation(index, options),
     xFilter,
   } = options;
 

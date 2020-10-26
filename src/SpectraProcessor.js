@@ -98,6 +98,7 @@ export class SpectraProcessor {
     if (index === undefined && x !== undefined) {
       index = xFindClosestIndex(normalizedData.x, x);
     }
+
     return getAutocorrelation(normalizedData, index);
   }
 
@@ -353,6 +354,8 @@ export class SpectraProcessor {
 
   /**
    * Returns a JSGraph chart object for all the spectra
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] ids of the spectra to select, by default all
    * @returns {object}
    */
   getAutocorrelationChart(index, options) {
@@ -369,10 +372,14 @@ export class SpectraProcessor {
 
   /**
    * Returns a JSGraph annotation object for box plot
+   * @param {object} [options={}]
+   * @param {array} [options.ids=[]] list of ids, by default all spectra
    * @returns {object}
    */
   getBoxPlotAnnotations(options) {
-    return getBoxPlotAnnotations(this.spectra, options);
+    const { ids } = options;
+    let spectra = this.getSpectra(ids);
+    return getBoxPlotAnnotations(spectra, options);
   }
 
   /**
@@ -382,7 +389,9 @@ export class SpectraProcessor {
    * @returns {object}
    */
   getNormalizedChart(options) {
-    return getNormalizedChart(this.spectra, options);
+    const { ids } = options;
+    let spectra = this.getSpectra(ids);
+    return getNormalizedChart(spectra, options);
   }
 
   /**
