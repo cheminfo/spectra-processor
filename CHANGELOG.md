@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.5.2](https://www.github.com/cheminfo/spectra-processor/compare/v1.5.1...v1.5.2) (2020-10-27)
+
+
+### Bug Fixes
+
+* jcampconverter dependency ([83cc089](https://www.github.com/cheminfo/spectra-processor/commit/83cc089ebe1ef5d8f0685af7a9ad507f8a4bfa9a))
+
 ### [1.5.1](https://www.github.com/cheminfo/spectra-processor/compare/v1.5.0...v1.5.1) (2020-10-26)
 
 
