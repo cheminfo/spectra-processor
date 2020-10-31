@@ -9,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "build": "cheminfo-build --entry src/index.js ",
+    "build": "cheminfo-build --entry src/index.js",
     "build-doc": "cheminfo doc",
     "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
