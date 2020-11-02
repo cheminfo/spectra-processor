@@ -41,7 +41,7 @@ export class SpectraProcessor {
    */
   constructor(options = {}) {
     this.normalization = options.normalization;
-    this.maxMemory = options.maxMemory || 64 * 1024 * 1024;
+    this.maxMemory = options.maxMemory || 256 * 1024 * 1024;
     this.keepOriginal = true;
     this.spectra = [];
     this.boundaries = {
