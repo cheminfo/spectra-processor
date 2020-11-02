@@ -378,7 +378,6 @@ export class SpectraProcessor {
    * @returns {object}
    */
   getBoxPlotChart(options = {}) {
-    debugger;
     const normalizedData = this.getNormalizedData(options);
     return getBoxPlotChart(normalizedData, options);
   }
