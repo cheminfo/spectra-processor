@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/cheminfo/spectra-processor/compare/v1.5.2...v2.0.0) (2020-11-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* add getBoxPlotChart
+
+### Features
+
+* add getBoxPlotChart ([da766d3](https://www.github.com/cheminfo/spectra-processor/commit/da766d3a1a99c0b5c5073582f4fc0de1fa49a105))
+
 ### [1.5.2](https://www.github.com/cheminfo/spectra-processor/compare/v1.5.1...v1.5.2) (2020-10-27)
 
 
