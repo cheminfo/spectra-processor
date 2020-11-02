@@ -1,4 +1,6 @@
 import chroma from 'chroma-js';
+import maxFct from 'ml-array-max';
+import minFct from 'ml-array-min';
 import filterX from 'ml-array-xy-filter-x';
 
 /**
@@ -20,13 +22,8 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     ids,
   } = options;
 
-  let max = autocorrelation.y.reduce(function (a, b) {
-    return isNaN(b) ? a : Math.max(a, b);
-  }, Number.MIN_VALUE);
-
-  let min = autocorrelation.y.reduce(function (a, b) {
-    return isNaN(b) ? a : Math.min(a, b);
-  }, Number.MAX_VALUE);
+  let max = maxFct(autocorrelation.y);
+  let min = minFct(autocorrelation.y);
 
   let colorCallback = chroma
     .scale(['blue', 'cyan', 'yellow', 'red'])

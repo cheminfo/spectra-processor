@@ -1,7 +1,7 @@
 import { xFindClosestIndex } from 'ml-spectra-processing';
 
 import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart';
-import { getBoxPlotAnnotations } from './jsgraph/getBoxPlotAnnotations';
+import { getBoxPlotChart } from './jsgraph/getBoxPlotChart';
 import { getChart } from './jsgraph/getChart';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
@@ -14,6 +14,7 @@ import parseJcamp from './parser/jcamp';
 import parseMatrix from './parser/matrix';
 import parseText from './parser/text';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
+import { getBoxPlotData } from './spectra/getBoxPlotData';
 import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
@@ -376,10 +377,21 @@ export class SpectraProcessor {
    * @param {array} [options.ids=[]] list of ids, by default all spectra
    * @returns {object}
    */
-  getBoxPlotAnnotations(options) {
-    const { ids } = options;
-    let spectra = this.getSpectra(ids);
-    return getBoxPlotAnnotations(spectra, options);
+  getBoxPlotChart(options = {}) {
+    debugger;
+    const normalizedData = this.getNormalizedData(options);
+    return getBoxPlotChart(normalizedData, options);
+  }
+
+  /**
+   * Returns boxplot information
+   * @param {object} [options={}]
+   * @param {array} [options.ids=[]] list of ids, by default all spectra
+   * @returns {object}
+   */
+  getBoxPlotData(options = {}) {
+    const normalizedData = this.getNormalizedData(options);
+    return getBoxPlotData(normalizedData, options);
   }
 
   /**

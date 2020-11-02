@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getBoxPlotChart check jsgraph chart with annotations 1`] = `
+Object {
+  "annotations": Array [
+    Object {
+      "layer": 0,
+      "properties": Object {
+        "fillColor": "#000",
+        "fillOpacity": 0.3,
+        "position": Array [
+          Object {
+            "x": 10,
+            "y": 1.5,
+          },
+          Object {
+            "x": 20,
+            "y": 2.5,
+          },
+          Object {
+            "x": 30,
+            "y": 3.5,
+          },
+          Object {
+            "x": 30,
+            "y": 7,
+          },
+          Object {
+            "x": 20,
+            "y": 6,
+          },
+          Object {
+            "x": 10,
+            "y": 5,
+          },
+        ],
+        "strokeWidth": 1e-7,
+      },
+      "type": "polygon",
+    },
+    Object {
+      "layer": 0,
+      "properties": Object {
+        "fillColor": "#000",
+        "fillOpacity": 0.15,
+        "position": Array [
+          Object {
+            "x": 10,
+            "y": 1,
+          },
+          Object {
+            "x": 20,
+            "y": 2,
+          },
+          Object {
+            "x": 30,
+            "y": 3,
+          },
+          Object {
+            "x": 30,
+            "y": 8,
+          },
+          Object {
+            "x": 20,
+            "y": 7,
+          },
+          Object {
+            "x": 10,
+            "y": 6,
+          },
+        ],
+        "strokeColor": "#FFF",
+        "strokeWidth": 1e-7,
+      },
+      "type": "polygon",
+    },
+  ],
+  "data": Object {
+    "color": Array [
+      "#000",
+      "#000",
+      "#000",
+    ],
+    "x": Array [
+      10,
+      20,
+      30,
+    ],
+    "y": Array [
+      3,
+      4,
+      5,
+    ],
+  },
+  "styles": Object {
+    "selected": Object {
+      "lineStyle": 1,
+      "lineWidth": 3,
+    },
+    "unselected": Object {
+      "lineStyle": 1,
+      "lineWidth": 3,
+    },
+  },
+  "type": "color",
+}
+`;

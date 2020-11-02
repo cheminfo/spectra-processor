@@ -5,13 +5,8 @@ import { xBoxPlot } from 'ml-spectra-processing';
  * @param {*} spectra
  */
 
-export function getBoxPlotData(spectra) {
-  let matrix = [];
-  let x = spectra[0].normalized.x;
-  for (let spectrum of spectra) {
-    matrix.push(spectrum.normalized.y);
-  }
-
+export function getBoxPlotData(normalizedData) {
+  const { x, matrix } = normalizedData;
   let nbRow = matrix.length;
   let nbColumn = matrix[0].length;
   let result;
