@@ -1,5 +1,6 @@
 import { minMax } from 'ml-stat/array';
 
+import { getAligned } from './getAligned';
 import { getData } from './getData';
 import { getNormalized } from './getNormalized';
 import { updateRangesInfo } from './updateRangesInfo';
@@ -72,6 +73,10 @@ export class Spectrum {
     return { x: this.x, y: this.y };
   }
 }
+
+Spectrum.prototype.alignSpectrum = function (shift) {
+  getAligned(this.normalized, shift);
+};
 
 Spectrum.prototype.getData = function (options) {
   return getData(this, options);
