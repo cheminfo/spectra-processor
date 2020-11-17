@@ -19,7 +19,7 @@ import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
-import { getShifts } from './spectra/getShifts';
+import { getSpectraShifts } from './spectra/getSpectraShifts';
 import { Spectrum } from './spectrum/Spectrum';
 
 export class SpectraProcessor {
@@ -79,6 +79,48 @@ export class SpectraProcessor {
     this.normalization = normalization;
     for (let spectrum of this.spectra) {
       spectrum.updateNormalization(this.normalization);
+    }
+  }
+
+  /**
+   * Aligns the spectra to a target
+   * @param {number} [targetPoint] - Target point to set the interest signal.
+   * @param {number} [from] - Beginning of the range where the interest signal is localed
+   * @param {number} [to] - End of the range where the interest signal is localed
+   * @param {Object} [options={}]
+   * @param {number} [options.minMaxRatio=0.4] - GSD Threshold to determine if a given peak should be considered as a noise.
+   */
+  calculateSpectraXShifts(from, to, options = {}) {
+    let {
+      targetPoint = 0,
+      gsdOptions = {
+        minMaxRatio: 0.4,
+        realTopDetection: true,
+        smoothY: true,
+        sgOptions: {
+          windowSize: 5,
+          polynomial: 3,
+        },
+      },
+    } = options;
+
+    const spectra = this.getSpectra();
+    const normalizedSpectra = spectra.map((item) => item.normalized);
+    let shifts;
+    if (spectra[0].y.length !== 0) {
+      shifts = getSpectraShifts(spectra, targetPoint, from, to, gsdOptions);
+    }
+    let normalizedShifts = getSpectraShifts(
+      normalizedSpectra,
+      targetPoint,
+      from,
+      to,
+      gsdOptions,
+    );
+
+    for (let i = 0; i < spectra.length; i++) {
+      spectra[i].shift = shifts ? shifts[i] : false;
+      spectra[i].normalized.shift = normalizedShifts[i];
     }
   }
 
@@ -453,33 +495,6 @@ export class SpectraProcessor {
       }
     }
     return boundary;
-  }
-
-  /**
-   * Aligns the spectra to a target
-   * @param {number} [targetPoint] - Target point to set the interest signal.
-   * @param {number} [from] - Beginning of the range where the interest signal is localed
-   * @param {number} [to] - End of the range where the interest signal is localed
-   * @param {Object} [options={}]
-   * @param {number} [options.minMaxRatio=0.4] - GSD Threshold to determine if a given peak should be considered as a noise.
-   */
-  alignSpectra(targetPoint, from, to, options = {}) {
-    let defaultOptions = {
-      minMaxRatio: 0.4,
-      realTopDetection: false,
-      smoothY: true,
-      sgOptions: {
-        windowSize: 5,
-        polynomial: 3,
-      },
-    };
-
-    options = Object.assign(defaultOptions, options);
-    const data = this.getSpectra();
-    const shifts = getShifts(targetPoint, from, to, data, options);
-    for (let i = 0; i < data.length; i++) {
-      data[i].alignSpectrum(shifts[i]);
-    }
   }
 
   /**

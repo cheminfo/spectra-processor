@@ -2,6 +2,7 @@ import chroma from 'chroma-js';
 import maxFct from 'ml-array-max';
 import minFct from 'ml-array-min';
 import { Matrix } from 'ml-matrix';
+
 import { getBoxPlotData } from '../spectra/getBoxPlotData';
 
 export function getBoxPlotChart(normalizedData, options = {}) {
