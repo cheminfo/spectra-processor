@@ -85,6 +85,7 @@ export class SpectraProcessor {
    * @param {Object} [options={}]
    * @param {number} [options.nbPeaks=1] Number of peaks to consider to calculate mean (sorted by height)
    * @param {number} [options.targetX=0] Expected value for the mean of the peaks position
+   * @param {number} [options.gsd={}] GSD options. You may check options here: http://mljs.github.io/global-spectral-deconvolution/#gsd
    * @param {number} [options.gsd.minMaxRatio=0.2] - GSD Threshold to determine if a given peak should be considered as a noise.
    */
   calculateSpectraXShifts(range, options = {}) {
