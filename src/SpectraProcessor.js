@@ -44,12 +44,6 @@ export class SpectraProcessor {
     this.maxMemory = options.maxMemory || 256 * 1024 * 1024;
     this.keepOriginal = true;
     this.spectra = [];
-    this.boundaries = {
-      minX: Number.MAX_VALUE,
-      maxX: Number.MIN_VALUE,
-      minY: Number.MAX_VALUE,
-      maxY: Number.MIN_VALUE,
-    };
   }
 
   getNormalizationAnnotations() {
@@ -93,8 +87,10 @@ export class SpectraProcessor {
    * @param {number} [options.gsd.minMaxRatio=0.2] - GSD Threshold to determine if a given peak should be considered as a noise.
    */
   calculateSpectraXShifts(from, to, options = {}) {
-    const spectra = this.getSpectra();
-    calculateSpectraXShifts(spectra, from, to, options);
+    calculateSpectraXShifts(this.spectra, from, to, options);
+    for (let spectrum of this.spectra) {
+      spectrum.updateNormalization(this.normalization);
+    }
   }
 
   getNormalization() {

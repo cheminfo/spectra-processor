@@ -7,8 +7,8 @@ import { xAdd } from 'ml-spectra-processing';
 /**
  *
  * @private
- * @param {*} spectrum
- * @param {*} options
+ * @param {DataXY} spectrum
+ * @param {object} options
  */
 export function getNormalized(spectrum, options = {}) {
   if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
