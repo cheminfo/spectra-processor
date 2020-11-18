@@ -13,13 +13,13 @@ import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
 import parseMatrix from './parser/matrix';
 import parseText from './parser/text';
+import { calculateSpectraXShifts } from './spectra/calculateSpectraXShifts';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
 import { getBoxPlotData } from './spectra/getBoxPlotData';
 import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getScaledData } from './spectra/getScaledData';
-import { getSpectraShifts } from './spectra/getSpectraShifts';
 import { Spectrum } from './spectrum/Spectrum';
 
 export class SpectraProcessor {
@@ -90,38 +90,14 @@ export class SpectraProcessor {
    * @param {Object} [options={}]
    * @param {number} [options.minMaxRatio=0.4] - GSD Threshold to determine if a given peak should be considered as a noise.
    */
-  calculateSpectraXShifts(from, to, options = {}) {
-    let {
-      targetPoint = 0,
-      gsdOptions = {
-        minMaxRatio: 0.4,
-        realTopDetection: true,
-        smoothY: true,
-        sgOptions: {
-          windowSize: 5,
-          polynomial: 3,
-        },
-      },
-    } = options;
-
+  align(from, to, options = {}) {
+    const { targetPoint = 0, gsdOptions } = options;
     const spectra = this.getSpectra();
-    const normalizedSpectra = spectra.map((item) => item.normalized);
-    let shifts;
-    if (spectra[0].y.length !== 0) {
-      shifts = getSpectraShifts(spectra, targetPoint, from, to, gsdOptions);
-    }
-    let normalizedShifts = getSpectraShifts(
-      normalizedSpectra,
-      targetPoint,
-      from,
-      to,
-      gsdOptions,
-    );
-
-    for (let i = 0; i < spectra.length; i++) {
-      spectra[i].shift = shifts ? shifts[i] : false;
-      spectra[i].normalized.shift = normalizedShifts[i];
-    }
+    calculateSpectraXShifts(spectra, targetPoint, {
+      from: from,
+      to: to,
+      gsdOptions: gsdOptions,
+    });
   }
 
   getNormalization() {

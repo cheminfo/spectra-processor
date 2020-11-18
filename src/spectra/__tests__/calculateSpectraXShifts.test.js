@@ -1,5 +1,5 @@
 import { SpectraProcessor } from '../../SpectraProcessor';
-import { getSpectraShifts } from '../getSpectraShifts';
+import { calculateSpectraXShifts } from '../calculateSpectraXShifts';
 
 describe('Get shifts of spectra', () => {
   it('Should return an array with the difference in points between target and the signal', () => {
@@ -20,6 +20,12 @@ describe('Get shifts of spectra', () => {
       { id: 2 },
     );
 
+    spectraProcessor.setNormalization({
+      from: 0,
+      to: 12,
+      numberOfPoints: 12,
+    });
+
     let gsdOptions = {
       minMaxRatio: 0.4,
       realTopDetection: true,
@@ -31,12 +37,19 @@ describe('Get shifts of spectra', () => {
     };
 
     const targetPoint = 5;
-    const from = 1;
-    const to = 10;
     const spectra = spectraProcessor.getSpectra();
-    const shifts = getSpectraShifts(spectra, targetPoint, from, to, gsdOptions);
+    calculateSpectraXShifts(spectra, targetPoint, {
+      from: 1,
+      to: 10,
+      gsdOptions,
+    });
+
     const targetIndex = spectra[0].x.indexOf(targetPoint);
-    expect(shifts[0]).toStrictEqual(targetIndex - spectra[0].y.indexOf(700));
-    expect(shifts[1]).toStrictEqual(targetIndex - spectra[1].y.indexOf(700));
+    expect(spectra[0].shift).toStrictEqual(
+      targetIndex - spectra[0].y.indexOf(700),
+    );
+    expect(spectra[1].shift).toStrictEqual(
+      targetIndex - spectra[1].y.indexOf(700),
+    );
   });
 });
