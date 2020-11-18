@@ -13,6 +13,7 @@ import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
 import parseMatrix from './parser/matrix';
 import parseText from './parser/text';
+import { calculateSpectraXShifts } from './spectra/calculateSpectraXShifts';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
 import { getBoxPlotData } from './spectra/getBoxPlotData';
 import { getMeanData } from './spectra/getMeanData';
@@ -79,6 +80,24 @@ export class SpectraProcessor {
     for (let spectrum of this.spectra) {
       spectrum.updateNormalization(this.normalization);
     }
+  }
+
+  /**
+   * Aligns the spectra to a target
+   * @param {number} [targetPoint] - Target point to set the interest signal.
+   * @param {number} [from] - Beginning of the range where the interest signal is localed
+   * @param {number} [to] - End of the range where the interest signal is localed
+   * @param {Object} [options={}]
+   * @param {number} [options.minMaxRatio=0.4] - GSD Threshold to determine if a given peak should be considered as a noise.
+   */
+  align(from, to, options = {}) {
+    const { targetPoint = 0, gsdOptions } = options;
+    const spectra = this.getSpectra();
+    calculateSpectraXShifts(spectra, targetPoint, {
+      from: from,
+      to: to,
+      gsdOptions: gsdOptions,
+    });
   }
 
   getNormalization() {
