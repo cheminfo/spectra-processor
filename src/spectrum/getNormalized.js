@@ -2,6 +2,7 @@ import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
+import { xAdd } from 'ml-spectra-processing';
 
 /**
  *
@@ -16,9 +17,10 @@ export function getNormalized(spectrum, options = {}) {
     );
   }
 
+  let xs = spectrum.shift ? xAdd(spectrum.x, spectrum.shift) : spectrum.x;
   let {
-    from = spectrum.x[0],
-    to = spectrum.x[spectrum.x.length - 1],
+    from = xs[0],
+    to = xs[xs.length - 1],
     numberOfPoints = 1024,
     filters = [],
     exclusions = [],
@@ -55,8 +57,9 @@ export function getNormalized(spectrum, options = {}) {
         throw new Error(`Unknown process kind: ${process.kind}`);
     }
   }
+
   let result = equallySpaced(
-    { x: spectrum.x, y: ys },
+    { x: xs, y: ys },
     { from, to, numberOfPoints, exclusions },
   );
   return result;
