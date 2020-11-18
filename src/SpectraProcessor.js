@@ -83,21 +83,18 @@ export class SpectraProcessor {
   }
 
   /**
-   * Aligns the spectra to a target
+   * Aligns the spectra based on a range and means of peaks in this range
    * @param {number} [targetPoint] - Target point to set the interest signal.
    * @param {number} [from] - Beginning of the range where the interest signal is localed
    * @param {number} [to] - End of the range where the interest signal is localed
    * @param {Object} [options={}]
-   * @param {number} [options.minMaxRatio=0.4] - GSD Threshold to determine if a given peak should be considered as a noise.
+   * @param {number} [options.nbPeaks=1] Number of peaks to consider to calculate mean (sorted by height)
+   * @param {number} [options.targetX=0] Expected value for the mean of the peaks position
+   * @param {number} [options.gsd.minMaxRatio=0.2] - GSD Threshold to determine if a given peak should be considered as a noise.
    */
-  align(from, to, options = {}) {
-    const { targetPoint = 0, gsdOptions } = options;
+  calculateSpectraXShifts(from, to, options = {}) {
     const spectra = this.getSpectra();
-    calculateSpectraXShifts(spectra, targetPoint, {
-      from: from,
-      to: to,
-      gsdOptions: gsdOptions,
-    });
+    calculateSpectraXShifts(spectra, from, to, options);
   }
 
   getNormalization() {

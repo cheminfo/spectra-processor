@@ -20,12 +20,6 @@ describe('Get shifts of spectra', () => {
       { id: 2 },
     );
 
-    spectraProcessor.setNormalization({
-      from: 0,
-      to: 12,
-      numberOfPoints: 12,
-    });
-
     let gsdOptions = {
       minMaxRatio: 0.4,
       realTopDetection: true,
@@ -36,20 +30,14 @@ describe('Get shifts of spectra', () => {
       },
     };
 
-    const targetPoint = 5;
     const spectra = spectraProcessor.getSpectra();
-    calculateSpectraXShifts(spectra, targetPoint, {
-      from: 1,
-      to: 10,
-      gsdOptions,
+
+    calculateSpectraXShifts(spectra, 1, 10, {
+      targetX: 6,
+      gsd: gsdOptions,
     });
 
-    const targetIndex = spectra[0].x.indexOf(targetPoint);
-    expect(spectra[0].shift).toStrictEqual(
-      targetIndex - spectra[0].y.indexOf(700),
-    );
-    expect(spectra[1].shift).toStrictEqual(
-      targetIndex - spectra[1].y.indexOf(700),
-    );
+    expect(spectra[0].xShift).toBe(0);
+    expect(spectra[1].xShift).toBe(2);
   });
 });
