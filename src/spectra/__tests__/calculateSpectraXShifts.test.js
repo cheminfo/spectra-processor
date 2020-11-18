@@ -32,10 +32,14 @@ describe('Get shifts of spectra', () => {
 
     const spectra = spectraProcessor.getSpectra();
 
-    calculateSpectraXShifts(spectra, 1, 10, {
-      targetX: 6,
-      gsd: gsdOptions,
-    });
+    calculateSpectraXShifts(
+      spectra,
+      { from: 1, to: 10 },
+      {
+        targetX: 6,
+        gsd: gsdOptions,
+      },
+    );
 
     expect(spectra[0].xShift).toBe(0);
     expect(spectra[1].xShift).toBe(2);

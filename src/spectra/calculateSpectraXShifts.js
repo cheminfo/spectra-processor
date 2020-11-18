@@ -12,7 +12,7 @@ import { xFindClosestIndex } from 'ml-spectra-processing';
  * @return {Array<number>} Array with the shifts between the spectra and the target point
  */
 
-export function calculateSpectraXShifts(spectra, from, to, options = {}) {
+export function calculateSpectraXShifts(spectra, range = {}, options = {}) {
   const {
     targetX = 0,
     nbPeaks = 1,
@@ -26,7 +26,7 @@ export function calculateSpectraXShifts(spectra, from, to, options = {}) {
       },
     },
   } = options;
-
+  let { from, to } = range;
   if (!from || !to) return;
 
   for (let spectrum of spectra) {
