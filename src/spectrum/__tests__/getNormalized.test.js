@@ -20,24 +20,33 @@ describe('getNormalized', () => {
     expect(result.y).toStrictEqual([1, 3, 4.5, 3, 1]);
   });
 
-  it('with shift', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+  it('with align', () => {
+    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    let y = [0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 0, 0, 0];
     let result = getNormalized(
       {
         x,
         y,
-        shift: 1,
       },
       {
-        from: 2,
-        to: 10,
+        from: 0,
+        to: 16,
         numberOfPoints: 5,
+        filters: [
+          {
+            name: 'align',
+            options: {
+              from: 1,
+              to: 16,
+              nbPeaks: 1,
+              targetX: 1,
+            },
+          },
+        ],
       },
     );
-
-    expect(result.x).toStrictEqual([2, 4, 6, 8, 10]);
-    expect(result.y).toStrictEqual([1, 3, 4.5, 3, 1]);
+    expect(result.x).toStrictEqual([0, 4, 8, 12, 16]);
+    expect(result.y).toStrictEqual([3.75, 2, 0, 0, 0]);
   });
   it('with SNV', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

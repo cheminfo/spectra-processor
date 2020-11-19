@@ -2,7 +2,7 @@ import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
-import { xAdd } from 'ml-spectra-processing';
+import { xAdd, xyXShift } from 'ml-spectra-processing';
 
 /**
  *
@@ -17,7 +17,7 @@ export function getNormalized(spectrum, options = {}) {
     );
   }
 
-  let xs = spectrum.shift ? xAdd(spectrum.x, spectrum.shift) : spectrum.x;
+  let xs = spectrum.x;
   let {
     from = xs[0],
     to = xs[xs.length - 1],
@@ -48,6 +48,15 @@ export function getNormalized(spectrum, options = {}) {
       }
       case 'rescale': {
         ys = rescale(ys);
+        break;
+      }
+      case 'align': {
+        let shift = xyXShift(
+          { x: xs, y: ys },
+          { from: filter.options.from, to: filter.options.to },
+          { nbPeaks: filter.options.nbPeaks, targetX: filter.options.targetX },
+        );
+        xs = xAdd(xs, shift);
         break;
       }
       case '':

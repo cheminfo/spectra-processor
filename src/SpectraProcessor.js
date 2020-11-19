@@ -13,7 +13,6 @@ import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
 import parseMatrix from './parser/matrix';
 import parseText from './parser/text';
-import { calculateSpectraXShifts } from './spectra/calculateSpectraXShifts';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
 import { getBoxPlotData } from './spectra/getBoxPlotData';
 import { getMeanData } from './spectra/getMeanData';
@@ -71,25 +70,6 @@ export class SpectraProcessor {
       return;
     }
     this.normalization = normalization;
-    for (let spectrum of this.spectra) {
-      spectrum.updateNormalization(this.normalization);
-    }
-  }
-
-  /**
-   * Aligns the spectra based on a range and means of peaks in this range
-   * @param {number} [targetPoint] - Target point to set the interest signal.
-   * @param {Object} [range={}]
-   * @param {number} [range.from] - Beginning of the range where the interest signal is localed
-   * @param {number} [range.to] - End of the range where the interest signal is localed
-   * @param {Object} [options={}]
-   * @param {number} [options.nbPeaks=1] Number of peaks to consider to calculate mean (sorted by height)
-   * @param {number} [options.targetX=0] Expected value for the mean of the peaks position
-   * @param {number} [options.gsd={}] GSD options. You may check options here: http://mljs.github.io/global-spectral-deconvolution/#gsd
-   * @param {number} [options.gsd.minMaxRatio=0.2] - GSD Threshold to determine if a given peak should be considered as a noise.
-   */
-  calculateSpectraXShifts(range, options = {}) {
-    calculateSpectraXShifts(this.spectra, range, options);
     for (let spectrum of this.spectra) {
       spectrum.updateNormalization(this.normalization);
     }
