@@ -68,9 +68,6 @@ export function getNormalized(spectrum, options = {}) {
       }
       case 'sg': {
         ys = sg(ys, xs, filterOptions);
-      }
-      case 'rescale': {
-        ys = sg(ys);
         break;
       }
       case '':
