@@ -3,7 +3,7 @@ import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
 import { xAdd, xyXShift } from 'ml-spectra-processing';
-
+import sg from 'ml-savitzky-golay-generalized';
 /**
  *
  * @private
@@ -29,6 +29,7 @@ export function getNormalized(spectrum, options = {}) {
   let ys = spectrum.y.slice(0);
 
   for (let filter of filters) {
+    let filterOptions = filter.options;
     switch (filter.name) {
       case 'centerMean': {
         let mean = Stat.mean(spectrum.y);
@@ -51,19 +52,32 @@ export function getNormalized(spectrum, options = {}) {
         break;
       }
       case 'align': {
+        if (
+          filterOptions.from === undefined ||
+          filterOptions.to === undefined
+        ) {
+          break;
+        }
         let shift = xyXShift(
           { x: xs, y: ys },
-          { from: filter.options.from, to: filter.options.to },
-          { nbPeaks: filter.options.nbPeaks, targetX: filter.options.targetX },
+          { from: filterOptions.from, to: filterOptions.to },
+          { nbPeaks: filterOptions.nbPeaks, targetX: filterOptions.targetX },
         );
         xs = xAdd(xs, shift);
+        break;
+      }
+      case 'sg': {
+        ys = sg(ys, xs, filterOptions);
+      }
+      case 'rescale': {
+        ys = sg(ys);
         break;
       }
       case '':
       case undefined:
         break;
       default:
-        throw new Error(`Unknown process kind: ${process.kind}`);
+        throw new Error(`Unknown filter kind: ${filter.name}`);
     }
   }
 
