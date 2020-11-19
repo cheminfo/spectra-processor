@@ -15,7 +15,7 @@ It should be able to deal with large amount of large files and will automaticall
 * final number of points
 * exclusion zones
 
-The package will try by default to have less than 64 Mb of memory used and if the presence of original data yield to a higher amount it will remove the orignal data.
+The package will try by default to have less than 64 Mb of memory used and if the presence of original data yield to a higher amount it will remove the original data.
 This will have as consequence that you will not be able to change the normalization parameters. 
 
 Practically this means that if you have 1024 spectra of 65536 points and you normalize the data to 4096 points it can still be kept in memory.
