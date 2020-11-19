@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.0.0...v2.1.0) (2020-11-19)
+
+
+### Features
+
+* add align filter ([0591e57](https://www.github.com/cheminfo/spectra-processor/commit/0591e571fb9874d247e1ff2805c7d2ad2e360ad8))
+* add calculateSpectraXShifts ([11cd671](https://www.github.com/cheminfo/spectra-processor/commit/11cd6712cd3a72b5eaea561f45a6b1282b3f4c5f))
+* add getSpectraShifts function ([#9](https://www.github.com/cheminfo/spectra-processor/issues/9)) ([3dafee6](https://www.github.com/cheminfo/spectra-processor/commit/3dafee6a11c784c2f064b7533d767fa7c7314768))
+* add SG as filter ([ea1fb68](https://www.github.com/cheminfo/spectra-processor/commit/ea1fb6868d43be18ddf389739698d1317fc473d4))
+* deal with xShift when getting normalized data ([6aa0724](https://www.github.com/cheminfo/spectra-processor/commit/6aa0724d69fc9c026b91f5f3e63fe10d3f80b62a))
+* set memory limit for original spectra to 256 Mb ([8c24164](https://www.github.com/cheminfo/spectra-processor/commit/8c24164dc8ce294ac3ac469560f5d1b89fb1552f))
+
+
+### Bug Fixes
+
+* spelling mistake ([e2c4836](https://www.github.com/cheminfo/spectra-processor/commit/e2c48364fea18bb889b650e8e3bc4608f84a1ffa))
+
 ## [2.0.0](https://www.github.com/cheminfo/spectra-processor/compare/v1.5.2...v2.0.0) (2020-11-02)
 
 
