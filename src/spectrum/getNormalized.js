@@ -4,6 +4,7 @@ import equallySpaced from 'ml-array-xy-equally-spaced';
 import Stat from 'ml-stat/array';
 import { xAdd, xyXShift } from 'ml-spectra-processing';
 import sg from 'ml-savitzky-golay-generalized';
+import isAnyArray from 'is-any-array';
 /**
  *
  * @private
@@ -11,7 +12,7 @@ import sg from 'ml-savitzky-golay-generalized';
  * @param {object} options
  */
 export function getNormalized(spectrum, options = {}) {
-  if (!Array.isArray(spectrum.x) || !Array.isArray(spectrum.y)) {
+  if (!isAnyArray(spectrum.x) || !isAnyArray(spectrum.y)) {
     throw new Error(
       'getNormalized: Can not get normalized data, missing original data.',
     );
