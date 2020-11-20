@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.1.0...v2.2.0) (2020-11-20)
+
+
+### Features
+
+* allow typed array for data ([7c39ba9](https://www.github.com/cheminfo/spectra-processor/commit/7c39ba9d27fc29052244262f7bcd15f6f4691d75))
+
 ## [2.1.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.0.0...v2.1.0) (2020-11-19)
 
 
