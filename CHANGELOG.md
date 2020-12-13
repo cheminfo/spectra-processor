@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.2.0...v2.3.0) (2020-12-13)
+
+
+### Features
+
+* sort peaks annotations ([e6b3439](https://www.github.com/cheminfo/spectra-processor/commit/e6b3439f4524f50226abd6753e4fdde0ce837b0f))
+
+
+### Bug Fixes
+
+* update dependencies ([b1bdbdb](https://www.github.com/cheminfo/spectra-processor/commit/b1bdbdb182de4153680de391add230f8f8d232e0))
+
 ## [2.2.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.1.0...v2.2.0) (2020-11-20)
 
 
