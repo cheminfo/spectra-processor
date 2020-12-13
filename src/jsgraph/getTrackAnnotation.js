@@ -1,7 +1,7 @@
 import { getNormalizedData } from '../spectra/getNormalizedData';
 
 export function getTrackAnnotation(spectra, index, options = {}) {
-  const { ids, showSpectrumID = true } = options;
+  const { ids, showSpectrumID = true, sortY = true, limit = 20 } = options;
   let annotations = [];
 
   let normalized = getNormalizedData(spectra, { ids });
@@ -25,10 +25,23 @@ export function getTrackAnnotation(spectra, index, options = {}) {
   });
   line++;
 
+  let peaks = [];
   for (let i = 0; i < normalized.ids.length; i++) {
-    let id = normalized.ids[i];
-    let meta = normalized.meta[i];
-    let y = normalized.matrix[i][index];
+    peaks.push({
+      id: normalized.ids[i],
+      meta: normalized.meta[i],
+      y: normalized.matrix[i][index],
+    });
+  }
+
+  if (sortY) {
+    peaks = peaks.sort((a, b) => b.y - a.y);
+  }
+  if (limit) {
+    peaks = peaks.slice(0, limit);
+  }
+
+  for (let { id, meta, y } of peaks) {
     annotations.push({
       type: 'line',
       position: [

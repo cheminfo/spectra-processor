@@ -359,6 +359,13 @@ export class SpectraProcessor {
 
   /**
    * Returns a JSGraph annotation object for the specified index
+   * @param {object} [options={}]
+   * @param {array} [options.ids=[]]
+   * @param {array} [options.ids=[]]
+   * @param {array} [options.showSpectrumID=true]
+   * @param {array} [options.sortY=true]
+   * @param {object} [options.limit=20]
+   * ids, showSpectrumID = true, sort = true, limit = 20
    * @returns {object}
    */
   getTrackAnnotation(index, options) {
