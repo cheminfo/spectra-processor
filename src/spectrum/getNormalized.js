@@ -1,10 +1,11 @@
+import isAnyArray from 'is-any-array';
 import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
-import Stat from 'ml-stat/array';
-import { xAdd, xyXShift } from 'ml-spectra-processing';
 import sg from 'ml-savitzky-golay-generalized';
-import isAnyArray from 'is-any-array';
+import { xAdd, xyXShift } from 'ml-spectra-processing';
+import Stat, { minMax } from 'ml-stat/array';
+
 /**
  *
  * @private
@@ -71,6 +72,14 @@ export function getNormalized(spectrum, options = {}) {
         ys = sg(ys, xs, filterOptions);
         break;
       }
+      case 'xFunction': {
+        xs = applyArrayFunction(xs, 'x', filterOptions.function);
+        break;
+      }
+      case 'yFunction': {
+        ys = applyArrayFunction(ys, 'y', filterOptions.function);
+        break;
+      }
       case '':
       case undefined:
         break;
@@ -79,9 +88,35 @@ export function getNormalized(spectrum, options = {}) {
     }
   }
 
-  let result = equallySpaced(
+  const allowedBoundary = {
+    x: {
+      min: xs[0],
+      max: xs[xs.length - 1],
+    },
+    y: minMax(ys),
+  };
+
+  let data = equallySpaced(
     { x: xs, y: ys },
     { from, to, numberOfPoints, exclusions },
   );
-  return result;
+
+  return {
+    data,
+    allowedBoundary,
+  };
+}
+
+function applyArrayFunction(array, variableLabel, fctString) {
+  if (!fctString) fctString = variableLabel;
+  fctString = fctString
+    .replace(/(^|\W)([a-z]{2,})/g, '$1Math.$2')
+    .replace(/Math\.Math/g, 'Math');
+  // eslint-disable-next-line no-new-func
+  let fct = new Function(variableLabel, `return Number(${fctString})`);
+  array = array.slice();
+  for (let i = 0; i < array.length; i++) {
+    array[i] = fct(array[i]);
+  }
+  return array;
 }

@@ -14,7 +14,7 @@ describe('getNormalized', () => {
         to: 9,
         numberOfPoints: 5,
       },
-    );
+    ).data;
 
     expect(result.x).toStrictEqual([1, 3, 5, 7, 9]);
     expect(result.y).toStrictEqual([1, 3, 4.5, 3, 1]);
@@ -44,7 +44,7 @@ describe('getNormalized', () => {
           },
         ],
       },
-    );
+    ).data;
     expect(result.x).toStrictEqual([0, 4, 8, 12, 16]);
     expect(result.y).toStrictEqual([3.75, 2, 0, 0, 0]);
   });
@@ -62,7 +62,7 @@ describe('getNormalized', () => {
         numberOfPoints: 5,
         filters: [{ name: 'centerMean' }, { name: 'scaleSD' }],
       },
-    );
+    ).data;
 
     expect(result.x).toStrictEqual([1, 3, 5, 7, 9]);
     expect(result.y).toStrictEqual([

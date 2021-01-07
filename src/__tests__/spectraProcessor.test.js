@@ -126,6 +126,16 @@ describe('SpectraProcessor', () => {
     let minMaxX = spectraProcessor.getMinMaxX();
     expect(minMaxX).toStrictEqual({ min: 0, max: 5 });
   });
+
+  it('test getNormalizedMinMaxX of non uniform data', () => {
+    let spectraProcessor = getLogSpectra();
+
+    let boundary = spectraProcessor.getNormalizedCommonBoundary();
+    expect(boundary).toStrictEqual({
+      x: { min: -1, max: 1 },
+      y: { min: 1, max: 5 },
+    });
+  });
 });
 
 function getSimpleDataProcessor() {
@@ -155,5 +165,27 @@ function getNonUniformDataProcessor() {
   spectraProcessor.addFromData({ x: [0, 1, 2, 4], y: [1, 2, 3, 4] }, { id: 1 });
   spectraProcessor.addFromData({ x: [0, 1, 2, 5], y: [2, 3, 4, 5] }, { id: 2 });
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 4, 5, 6] }, { id: 3 });
+  return spectraProcessor;
+}
+
+function getLogSpectra() {
+  const spectraProcessor = new SpectraProcessor({
+    normalization: {
+      from: 0,
+      to: 5,
+      numberOfPoints: 4,
+      filters: [{ name: 'xFunction', options: { function: 'log10(x)' } }],
+    },
+  });
+
+  spectraProcessor.addFromData(
+    { x: [0.01, 1, 2, 10], y: [1, 2, 3, 4] },
+    { id: 1 },
+  );
+  spectraProcessor.addFromData(
+    { x: [0.1, 1, 2, 100], y: [2, 3, 4, 5] },
+    { id: 2 },
+  );
+
   return spectraProcessor;
 }

@@ -38,6 +38,7 @@ export class Spectrum {
     if (normalized) {
       this.normalized = normalized;
       this.updateNormalizedBoundary();
+      this.normalizedAllowedBoundary = this.normalizedBoundary;
     } else {
       this.updateNormalization(normalization);
     }
@@ -78,7 +79,9 @@ Spectrum.prototype.getData = function (options) {
 };
 
 Spectrum.prototype.updateNormalization = function (normalization) {
-  this.normalized = getNormalized(this, normalization);
+  const result = getNormalized(this, normalization);
+  this.normalized = result.data;
+  this.normalizedAllowedBoundary = result.allowedBoundary;
   this.ranges = {};
   this.updateMemory();
   this.updateNormalizedBoundary();

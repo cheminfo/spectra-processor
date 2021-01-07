@@ -456,6 +456,33 @@ export class SpectraProcessor {
   }
 
   /**
+   * We provide the allowed from / to after normalization
+   * For the X axis we return the smallest common values
+   * For the Y axis we return the largest min / max
+   */
+  getNormalizedCommonBoundary() {
+    let boundary = {
+      x: { min: Number.NEGATIVE_INFINITY, max: Number.POSITIVE_INFINITY },
+      y: { min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY },
+    };
+    for (let spectrum of this.spectra) {
+      if (spectrum.normalizedAllowedBoundary.x.min > boundary.x.min) {
+        boundary.x.min = spectrum.normalizedAllowedBoundary.x.min;
+      }
+      if (spectrum.normalizedAllowedBoundary.x.max < boundary.x.max) {
+        boundary.x.max = spectrum.normalizedAllowedBoundary.x.max;
+      }
+      if (spectrum.normalizedAllowedBoundary.y.min < boundary.y.min) {
+        boundary.y.min = spectrum.normalizedAllowedBoundary.y.min;
+      }
+      if (spectrum.normalizedAllowedBoundary.y.max > boundary.y.max) {
+        boundary.y.max = spectrum.normalizedAllowedBoundary.y.max;
+      }
+    }
+    return boundary;
+  }
+
+  /**
    * Create SpectraProcessor from normalized TSV
    * @param {string} text
    * @param {object} [options={}]
