@@ -7,7 +7,7 @@ import { min } from './scaled/min';
 import { minMax } from './scaled/minMax';
 import { range as rangeFct } from './scaled/range';
 /**
- * @private
+ * Allows to calculate relative intensity between normalized spectra
  * @param {Array<Spectrum>} spectra
  * @param {object} [options={}] scale spectra based on various parameters
  * @param {object} [options.range] from - to

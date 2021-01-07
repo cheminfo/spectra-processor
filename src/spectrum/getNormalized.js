@@ -117,6 +117,11 @@ function applyArrayFunction(array, variableLabel, fctString) {
   array = array.slice();
   for (let i = 0; i < array.length; i++) {
     array[i] = fct(array[i]);
+    if (isNaN(array[i])) {
+      throw Error(
+        `The callback ${fctString} does not return a number: ${array[i]}`,
+      );
+    }
   }
   return array;
 }
