@@ -1,5 +1,9 @@
-import { xSubtract, xyMaxYPoint, xyIntegration, probabilisticQuotientNormalization } from 'ml-spectra-processing';
-
+import {
+  xSubtract,
+  xyMaxYPoint,
+  xyIntegration,
+  probabilisticQuotientNormalization,
+} from 'ml-spectra-processing';
 
 import { getNormalizedData } from './getNormalizedData';
 import { getFromToIndex } from './scaled/getFromToIndex';
@@ -81,7 +85,10 @@ export function getScaledData(spectraProcessor, options = {}) {
   for (let filter of filters) {
     switch (filter.name) {
       case 'pqn': {
-        result.matrix = probabilisticQuotientNormalization(result.matrix, filter.options).data.to2DArray();
+        result.matrix = probabilisticQuotientNormalization(
+          result.matrix,
+          filter.options,
+        ).data.to2DArray();
         break;
       }
       case '':

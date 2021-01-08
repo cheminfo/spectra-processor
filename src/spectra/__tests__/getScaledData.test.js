@@ -1,7 +1,7 @@
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+
 import { SpectraProcessor } from '../../SpectraProcessor';
 import { getScaledData } from '../getScaledData';
-
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 expect.extend({ toBeDeepCloseTo });
 
@@ -41,16 +41,15 @@ describe('getScaledData', () => {
   });
 
   it('filter', () => {
-    let result = getScaledData(spectraProcessor, { filters: [{ name: 'pqn', options: { max: 10 } }] });
-    console.log(result.matrix)
+    let result = getScaledData(spectraProcessor, {
+      filters: [{ name: 'pqn', options: { max: 10 } }],
+    });
     expect(result.matrix).toBeDeepCloseTo([
       [2.672612419124244, 5.345224838248488, 8.017837257372733],
       [3.7139067635410377, 5.570860145311556, 7.427813527082075],
-      [4.242640687119285, 5.65685424949238, 7.071067811865475]
-    ])
-
-
-  })
+      [4.242640687119285, 5.65685424949238, 7.071067811865475],
+    ]);
+  });
 
   it('min', () => {
     let result = getScaledData(spectraProcessor, { method: 'minMax' });
