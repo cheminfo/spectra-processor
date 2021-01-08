@@ -10,7 +10,12 @@ import Stat, { minMax } from 'ml-stat/array';
  *
  * @private
  * @param {DataXY} spectrum
- * @param {object} options
+ * @param {object} [options={}]
+ * @param {number} [options.from=x[0]]
+ * @param {number} [options.to=x[x.length-1]]
+ * @param {number} [options.numberOfPoints=1024]
+ * @param {array} [options.filters=[]]
+ * @param {array} [options.exclusions=[]]
  */
 export function getNormalized(spectrum, options = {}) {
   if (!isAnyArray(spectrum.x) || !isAnyArray(spectrum.y)) {
