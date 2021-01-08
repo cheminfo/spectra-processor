@@ -3,7 +3,7 @@ import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import sg from 'ml-savitzky-golay-generalized';
-import { xAdd, xyXShift } from 'ml-spectra-processing';
+import { xAdd, xyXShift, xParetoNormalization } from 'ml-spectra-processing';
 import Stat, { minMax } from 'ml-stat/array';
 
 /**
@@ -43,6 +43,10 @@ export function getNormalized(spectrum, options = {}) {
         let std = Stat.standardDeviation(spectrum.y);
         let stdFct = (y) => y / std;
         ys = ys.map(stdFct);
+        break;
+      }
+      case 'pareto': {
+        ys = xParetoNormalization(ys);
         break;
       }
       case 'normalize': {
