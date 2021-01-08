@@ -1,4 +1,5 @@
-import { xSubtract, xyMaxYPoint, xyIntegration } from 'ml-spectra-processing';
+import { xSubtract, xyMaxYPoint, xyIntegration, probabilisticQuotientNormalization } from 'ml-spectra-processing';
+
 
 import { getNormalizedData } from './getNormalizedData';
 import { getFromToIndex } from './scaled/getFromToIndex';
@@ -17,6 +18,7 @@ import { range as rangeFct } from './scaled/range';
  * @param {boolean} [options.relative=false]
  * @param {Array} [options.ranges] Array of object containing {from:'', to:'', label:''}
  * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
+ * @param {Array} [options.filters=[]] Array of object containing {name:'', options:''}
  * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
  */
 
@@ -30,6 +32,7 @@ export function getScaledData(spectraProcessor, options = {}) {
     ids,
     ranges,
     calculations,
+    filters = [],
   } = options;
   let targetSpectrum =
     spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
@@ -72,6 +75,20 @@ export function getScaledData(spectraProcessor, options = {}) {
         result.matrix[i],
         targetSpectrum.normalized.y,
       );
+    }
+  }
+
+  for (let filter of filters) {
+    switch (filter.name) {
+      case 'pqn': {
+        result.matrix = probabilisticQuotientNormalization(result.matrix, filter.options).data.to2DArray();
+        break;
+      }
+      case '':
+      case undefined:
+        break;
+      default:
+        throw new Error(`Unknown matrix filter name: ${filter.name}`);
     }
   }
 
