@@ -60,7 +60,7 @@ describe('getScaledData', () => {
     ]);
   });
 
-  it('min cache', () => {
+  it.only('min cache', () => {
     let result = getScaledData(spectraProcessor, { method: 'minMax' });
     let result2 = getScaledData(spectraProcessor, { method: 'minMax' });
     expect(result === result2).toBe(true);
@@ -69,6 +69,10 @@ describe('getScaledData', () => {
       [1, 2, 3],
       [1, 2, 3],
     ]);
+    // same values but other pointer, normalized changed we can not use the cache
+    spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
+    let result3 = getScaledData(spectraProcessor, { method: 'minMax' });
+    expect(result === result3).toBe(false);
   });
 
   it('ranges', () => {
