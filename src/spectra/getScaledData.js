@@ -4,6 +4,7 @@ import {
   xyIntegration,
   probabilisticQuotientNormalization,
 } from 'ml-spectra-processing';
+import hash from 'object-hash';
 
 import { getNormalizedData } from './getNormalizedData';
 import { getFromToIndex } from './scaled/getFromToIndex';
@@ -15,7 +16,7 @@ import { range as rangeFct } from './scaled/range';
  * Allows to calculate relative intensity between normalized spectra
  * @param {Array<Spectrum>} spectra
  * @param {object} [options={}] scale spectra based on various parameters
- * @param {object} [options.range] from - to
+ * @param {object} [options.range] from - to to apply the method and rescale
  * @param {Array} [options.ids] ids of selected spectra
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
@@ -26,7 +27,17 @@ import { range as rangeFct } from './scaled/range';
  * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
  */
 
+let cache = {};
+
 export function getScaledData(spectraProcessor, options = {}) {
+  /**
+   * could implement a cache if all the options are identical and the normalized data is identical as well
+   * in order ot check if the normalized data are identical we should check if the normalized array of all the spectra are identical
+   * Because we don't make in-place modification when creating normalized array we can check if the 'pointer' to the object
+   * is identical
+   */
+  const optionsHash = hash(options);
+
   if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
   const {
     range,
@@ -41,6 +52,21 @@ export function getScaledData(spectraProcessor, options = {}) {
   let targetSpectrum =
     spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
   let spectra = spectraProcessor.getSpectra(ids);
+
+  // are we able to reuse the cache ?
+  // we can if the normalized information didn't change and optionsHash is the same
+  if (cache.optionsHash === optionsHash) {
+    let validCache = true;
+    for (let spectrum of spectra) {
+      if (!cache.weakMap.get(spectrum.normalized)) validCache = false;
+    }
+    if (validCache) return cache;
+  }
+  const weakMap = new WeakMap();
+  for (let spectrum of spectra) {
+    weakMap.set(spectrum.normalized, true);
+  }
+
   let result;
 
   if (method === '' || method === undefined) {
@@ -145,5 +171,7 @@ export function getScaledData(spectraProcessor, options = {}) {
     }
   }
 
-  return result;
+  cache = { ...result, optionsHash, weakMap };
+
+  return cache;
 }

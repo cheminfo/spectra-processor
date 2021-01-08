@@ -60,6 +60,17 @@ describe('getScaledData', () => {
     ]);
   });
 
+  it('min cache', () => {
+    let result = getScaledData(spectraProcessor, { method: 'minMax' });
+    let result2 = getScaledData(spectraProcessor, { method: 'minMax' });
+    expect(result === result2).toBe(true);
+    expect(result2.matrix).toStrictEqual([
+      [1, 2, 3],
+      [1, 2, 3],
+      [1, 2, 3],
+    ]);
+  });
+
   it('ranges', () => {
     let result = getScaledData(spectraProcessor, {
       ranges: [
