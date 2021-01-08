@@ -35,14 +35,16 @@ export function getNormalized(spectrum, options = {}) {
     switch (filter.name) {
       case 'centerMean': {
         let mean = Stat.mean(spectrum.y);
-        let meanFct = (y) => y - mean;
-        ys = ys.map(meanFct);
+        for (let i = 0; i < ys.length; i++) {
+          ys[i] -= mean;
+        }
         break;
       }
       case 'scaleSD': {
         let std = Stat.standardDeviation(spectrum.y);
-        let stdFct = (y) => y / std;
-        ys = ys.map(stdFct);
+        for (let i = 0; i < ys.length; i++) {
+          ys[i] /= std;
+        }
         break;
       }
       case 'pareto': {
