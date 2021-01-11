@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getBoxPlotChart check jsgraph chart with annotations 1`] = `
+exports[`getBoxPlotChart 1`] = `
 Object {
   "annotations": Array [
     Object {

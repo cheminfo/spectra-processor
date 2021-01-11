@@ -14,7 +14,7 @@ import { min } from './scaled/min';
 import { minMax } from './scaled/minMax';
 /**
  * Allows to calculate relative intensity between normalized spectra
- * @param {Array<Spectrum>} spectra
+ * @param {SpectraProcessor} spectraProcessor
  * @param {object}   [options={}] scale spectra based on various parameters
  * @param {Array}    [options.ids] ids of selected spectra
  * @param {Array}    [options.filters=[]] Array of object containing {name:'', options:''}
@@ -37,6 +37,7 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
    * Because we don't make in-place modification when creating normalized array we can check if the 'pointer' to the object
    * is identical
    */
+
   const optionsHash = hash(options);
 
   if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
@@ -44,10 +45,6 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
 
   const { range, targetID, relative, method = '' } = scale;
 
-  let normalizedTarget =
-    targetID !== undefined
-      ? spectraProcessor.getSpectrum(targetID).normalized
-      : spectraProcessor.spectra[0].normalized;
   let spectra = spectraProcessor.getSpectra(ids);
 
   // are we able to reuse the cache ?
@@ -65,6 +62,7 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
   }
 
   let normalizedData = getNormalizedData(spectra);
+
   for (let filter of filters) {
     switch (filter.name) {
       case 'pqn': {
@@ -82,24 +80,27 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
     }
   }
 
-  switch (method.toLowerCase()) {
-    case 'min':
-      min(normalizedData.matrix, normalizedTarget, range);
-      break;
-    case 'max':
-      max(normalizedData.matrix, normalizedTarget, range);
-      break;
-    case 'minmax':
-      minMax(normalizedData.matrix, normalizedTarget, range);
-      break;
-    case 'integration':
-      integration(normalizedData.matrix, normalizedTarget, range);
-      break;
-    case '':
-    case undefined:
-      break;
-    default:
-      throw new Error(`getPostProcessedData: unknown method: ${method}`);
+  let normalizedTarget = targetID
+    ? spectraProcessor.getSpectrum(targetID).normalized
+    : spectraProcessor.spectra[0].normalized;
+
+  if (method) {
+    switch (method.toLowerCase()) {
+      case 'min':
+        min(normalizedData.matrix, normalizedTarget, range);
+        break;
+      case 'max':
+        max(normalizedData.matrix, normalizedTarget, range);
+        break;
+      case 'minmax':
+        minMax(normalizedData.matrix, normalizedTarget, range);
+        break;
+      case 'integration':
+        integration(normalizedData.matrix, normalizedTarget, range);
+        break;
+      default:
+        throw new Error(`getPostProcessedData: unknown method: ${method}`);
+    }
   }
 
   if (relative) {
@@ -155,6 +156,5 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
   }
 
   cache = { ...normalizedData, optionsHash, weakMap };
-
   return cache;
 }

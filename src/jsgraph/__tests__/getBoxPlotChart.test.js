@@ -1,6 +1,6 @@
 import { getBoxPlotChart } from '../getBoxPlotChart';
 
-const nomralizedData = {
+const normalizedData = {
   ids: [undefined, undefined, undefined, undefined, undefined],
   matrix: [
     [1, 2, 3],
@@ -13,10 +13,8 @@ const nomralizedData = {
   x: [10, 20, 30],
 };
 
-describe('getBoxPlotChart', () => {
-  it('check jsgraph chart with annotations', () => {
-    let result = getBoxPlotChart(nomralizedData, { q2StrokeColor: '#000' });
+test('getBoxPlotChart', () => {
+  let result = getBoxPlotChart(normalizedData, { q2StrokeColor: '#000' });
 
-    expect(result).toMatchSnapshot();
-  });
+  expect(result).toMatchSnapshot();
 });

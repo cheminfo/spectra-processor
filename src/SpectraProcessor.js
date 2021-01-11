@@ -19,6 +19,7 @@ import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
 import { getPostProcessedData } from './spectra/getPostProcessedData';
+import { getPostProcessedText } from './spectra/getPostProcessedText';
 import { Spectrum } from './spectrum/Spectrum';
 
 export class SpectraProcessor {
@@ -130,6 +131,19 @@ export class SpectraProcessor {
     const { ids } = options;
     let spectra = this.getSpectra(ids);
     return getNormalizedText(spectra, options);
+  }
+
+  /**
+   * Returns a tab separated value containing the post processed data
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] List of spectra ids to export, by default all
+   * @param {string} [options.fs='\t'] field separator
+   * @param {string} [options.rs='\n'] record (line) separator
+   * @param {object} [postProcessing={}]
+   * @returns {string}
+   */
+  getPostProcessedText(options = {}) {
+    return getPostProcessedText(this, options);
   }
 
   getMinMaxX() {
