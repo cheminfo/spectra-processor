@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>spectra-processor 2.3.0 | Documentation</title>
+  <title>spectra-processor 2.4.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
   <link href='assets/style.css' rel='stylesheet'>
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>spectra-processor</h3>
-          <div class='mb1'><code>2.3.0</code></div>
+          <div class='mb1'><code>2.4.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -168,6 +168,16 @@
               
                 
                 <li><a
+                  href='#getnormalizedcommonboundary'
+                  class="">
+                  getNormalizedCommonBoundary
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#getnormalizeddata'
                   class="">
                   getNormalizedData
@@ -188,9 +198,9 @@
               
                 
                 <li><a
-                  href='#getscaledchart'
+                  href='#getpostprocessedchart'
                   class="">
-                  getScaledChart
+                  getPostProcessedChart
                   
                 </a>
                 
@@ -198,9 +208,19 @@
               
                 
                 <li><a
-                  href='#getscaleddata'
+                  href='#getpostprocesseddata'
                   class="">
-                  getScaledData
+                  getPostProcessedData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getpostprocessedtext'
+                  class="">
+                  getPostProcessedText
                   
                 </a>
                 
@@ -288,6 +308,16 @@
               
                 
                 <li><a
+                  href='#cache'
+                  class="">
+                  cache
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#getautocorrelationchart'
                   class="">
                   getAutocorrelationChart
@@ -318,9 +348,9 @@
               
                 
                 <li><a
-                  href='#getscaledchart'
+                  href='#getpostprocessedchart'
                   class="">
-                  getScaledChart
+                  getPostProcessedChart
                   
                 </a>
                 
@@ -341,6 +371,16 @@
                   href='#matrix'
                   class="">
                   matrix
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#optionshash'
+                  class="">
+                  optionsHash
                   
                 </a>
                 
@@ -386,7 +426,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L241-L261'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L255-L275'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -523,7 +563,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L193-L200'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L207-L214'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -657,7 +697,7 @@ By default TITLE from the jcamp will be in the meta information</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L173-L180'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L187-L194'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -810,7 +850,7 @@ By default TITLE from the jcamp will be in the meta information</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L41-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L42-L47'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -958,7 +998,7 @@ and skip the original data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L296-L298'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L310-L312'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1025,7 +1065,7 @@ and skip the original data.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L90-L98'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L91-L99'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1147,7 +1187,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L356-L358'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L370-L372'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1256,7 +1296,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L381-L384'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L395-L398'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1359,7 +1399,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L392-L395'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L406-L409'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1462,7 +1502,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L226-L228'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L240-L242'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1555,7 +1595,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L346-L348'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L360-L362'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1630,7 +1670,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L217-L219'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L231-L233'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1723,7 +1763,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L105-L107'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L106-L108'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1818,7 +1858,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L403-L407'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L417-L421'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -1914,12 +1954,68 @@ specified index</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getnormalizedcommonboundary'>
+      getNormalizedCommonBoundary
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L477-L497'>
+      <span>src/SpectraProcessor.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>We provide the allowed from / to after normalization
+For the X axis we return the smallest common values
+For the Y axis we return the largest min / max</p>
+
+    <div class='pre p1 fill-light mt0'>getNormalizedCommonBoundary()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getnormalizeddata'>
       getNormalizedData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L115-L119'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L116-L120'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2024,7 +2120,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L129-L133'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L130-L134'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2142,12 +2238,12 @@ specified index</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='getscaledchart'>
-      getScaledChart
+    <h3 class='fl m0' id='getpostprocessedchart'>
+      getPostProcessedChart
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L419-L421'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L433-L435'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2156,7 +2252,7 @@ specified index</p>
 
   <p>Returns a JSGraph chart object for all the scaled normalized spectra</p>
 
-    <div class='pre p1 fill-light mt0'>getScaledChart(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
+    <div class='pre p1 fill-light mt0'>getPostProcessedChart(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
   
   
 
@@ -2283,12 +2379,12 @@ specified index</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='getscaleddata'>
-      getScaledData
+    <h3 class='fl m0' id='getpostprocesseddata'>
+      getPostProcessedData
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L156-L158'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L170-L172'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2297,7 +2393,7 @@ specified index</p>
 
   <p>Returns an object contains 4 parameters with the scaled data</p>
 
-    <div class='pre p1 fill-light mt0'>getScaledData(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
+    <div class='pre p1 fill-light mt0'>getPostProcessedData(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
   
   
 
@@ -2429,12 +2525,144 @@ specified index</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getpostprocessedtext'>
+      getPostProcessedText
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L145-L147'>
+      <span>src/SpectraProcessor.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns a tab separated value containing the post processed data</p>
+
+    <div class='pre p1 fill-light mt0'>getPostProcessedText(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, postProcessing: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.ids</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
+  </td>
+  <td class='break-word'><span>List of spectra ids to export, by default all
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.fs</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  
+    (default <code>&#39;\t&#39;</code>)
+  </td>
+  <td class='break-word'><span>field separator
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.rs</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  
+    (default <code>&#39;\n&#39;</code>)
+  </td>
+  <td class='break-word'><span>record (line) separator
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>postProcessing</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getspectra'>
       getSpectra
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L319-L329'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L333-L343'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2501,7 +2729,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L336-L340'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L350-L354'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2576,7 +2804,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L305-L312'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L319-L326'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2651,7 +2879,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L371-L373'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L385-L387'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2802,7 +3030,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L283-L290'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L297-L304'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2870,7 +3098,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L273-L277'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L287-L291'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -2937,7 +3165,7 @@ specified index</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L68-L76'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L69-L77'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -3006,7 +3234,7 @@ This will throw an error in the original data is not present</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/SpectraProcessor.js#L464-L494'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/SpectraProcessor.js#L505-L535'>
       <span>src/SpectraProcessor.js</span>
       </a>
     
@@ -3103,12 +3331,210 @@ This will throw an error in the original data is not present</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='cache'>
+      cache
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/spectra/getPostProcessedData.js#L31-L31'>
+      <span>src/spectra/getPostProcessedData.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Allows to calculate relative intensity between normalized spectra</p>
+
+    <div class='pre p1 fill-light mt0'>cache</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>spectraProcessor</span> <code class='quiet'>(SpectraProcessor)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            = <code>{}</code>)</code>
+	    scale spectra based on various parameters
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.ids</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
+  </td>
+  <td class='break-word'><span>ids of selected spectra
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.filters</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>
+  
+    (default <code>[]</code>)
+  </td>
+  <td class='break-word'><span>Array of object containing {name:'', options:''}
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.scale</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
+  
+    (default <code>{}</code>)
+  </td>
+  <td class='break-word'><span>object containing the options for rescaling
+</span></td>
+</tr>
+
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.targetID</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  
+    (default <code>spectra[0].id</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.method</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  
+    (default <code>&#39;max&#39;</code>)
+  </td>
+  <td class='break-word'><span>min, max, integration, minMax
+</span></td>
+</tr>
+
+
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.range</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
+  </td>
+  <td class='break-word'><span>from - to to apply the method and rescale
+</span></td>
+</tr>
+
+
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.relative</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+  
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.ranges</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
+  </td>
+  <td class='break-word'><span>Array of object containing {from:'', to:'', label:''}
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.calculations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
+  </td>
+  <td class='break-word'><span>Array of object containing {label:'', formula:''}
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>:
+        { ids:[], matrix:
+[Array]
+, meta:
+[object]
+, x:[], ranges:
+[object]
+ }
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getautocorrelationchart'>
       getAutocorrelationChart
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/jsgraph/getAutocorrelationChart.js#L18-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/jsgraph/getAutocorrelationChart.js#L18-L60'>
       <span>src/jsgraph/getAutocorrelationChart.js</span>
       </a>
     
@@ -3234,7 +3660,7 @@ This will throw an error in the original data is not present</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/jsgraph/getChart.js#L8-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/jsgraph/getChart.js#L8-L22'>
       <span>src/jsgraph/getChart.js</span>
       </a>
     
@@ -3345,7 +3771,7 @@ This will throw an error in the original data is not present</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/jsgraph/getNormalizedChart.js#L14-L28'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/jsgraph/getNormalizedChart.js#L14-L28'>
       <span>src/jsgraph/getNormalizedChart.js</span>
       </a>
     
@@ -3469,20 +3895,20 @@ This will throw an error in the original data is not present</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='getscaledchart'>
-      getScaledChart
+    <h3 class='fl m0' id='getpostprocessedchart'>
+      getPostProcessedChart
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/jsgraph/getScaledChart.js#L14-L32'>
-      <span>src/jsgraph/getScaledChart.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/jsgraph/getPostProcessedChart.js#L14-L32'>
+      <span>src/jsgraph/getPostProcessedChart.js</span>
       </a>
     
   </div>
   
 
   
-    <div class='pre p1 fill-light mt0'>getScaledChart(spectraProcessor: SpectraProcessor, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+    <div class='pre p1 fill-light mt0'>getPostProcessedChart(spectraProcessor: SpectraProcessor, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
   
   
 
@@ -3527,15 +3953,6 @@ This will throw an error in the original data is not present</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.range</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?</code>
-  </td>
-  <td class='break-word'><span>from - to
-</span></td>
-</tr>
-
-
-              
-                <tr>
   <td class='break-word'><span class='code bold'>options.ids</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
   </td>
   <td class='break-word'><span>ids of selected spectra
@@ -3545,7 +3962,28 @@ This will throw an error in the original data is not present</p>
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.targetID</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  <td class='break-word'><span class='code bold'>options.filters</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>
+  
+    (default <code>[]</code>)
+  </td>
+  <td class='break-word'><span>Array of object containing {name:'', options:''}
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.scale</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
+  
+    (default <code>{}</code>)
+  </td>
+  <td class='break-word'><span>object containing the options for rescaling
+</span></td>
+</tr>
+
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.targetID</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   
     (default <code>spectra[0].id</code>)
   </td>
@@ -3553,43 +3991,37 @@ This will throw an error in the original data is not present</p>
 </tr>
 
 
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.method</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.method</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   
     (default <code>&#39;max&#39;</code>)
   </td>
-  <td class='break-word'><span>min, max, range, minMax
+  <td class='break-word'><span>min, max, integration, minMax
 </span></td>
 </tr>
 
 
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.ranges</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.range</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
   </td>
-  <td class='break-word'><span>Array of object containing {from:'', to:'', label:''}
+  <td class='break-word'><span>from - to to apply the method and rescale
 </span></td>
 </tr>
 
 
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.calculations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
-  </td>
-  <td class='break-word'><span>Array of object containing {label:'', formula:''}
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.relative</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+  
+    <tr>
+  <td class='break-word'><span class='code bold'>options.scale.relative</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
   
     (default <code>false</code>)
   </td>
   <td class='break-word'><span></span></td>
 </tr>
+
+
+  
 
 
               
@@ -3633,7 +4065,7 @@ This will throw an error in the original data is not present</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/parser/jcamp.js#L9-L21'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/parser/jcamp.js#L9-L21'>
       <span>src/parser/jcamp.js</span>
       </a>
     
@@ -3709,7 +4141,7 @@ This will throw an error in the original data is not present</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/parser/matrix.js#L8-L47'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/parser/matrix.js#L8-L47'>
       <span>src/parser/matrix.js</span>
       </a>
     
@@ -3816,12 +4248,69 @@ This will throw an error in the original data is not present</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='optionshash'>
+      optionsHash
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/spectra/getPostProcessedData.js#L41-L41'>
+      <span>src/spectra/getPostProcessedData.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>could implement a cache if all the options are identical and the normalized data is identical as well
+in order ot check if the normalized data are identical we should check if the normalized array of all the spectra are identical
+Because we don't make in-place modification when creating normalized array we can check if the 'pointer' to the object
+is identical</p>
+
+    <div class='pre p1 fill-light mt0'>optionsHash</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='spectrum'>
       spectrum
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/spectrum/Spectrum.js#L14-L74'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/spectrum/Spectrum.js#L14-L75'>
       <span>src/spectrum/Spectrum.js</span>
       </a>
     
@@ -3928,7 +4417,7 @@ This will throw an error in the original data is not present</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/9c3d1da5d218ac4a43012535f4b8264b6b524c83/src/parser/text.js#L8-L19'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/cheminfo/spectra-processor/blob/f04f1296c92f31998e110a7db7c03d77dad7f40f/src/parser/text.js#L8-L19'>
       <span>src/parser/text.js</span>
       </a>
     
