@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.3.0...v2.4.0) (2021-01-11)
+
+
+### Features
+
+* add cache in getScaledData ([6f6bf35](https://www.github.com/cheminfo/spectra-processor/commit/6f6bf35512f2acc40a8820234e4bf20b72b36ed4))
+* add filters in getScaledData ([4f94ba6](https://www.github.com/cheminfo/spectra-processor/commit/4f94ba6a554a8073646a4f328597baeeda105f62))
+* add getNormalizedCommonBoundary ([7ee2e37](https://www.github.com/cheminfo/spectra-processor/commit/7ee2e376af98bde569d9245d0ed0bb5de28a557f))
+* add getPostProcessedText ([d2dd756](https://www.github.com/cheminfo/spectra-processor/commit/d2dd756cbd345572b608be971b84776a762cf0b7))
+* add pareto filter ([13967a8](https://www.github.com/cheminfo/spectra-processor/commit/13967a80fd932b527f6171c8f98da20059f29a00))
+* add scale level get getPostProcessedData ([f8f7a49](https://www.github.com/cheminfo/spectra-processor/commit/f8f7a4996939d501d53472e875e5237f4f4a8c20))
+* deal with fct error in filters ([1f68864](https://www.github.com/cheminfo/spectra-processor/commit/1f688648a3e90a7596555cefae5e95ac2a6c80c3))
+* refactor getScaledData to deal with matrix ([97d318e](https://www.github.com/cheminfo/spectra-processor/commit/97d318e21ece6a5957af9962139029361400a5ab))
+
+
+### Bug Fixes
+
+* getPostProcssedData and getPostProcessedChart ([1901c13](https://www.github.com/cheminfo/spectra-processor/commit/1901c13d40ff8c4eca1002834a8b933b89a6ff54))
+* update dependencies and fix pqn ([fba15e7](https://www.github.com/cheminfo/spectra-processor/commit/fba15e7945f8d7d48372c25c99e6eec8cb8f2fd6))
+
 ## [2.3.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.2.0...v2.3.0) (2020-12-13)
 
 
