@@ -51,7 +51,7 @@ describe('getScaledData', () => {
     ]);
   });
 
-  it('min', () => {
+  it('minMax', () => {
     let result = getScaledData(spectraProcessor, { method: 'minMax' });
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
@@ -60,7 +60,7 @@ describe('getScaledData', () => {
     ]);
   });
 
-  it.only('min cache', () => {
+  it('minMax cache', () => {
     let result = getScaledData(spectraProcessor, { method: 'minMax' });
     let result2 = getScaledData(spectraProcessor, { method: 'minMax' });
     expect(result === result2).toBe(true);
@@ -73,6 +73,57 @@ describe('getScaledData', () => {
     spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
     let result3 = getScaledData(spectraProcessor, { method: 'minMax' });
     expect(result === result3).toBe(false);
+  });
+
+  it('min', () => {
+    let result = getScaledData(spectraProcessor, {
+      method: 'min',
+      targetID: 3,
+    });
+    result.matrix[0] = Array.from(result.matrix[0]);
+    result.matrix[1] = Array.from(result.matrix[1]);
+    result.matrix[2] = Array.from(result.matrix[2]);
+    expect(result.matrix).toStrictEqual([
+      [3, 6, 9],
+      [3, 4.5, 6],
+      [3, 4, 5],
+    ]);
+  });
+
+  it('max', () => {
+    let result = getScaledData(spectraProcessor, {
+      method: 'max',
+      targetID: 2,
+    });
+    result.matrix[0] = Array.from(result.matrix[0]);
+    result.matrix[1] = Array.from(result.matrix[1]);
+    result.matrix[2] = Array.from(result.matrix[2]);
+    expect(result.matrix).toBeDeepCloseTo(
+      [
+        [1.3333333, 2.666666, 4],
+        [2, 3, 4],
+        [2.4, 3.2, 4],
+      ],
+      5,
+    );
+  });
+
+  it('integration', () => {
+    let result = getScaledData(spectraProcessor, {
+      method: 'integration',
+      targetID: 2,
+    });
+    result.matrix[0] = Array.from(result.matrix[0]);
+    result.matrix[1] = Array.from(result.matrix[1]);
+    result.matrix[2] = Array.from(result.matrix[2]);
+    expect(result.matrix).toBeDeepCloseTo(
+      [
+        [1.5, 3, 4.5],
+        [2, 3, 4],
+        [2.25, 3, 3.75],
+      ],
+      5,
+    );
   });
 
   it('ranges', () => {
@@ -92,14 +143,14 @@ describe('getScaledData', () => {
         label: 'A',
         from: 6,
         to: 14,
-        integration: 0,
+        integration: 20,
         maxPoint: { x: 10, y: 2, index: 0 },
       },
       B: {
         label: 'B',
         from: 16,
         to: 34,
-        integration: 35,
+        integration: 70,
         maxPoint: { x: 30, y: 4, index: 2 },
       },
     });
@@ -132,20 +183,20 @@ describe('getScaledData', () => {
         label: 'A',
         from: 6,
         to: 14,
-        integration: 0,
+        integration: 20,
         maxPoint: { x: 10, y: 2, index: 0 },
       },
       B: {
         label: 'B',
         from: 16,
         to: 34,
-        integration: 35,
+        integration: 70,
         maxPoint: { x: 30, y: 4, index: 2 },
       },
     });
     expect(result.calculations[1]).toStrictEqual({
-      sum: 35,
-      difference: -35,
+      sum: 90,
+      difference: -50,
     });
   });
 });

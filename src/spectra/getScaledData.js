@@ -1,23 +1,24 @@
 import {
   xSubtract,
   xyMaxYPoint,
-  xyIntegration,
+  xSum,
   probabilisticQuotientNormalization,
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
 import { getNormalizedData } from './getNormalizedData';
 import { getFromToIndex } from './scaled/getFromToIndex';
+import { integration } from './scaled/integration';
 import { max } from './scaled/max';
 import { min } from './scaled/min';
 import { minMax } from './scaled/minMax';
-import { range as rangeFct } from './scaled/range';
 /**
  * Allows to calculate relative intensity between normalized spectra
  * @param {Array<Spectrum>} spectra
  * @param {object} [options={}] scale spectra based on various parameters
- * @param {object} [options.range] from - to to apply the method and rescale
  * @param {Array} [options.ids] ids of selected spectra
+ *
+ * @param {object} [options.range] from - to to apply the method and rescale
  * @param {string} [options.targetID=spectra[0].id]
  * @param {string} [options.method='max'] min, max, range, minMax
  * @param {boolean} [options.relative=false]
@@ -43,14 +44,17 @@ export function getScaledData(spectraProcessor, options = {}) {
     range,
     targetID,
     relative,
-    method,
+    method = '',
     ids,
     ranges,
     calculations,
     filters = [],
   } = options;
-  let targetSpectrum =
-    spectraProcessor.getSpectrum(targetID) || spectraProcessor.spectra[0];
+
+  let normalizedTarget =
+    targetID !== undefined
+      ? spectraProcessor.getSpectrum(targetID).normalized
+      : spectraProcessor.spectra[0].normalized;
   let spectra = spectraProcessor.getSpectra(ids);
 
   // are we able to reuse the cache ?
@@ -67,52 +71,12 @@ export function getScaledData(spectraProcessor, options = {}) {
     weakMap.set(spectrum.normalized, true);
   }
 
-  let result;
-
-  if (method === '' || method === undefined) {
-    result = getNormalizedData(spectra);
-  } else {
-    let matrix;
-    switch (method.toLowerCase()) {
-      case 'min':
-        matrix = min(spectra, targetSpectrum, range);
-        break;
-      case 'max':
-        matrix = max(spectra, targetSpectrum, range);
-        break;
-      case 'minmax':
-        matrix = minMax(spectra, targetSpectrum, range);
-        break;
-      case 'range':
-        matrix = rangeFct(spectra, targetSpectrum, range);
-        break;
-      default:
-        throw new Error(`getScaledData: unknown method: ${method}`);
-    }
-    let meta = [];
-    let currentIDs = [];
-    for (let spectrum of spectra) {
-      currentIDs.push(spectrum.id);
-      meta.push(spectrum.meta);
-    }
-    let x = spectra[0].normalized.x;
-    result = { ids: currentIDs, matrix, meta, x };
-  }
-
-  if (relative) {
-    for (let i = 0; i < result.matrix.length; i++) {
-      result.matrix[i] = xSubtract(
-        result.matrix[i],
-        targetSpectrum.normalized.y,
-      );
-    }
-  }
-
+  let normalizedData = getNormalizedData(spectra);
   for (let filter of filters) {
     switch (filter.name) {
       case 'pqn': {
-        result.matrix = probabilisticQuotientNormalization(
-          result.matrix,
+        normalizedData.matrix = probabilisticQuotientNormalization(
+          normalizedData.matrix,
           filter.options,
         ).data.to2DArray();
         break;
@@ -125,25 +89,51 @@ export function getScaledData(spectraProcessor, options = {}) {
     }
   }
 
+  switch (method.toLowerCase()) {
+    case 'min':
+      min(normalizedData.matrix, normalizedTarget, range);
+      break;
+    case 'max':
+      max(normalizedData.matrix, normalizedTarget, range);
+      break;
+    case 'minmax':
+      minMax(normalizedData.matrix, normalizedTarget, range);
+      break;
+    case 'integration':
+      integration(normalizedData.matrix, normalizedTarget, range);
+      break;
+    case '':
+    case undefined:
+      break;
+    default:
+      throw new Error(`getScaledData: unknown method: ${method}`);
+  }
+
+  if (relative) {
+    for (let i = 0; i < normalizedData.matrix.length; i++) {
+      normalizedData.matrix[i] = xSubtract(
+        normalizedData.matrix[i],
+        normalizedTarget.y,
+      );
+    }
+  }
+
   if (ranges) {
-    result.ranges = [];
-    for (let i = 0; i < result.matrix.length; i++) {
+    normalizedData.ranges = [];
+    for (let i = 0; i < normalizedData.matrix.length; i++) {
       let rangesCopy = JSON.parse(JSON.stringify(ranges));
-      let yNormalized = result.matrix[i];
+      let yNormalized = normalizedData.matrix[i];
       let resultRanges = {};
-      result.ranges.push(resultRanges);
+      normalizedData.ranges.push(resultRanges);
       for (let currentRange of rangesCopy) {
         if (currentRange.label) {
-          let fromToIndex = getFromToIndex(
-            targetSpectrum.normalized.x,
-            currentRange,
-          );
-          currentRange.integration = xyIntegration(
-            { x: result.x, y: yNormalized },
-            fromToIndex,
-          );
+          let fromToIndex = getFromToIndex(normalizedTarget.x, currentRange);
+
+          let deltaX = normalizedTarget.x[1] - normalizedTarget.x[0];
+
+          currentRange.integration = xSum(yNormalized, fromToIndex) * deltaX;
           currentRange.maxPoint = xyMaxYPoint(
-            { x: result.x, y: yNormalized },
+            { x: normalizedData.x, y: yNormalized },
             fromToIndex,
           );
           resultRanges[currentRange.label] = currentRange;
@@ -152,26 +142,26 @@ export function getScaledData(spectraProcessor, options = {}) {
     }
   }
 
-  if (calculations && result.ranges) {
-    result.calculations = result.ranges.map(() => {
+  if (calculations && normalizedData.ranges) {
+    normalizedData.calculations = normalizedData.ranges.map(() => {
       return {};
     });
-    const parameters = Object.keys(result.ranges[0]);
+    const parameters = Object.keys(normalizedData.ranges[0]);
     for (let calculation of calculations) {
       // eslint-disable-next-line no-new-func
       const callback = new Function(
         ...parameters,
         `return ${calculation.formula}`,
       );
-      for (let i = 0; i < result.ranges.length; i++) {
-        let oneRanges = result.ranges[i];
+      for (let i = 0; i < normalizedData.ranges.length; i++) {
+        let oneRanges = normalizedData.ranges[i];
         let values = parameters.map((key) => oneRanges[key].integration);
-        result.calculations[i][calculation.label] = callback(...values);
+        normalizedData.calculations[i][calculation.label] = callback(...values);
       }
     }
   }
 
-  cache = { ...result, optionsHash, weakMap };
+  cache = { ...normalizedData, optionsHash, weakMap };
 
   return cache;
 }

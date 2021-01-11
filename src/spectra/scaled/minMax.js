@@ -1,38 +1,32 @@
-import SimpleLinearRegression from 'ml-regression-simple-linear';
-import { xyMinYPoint, xyMaxYPoint } from 'ml-spectra-processing';
+import { xMinValue, xMaxValue } from 'ml-spectra-processing';
 
 import { getFromToIndex } from './getFromToIndex';
 
-export function minMax(spectra, targetSpectrum, range = {}) {
-  let fromToIndex = getFromToIndex(targetSpectrum.normalized.x, range);
-
+export function minMax(matrix, normalizedTarget, range = {}) {
+  let fromToIndex = getFromToIndex(normalizedTarget.x, range);
   let targetValue = {
-    min: xyMinYPoint(targetSpectrum.normalized, fromToIndex).y,
-    max: xyMaxYPoint(targetSpectrum.normalized, fromToIndex).y,
+    min: xMinValue(normalizedTarget.y, fromToIndex),
+    max: xMaxValue(normalizedTarget.y, fromToIndex),
   };
 
-  let values = spectra.map((spectrum) => {
+  let deltaTarget = targetValue.max - targetValue.min;
+  let minTarget = targetValue.min;
+
+  let values = matrix.map((row) => {
     return {
-      min: xyMinYPoint(spectrum.normalized, fromToIndex).y,
-      max: xyMaxYPoint(spectrum.normalized, fromToIndex).y,
+      min: xMinValue(row, fromToIndex),
+      max: xMaxValue(row, fromToIndex),
     };
   });
-
-  let matrix = [];
-  for (let i = 0; i < spectra.length; i++) {
-    let spectrum = spectra[i];
-    const regression = new SimpleLinearRegression(
-      [targetValue.min, targetValue.max],
-      [values[i].min, values[i].max],
-    );
-
-    let length = spectrum.normalized.y.length;
-    let scaled = new Array(length);
-    for (let j = 0; j < length; j++) {
-      scaled[j] = regression.computeX(spectrum.normalized.y[j]);
+  for (let i = 0; i < matrix.length; i++) {
+    let deltaSource = values[i].max - values[i].min;
+    let minSource = values[i].min;
+    let newData = [];
+    for (let j = 0; j < normalizedTarget.y.length; j++) {
+      newData.push(
+        ((matrix[i][j] - minSource) / deltaSource) * deltaTarget + minTarget,
+      );
     }
-    matrix.push(scaled);
+    matrix[i] = newData;
   }
-
-  return matrix;
 }

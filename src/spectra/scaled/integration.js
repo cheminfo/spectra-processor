@@ -1,12 +1,12 @@
-import { xMinValue, xMultiply } from 'ml-spectra-processing';
+import { xSum, xMultiply } from 'ml-spectra-processing';
 
 import { getFromToIndex } from './getFromToIndex';
 
-export function min(matrix, normalizedTarget, range = {}) {
+export function integration(matrix, normalizedTarget, range = {}) {
   let fromToIndex = getFromToIndex(normalizedTarget.x, range);
 
-  let targetValue = xMinValue(normalizedTarget.y, fromToIndex);
-  let values = matrix.map((row) => xMinValue(row, fromToIndex));
+  let targetValue = xSum(normalizedTarget.y, fromToIndex);
+  let values = matrix.map((row) => xSum(row, fromToIndex));
 
   for (let i = 0; i < matrix.length; i++) {
     let factor = targetValue / values[i];
