@@ -57,10 +57,10 @@ describe('SpectraProcessor', () => {
     );
   });
 
-  it('test getScaleddData', () => {
+  it('test getPostProcesseddData', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
-    let scaled = spectraProcessor.getScaledData({
+    let scaled = spectraProcessor.getPostProcessedData({
       range: { from: 0.9, to: 2.1 },
     });
 
@@ -71,10 +71,10 @@ describe('SpectraProcessor', () => {
     ]);
   });
 
-  it('test getScaleddData undefined method, relative', () => {
+  it('test getPostProcesseddData undefined method, relative', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
-    let scaled = spectraProcessor.getScaledData({
+    let scaled = spectraProcessor.getPostProcessedData({
       range: { from: 0.9, to: 2.1 },
       relative: true,
     });
@@ -85,10 +85,10 @@ describe('SpectraProcessor', () => {
     ]);
   });
 
-  it('test getScaleddData minMax method, relative', () => {
+  it('test getPostProcesseddData minMax method, relative', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
-    let scaled = spectraProcessor.getScaledData({
+    let scaled = spectraProcessor.getPostProcessedData({
       range: { from: 0.9, to: 2.1 },
       method: 'minMax',
       relative: true,
@@ -101,10 +101,10 @@ describe('SpectraProcessor', () => {
     ]);
   });
 
-  it('test getScaledChart minMax and relative', () => {
+  it('test getPostProcessedChart minMax and relative', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
-    let spectra = spectraProcessor.getScaledChart({
+    let spectra = spectraProcessor.getPostProcessedChart({
       range: { from: 0.9, to: 2.1 },
       method: 'minMax',
       relative: true,

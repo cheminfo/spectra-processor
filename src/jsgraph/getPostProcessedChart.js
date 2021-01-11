@@ -11,8 +11,8 @@ import { addChartDataStyle } from './addChartDataStyle';
  * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
  * @param {boolean} [options.relative=false]
  */
-export function getScaledChart(spectraProcessor, options = {}) {
-  let scaled = spectraProcessor.getScaledData(options);
+export function getPostProcessedChart(spectraProcessor, options = {}) {
+  let scaled = spectraProcessor.getPostProcessedData(options);
 
   let chart = {
     data: [],

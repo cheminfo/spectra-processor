@@ -1,7 +1,7 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { SpectraProcessor } from '../../SpectraProcessor';
-import { getScaledData } from '../getScaledData';
+import { getPostProcessedData } from '../getPostProcessedData';
 
 expect.extend({ toBeDeepCloseTo });
 
@@ -30,9 +30,9 @@ spectraProcessor.spectra = [
   },
 ];
 
-describe('getScaledData', () => {
+describe('getPostProcessedData', () => {
   it('No options', () => {
-    let result = getScaledData(spectraProcessor);
+    let result = getPostProcessedData(spectraProcessor);
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [2, 3, 4],
@@ -41,7 +41,7 @@ describe('getScaledData', () => {
   });
 
   it('filter', () => {
-    let result = getScaledData(spectraProcessor, {
+    let result = getPostProcessedData(spectraProcessor, {
       filters: [{ name: 'pqn', options: { max: 10 } }],
     });
     expect(result.matrix).toBeDeepCloseTo([
@@ -52,7 +52,7 @@ describe('getScaledData', () => {
   });
 
   it('minMax', () => {
-    let result = getScaledData(spectraProcessor, { method: 'minMax' });
+    let result = getPostProcessedData(spectraProcessor, { method: 'minMax' });
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [1, 2, 3],
@@ -61,8 +61,8 @@ describe('getScaledData', () => {
   });
 
   it('minMax cache', () => {
-    let result = getScaledData(spectraProcessor, { method: 'minMax' });
-    let result2 = getScaledData(spectraProcessor, { method: 'minMax' });
+    let result = getPostProcessedData(spectraProcessor, { method: 'minMax' });
+    let result2 = getPostProcessedData(spectraProcessor, { method: 'minMax' });
     expect(result === result2).toBe(true);
     expect(result2.matrix).toStrictEqual([
       [1, 2, 3],
@@ -71,12 +71,12 @@ describe('getScaledData', () => {
     ]);
     // same values but other pointer, normalized changed we can not use the cache
     spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
-    let result3 = getScaledData(spectraProcessor, { method: 'minMax' });
+    let result3 = getPostProcessedData(spectraProcessor, { method: 'minMax' });
     expect(result === result3).toBe(false);
   });
 
   it('min', () => {
-    let result = getScaledData(spectraProcessor, {
+    let result = getPostProcessedData(spectraProcessor, {
       method: 'min',
       targetID: 3,
     });
@@ -91,7 +91,7 @@ describe('getScaledData', () => {
   });
 
   it('max', () => {
-    let result = getScaledData(spectraProcessor, {
+    let result = getPostProcessedData(spectraProcessor, {
       method: 'max',
       targetID: 2,
     });
@@ -109,7 +109,7 @@ describe('getScaledData', () => {
   });
 
   it('integration', () => {
-    let result = getScaledData(spectraProcessor, {
+    let result = getPostProcessedData(spectraProcessor, {
       method: 'integration',
       targetID: 2,
     });
@@ -127,7 +127,7 @@ describe('getScaledData', () => {
   });
 
   it('ranges', () => {
-    let result = getScaledData(spectraProcessor, {
+    let result = getPostProcessedData(spectraProcessor, {
       ranges: [
         { label: 'A', from: 6, to: 14 },
         { label: 'B', from: 16, to: 34 },
@@ -157,7 +157,7 @@ describe('getScaledData', () => {
   });
 
   it('ranges and calculations', () => {
-    let result = getScaledData(spectraProcessor, {
+    let result = getPostProcessedData(spectraProcessor, {
       ranges: [
         { label: 'A', from: 6, to: 14 },
         { label: 'B', from: 16, to: 34 },

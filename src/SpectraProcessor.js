@@ -5,7 +5,7 @@ import { getBoxPlotChart } from './jsgraph/getBoxPlotChart';
 import { getChart } from './jsgraph/getChart';
 import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
 import { getNormalizedChart } from './jsgraph/getNormalizedChart';
-import { getScaledChart } from './jsgraph/getScaledChart';
+import { getPostProcessedChart } from './jsgraph/getPostProcessedChart';
 import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
 import { getCategoriesStats } from './metadata/getCategoriesStats';
 import { getClasses } from './metadata/getClasses';
@@ -18,7 +18,7 @@ import { getBoxPlotData } from './spectra/getBoxPlotData';
 import { getMeanData } from './spectra/getMeanData';
 import { getNormalizedData } from './spectra/getNormalizedData';
 import { getNormalizedText } from './spectra/getNormalizedText';
-import { getScaledData } from './spectra/getScaledData';
+import { getPostProcessedData } from './spectra/getPostProcessedData';
 import { Spectrum } from './spectrum/Spectrum';
 
 export class SpectraProcessor {
@@ -153,8 +153,8 @@ export class SpectraProcessor {
    * @param {boolean} [options.relative=false]
    * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
    */
-  getScaledData(options) {
-    return getScaledData(this, options);
+  getPostProcessedData(options) {
+    return getPostProcessedData(this, options);
   }
 
   /**
@@ -416,8 +416,8 @@ export class SpectraProcessor {
    * @param {boolean} [options.relative=false]
    * @returns {object}
    */
-  getScaledChart(options) {
-    return getScaledChart(this, options);
+  getPostProcessedChart(options) {
+    return getPostProcessedChart(this, options);
   }
 
   getMemoryInfo() {

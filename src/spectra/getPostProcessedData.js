@@ -30,7 +30,7 @@ import { minMax } from './scaled/minMax';
 
 let cache = {};
 
-export function getScaledData(spectraProcessor, options = {}) {
+export function getPostProcessedData(spectraProcessor, options = {}) {
   /**
    * could implement a cache if all the options are identical and the normalized data is identical as well
    * in order ot check if the normalized data are identical we should check if the normalized array of all the spectra are identical
@@ -106,7 +106,7 @@ export function getScaledData(spectraProcessor, options = {}) {
     case undefined:
       break;
     default:
-      throw new Error(`getScaledData: unknown method: ${method}`);
+      throw new Error(`getPostProcessedData: unknown method: ${method}`);
   }
 
   if (relative) {
