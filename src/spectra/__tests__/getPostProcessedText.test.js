@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { SpectraProcessor } from '../../SpectraProcessor';
@@ -39,7 +40,6 @@ test('getPostProcessedText', () => {
     },
   });
   expect(result).toHaveLength(71);
-  // eslint-disable-next-line no-tabs
   expect(result).toMatchInlineSnapshot(`
     "id	10	20	30
     1	1	2	3
