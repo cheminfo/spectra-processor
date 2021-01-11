@@ -52,7 +52,9 @@ describe('getPostProcessedData', () => {
   });
 
   it('minMax', () => {
-    let result = getPostProcessedData(spectraProcessor, { method: 'minMax' });
+    let result = getPostProcessedData(spectraProcessor, {
+      scale: { method: 'minMax' },
+    });
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [1, 2, 3],
@@ -61,8 +63,12 @@ describe('getPostProcessedData', () => {
   });
 
   it('minMax cache', () => {
-    let result = getPostProcessedData(spectraProcessor, { method: 'minMax' });
-    let result2 = getPostProcessedData(spectraProcessor, { method: 'minMax' });
+    let result = getPostProcessedData(spectraProcessor, {
+      scale: { method: 'minMax' },
+    });
+    let result2 = getPostProcessedData(spectraProcessor, {
+      scale: { method: 'minMax' },
+    });
     expect(result === result2).toBe(true);
     expect(result2.matrix).toStrictEqual([
       [1, 2, 3],
@@ -71,14 +77,18 @@ describe('getPostProcessedData', () => {
     ]);
     // same values but other pointer, normalized changed we can not use the cache
     spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
-    let result3 = getPostProcessedData(spectraProcessor, { method: 'minMax' });
+    let result3 = getPostProcessedData(spectraProcessor, {
+      scale: { method: 'minMax' },
+    });
     expect(result === result3).toBe(false);
   });
 
   it('min', () => {
     let result = getPostProcessedData(spectraProcessor, {
-      method: 'min',
-      targetID: 3,
+      scale: {
+        method: 'min',
+        targetID: 3,
+      },
     });
     result.matrix[0] = Array.from(result.matrix[0]);
     result.matrix[1] = Array.from(result.matrix[1]);
@@ -92,8 +102,7 @@ describe('getPostProcessedData', () => {
 
   it('max', () => {
     let result = getPostProcessedData(spectraProcessor, {
-      method: 'max',
-      targetID: 2,
+      scale: { method: 'max', targetID: 2 },
     });
     result.matrix[0] = Array.from(result.matrix[0]);
     result.matrix[1] = Array.from(result.matrix[1]);
@@ -110,8 +119,7 @@ describe('getPostProcessedData', () => {
 
   it('integration', () => {
     let result = getPostProcessedData(spectraProcessor, {
-      method: 'integration',
-      targetID: 2,
+      scale: { method: 'integration', targetID: 2 },
     });
     result.matrix[0] = Array.from(result.matrix[0]);
     result.matrix[1] = Array.from(result.matrix[1]);

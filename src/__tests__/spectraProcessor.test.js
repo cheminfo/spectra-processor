@@ -61,7 +61,7 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let scaled = spectraProcessor.getPostProcessedData({
-      range: { from: 0.9, to: 2.1 },
+      scale: { range: { from: 0.9, to: 2.1 } },
     });
 
     expect(scaled.matrix).toStrictEqual([
@@ -75,8 +75,7 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let scaled = spectraProcessor.getPostProcessedData({
-      range: { from: 0.9, to: 2.1 },
-      relative: true,
+      scale: { range: { from: 0.9, to: 2.1 }, relative: true },
     });
     expect(scaled.matrix).toStrictEqual([
       [0, 0, 0, 0],
@@ -89,9 +88,11 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let scaled = spectraProcessor.getPostProcessedData({
-      range: { from: 0.9, to: 2.1 },
-      method: 'minMax',
-      relative: true,
+      scale: {
+        range: { from: 0.9, to: 2.1 },
+        method: 'minMax',
+        relative: true,
+      },
     });
 
     expect(scaled.matrix).toStrictEqual([
@@ -105,9 +106,11 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
     let spectra = spectraProcessor.getPostProcessedChart({
-      range: { from: 0.9, to: 2.1 },
-      method: 'minMax',
-      relative: true,
+      scale: {
+        range: { from: 0.9, to: 2.1 },
+        method: 'minMax',
+        relative: true,
+      },
     });
 
     expect(spectra).toMatchSnapshot();

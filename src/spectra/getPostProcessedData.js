@@ -15,16 +15,16 @@ import { minMax } from './scaled/minMax';
 /**
  * Allows to calculate relative intensity between normalized spectra
  * @param {Array<Spectrum>} spectra
- * @param {object} [options={}] scale spectra based on various parameters
- * @param {Array} [options.ids] ids of selected spectra
- *
- * @param {object} [options.range] from - to to apply the method and rescale
- * @param {string} [options.targetID=spectra[0].id]
- * @param {string} [options.method='max'] min, max, range, minMax
- * @param {boolean} [options.relative=false]
- * @param {Array} [options.ranges] Array of object containing {from:'', to:'', label:''}
- * @param {Array} [options.calculations] Array of object containing {label:'', formula:''}
- * @param {Array} [options.filters=[]] Array of object containing {name:'', options:''}
+ * @param {object}   [options={}] scale spectra based on various parameters
+ * @param {Array}    [options.ids] ids of selected spectra
+ * @param {Array}    [options.filters=[]] Array of object containing {name:'', options:''}
+ * @param {object}   [options.scale={}] object containing the options for rescaling
+ * @param {string}   [options.scale.targetID=spectra[0].id]
+ * @param {string}   [options.scale.method='max'] min, max, integration, minMax
+ * @param {Array}    [options.scale.range] from - to to apply the method and rescale
+ * @param {boolean}  [options.scale.relative=false]
+ * @param {Array}    [options.ranges] Array of object containing {from:'', to:'', label:''}
+ * @param {Array}    [options.calculations] Array of object containing {label:'', formula:''}
  * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
  */
 
@@ -40,16 +40,9 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
   const optionsHash = hash(options);
 
   if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
-  const {
-    range,
-    targetID,
-    relative,
-    method = '',
-    ids,
-    ranges,
-    calculations,
-    filters = [],
-  } = options;
+  const { scale = {}, ids, ranges, calculations, filters = [] } = options;
+
+  const { range, targetID, relative, method = '' } = scale;
 
   let normalizedTarget =
     targetID !== undefined
