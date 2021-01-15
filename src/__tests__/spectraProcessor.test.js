@@ -55,6 +55,97 @@ describe('SpectraProcessor', () => {
     }).toThrow(
       'getNormalized: Can not get normalized data, missing original data',
     );
+
+    expect(spectraProcessor.getIDs()).toStrictEqual([
+      '0140_1a.jdx',
+      '0140_1b.jdx',
+      '0140_1c.jdx',
+      '0140_1d.jdx',
+      '0140_1e.jdx',
+      '0140_2a.jdx',
+      '0140_2b.jdx',
+      '0140_2c.jdx',
+      '0140_2d.jdx',
+      '0140_2e.jdx',
+      '0140_3a.jdx',
+      '0140_3b.jdx',
+      '0140_3c.jdx',
+      '0140_3d.jdx',
+      '0140_3e.jdx',
+      '0189_1a.jdx',
+      '0189_1b.jdx',
+      '0189_1c.jdx',
+      '0189_1d.jdx',
+      '0189_1e.jdx',
+      '0189_2a.jdx',
+      '0189_2b.jdx',
+      '0189_2c.jdx',
+      '0189_2d.jdx',
+      '0189_2e.jdx',
+      '0189_3a.jdx',
+      '0189_3b.jdx',
+      '0189_3c.jdx',
+      '0189_3d.jdx',
+      '0189_3e.jdx',
+      '0235_1a.jdx',
+      '0235_1b.jdx',
+      '0235_1c.jdx',
+      '0235_1d.jdx',
+      '0235_1e.jdx',
+      '0235_2a.jdx',
+      '0235_2b.jdx',
+      '0235_2c.jdx',
+      '0235_2d.jdx',
+      '0235_2e.jdx',
+      '0235_3a.jdx',
+      '0235_3b.jdx',
+      '0235_3c.jdx',
+      '0235_3d.jdx',
+      '0235_3e.jdx',
+    ]);
+
+    expect(
+      spectraProcessor.getMetadata({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+      }),
+    ).toStrictEqual([
+      { TITLE: 'Z140a_1_a' },
+      { TITLE: 'Z140a_1_b' },
+      { TITLE: 'Z140a_1_c' },
+      { TITLE: 'Z140a_1_d' },
+      { TITLE: 'Z140a_1_e' },
+    ]);
+
+    expect(
+      spectraProcessor.getClasses({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+      }),
+    ).toStrictEqual([0, 0, 0, 0, 0]);
+
+    expect(
+      spectraProcessor.getClasses({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+        propertyName: 'TITLE',
+      }),
+    ).toStrictEqual([0, 1, 2, 3, 4]);
   });
 
   it('test getPostProcesseddData', () => {

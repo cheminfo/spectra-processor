@@ -219,17 +219,25 @@ export class SpectraProcessor {
     }
   }
 
-  getMetadata() {
-    return getMetadata(this.spectra);
+  /**
+   * Returns the metadata for a set of spectra
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @returns {object}
+   */
+  getMetadata(options = {}) {
+    const { ids } = options;
+    return getMetadata(this.getSpectra(ids));
   }
 
   /**
    *
    * @param {object} [options={}]
+   * @param {Array} [options.ids] ids of the spectra to select, by default all
    * @param {string} [options.propertyName="category"]
    */
   getClasses(options) {
-    return getClasses(this.getMetadata(), options);
+    return getClasses(this.getMetadata(options), options);
   }
 
   /**
@@ -326,6 +334,14 @@ export class SpectraProcessor {
   }
 
   /**
+   * Returns an array of all the ids
+   * @returns {array}
+   */
+  getIDs() {
+    return this.spectra.map((spectrum) => spectrum.id);
+  }
+
+  /**
    * Returns an array of spectrum from their ids
    * @param {Array} ids
    * @returns {Array<Spectrum}
@@ -374,7 +390,6 @@ export class SpectraProcessor {
   /**
    * Returns a JSGraph annotation object for the specified index
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]]
    * @param {array} [options.ids=[]]
    * @param {array} [options.showSpectrumID=true]
    * @param {array} [options.sortY=true]
