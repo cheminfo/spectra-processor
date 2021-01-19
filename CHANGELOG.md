@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.4.0...v2.5.0) (2021-01-19)
+
+
+### Features
+
+* add centerMean and rescale postProcessing ([19a6da0](https://www.github.com/cheminfo/spectra-processor/commit/19a6da0ee653f6f843371d318401a471c38f2516))
+* add options {ids} in getMetadata and getClasses ([c61bd16](https://www.github.com/cheminfo/spectra-processor/commit/c61bd1639c49a411727906954a939847696a9a68))
+
 ## [2.4.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.3.0...v2.4.0) (2021-01-11)
 
 
