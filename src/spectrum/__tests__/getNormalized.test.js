@@ -34,7 +34,7 @@ describe('getNormalized', () => {
         numberOfPoints: 5,
         filters: [
           {
-            name: 'align',
+            name: 'calibrate',
             options: {
               from: 1,
               to: 16,

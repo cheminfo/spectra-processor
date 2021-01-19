@@ -55,17 +55,24 @@ describe('getPostProcessedData', () => {
     let result = getPostProcessedData(spectraProcessor, {
       filters: [{ name: 'rescale', options: { max: 10 } }],
     });
-    result.matrix = result.matrix.map(row => Array.from(row));
-    expect(result.matrix).toEqual([[0, 0, 0], [5, 5, 5], [10, 10, 10]]);
+    result.matrix = result.matrix.map((row) => Array.from(row));
+    expect(result.matrix).toEqual([
+      [0, 0, 0],
+      [5, 5, 5],
+      [10, 10, 10],
+    ]);
   });
 
   it('filter centerMean', () => {
     let result = getPostProcessedData(spectraProcessor, {
       filters: [{ name: 'centerMean' }],
     });
-    result.matrix = result.matrix.map(row => Array.from(row));
-    expect(result.matrix).toEqual([[-1, -1, -1], [0, 0, 0], [1, 1, 1]]
-    );
+    result.matrix = result.matrix.map((row) => Array.from(row));
+    expect(result.matrix).toEqual([
+      [-1, -1, -1],
+      [0, 0, 0],
+      [1, 1, 1],
+    ]);
   });
 
   it('minMax', () => {

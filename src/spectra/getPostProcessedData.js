@@ -2,7 +2,9 @@ import {
   xSubtract,
   xyMaxYPoint,
   xSum,
-  matrixPQN, matrixYRescale, matrixCenterYMean
+  matrixPQN,
+  matrixYRescale,
+  matrixCenterYMean,
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
@@ -77,7 +79,10 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
         break;
       }
       case 'rescale': {
-        normalizedData.matrix = matrixYRescale(normalizedData.matrix, filter.options)
+        normalizedData.matrix = matrixYRescale(
+          normalizedData.matrix,
+          filter.options,
+        );
         break;
       }
       case '':
