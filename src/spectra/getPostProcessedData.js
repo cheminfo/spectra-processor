@@ -2,7 +2,7 @@ import {
   xSubtract,
   xyMaxYPoint,
   xSum,
-  probabilisticQuotientNormalization,
+  matrixPQN, matrixYRescale, matrixCenterYMean
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
@@ -66,10 +66,18 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
   for (let filter of filters) {
     switch (filter.name) {
       case 'pqn': {
-        normalizedData.matrix = probabilisticQuotientNormalization(
+        normalizedData.matrix = matrixPQN(
           normalizedData.matrix,
           filter.options,
-        ).data.to2DArray();
+        ).data;
+        break;
+      }
+      case 'centerMean': {
+        normalizedData.matrix = matrixCenterYMean(normalizedData.matrix);
+        break;
+      }
+      case 'rescale': {
+        normalizedData.matrix = matrixYRescale(normalizedData.matrix, filter.options)
         break;
       }
       case '':

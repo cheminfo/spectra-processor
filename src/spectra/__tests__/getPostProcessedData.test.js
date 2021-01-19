@@ -40,7 +40,7 @@ describe('getPostProcessedData', () => {
     ]);
   });
 
-  it('filter', () => {
+  it('filter pqn', () => {
     let result = getPostProcessedData(spectraProcessor, {
       filters: [{ name: 'pqn', options: { max: 10 } }],
     });
@@ -49,6 +49,23 @@ describe('getPostProcessedData', () => {
       [3.7139067635410377, 5.570860145311556, 7.427813527082075],
       [4.242640687119285, 5.65685424949238, 7.071067811865475],
     ]);
+  });
+
+  it('filter rescale', () => {
+    let result = getPostProcessedData(spectraProcessor, {
+      filters: [{ name: 'rescale', options: { max: 10 } }],
+    });
+    result.matrix = result.matrix.map(row => Array.from(row));
+    expect(result.matrix).toEqual([[0, 0, 0], [5, 5, 5], [10, 10, 10]]);
+  });
+
+  it('filter centerMean', () => {
+    let result = getPostProcessedData(spectraProcessor, {
+      filters: [{ name: 'centerMean' }],
+    });
+    result.matrix = result.matrix.map(row => Array.from(row));
+    expect(result.matrix).toEqual([[-1, -1, -1], [0, 0, 0], [1, 1, 1]]
+    );
   });
 
   it('minMax', () => {
