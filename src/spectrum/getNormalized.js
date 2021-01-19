@@ -3,7 +3,7 @@ import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
 import sg from 'ml-savitzky-golay-generalized';
-import { xAdd, xyXShift, xParetoNormalization } from 'ml-spectra-processing';
+import { xAdd, xyCalibrate, xParetoNormalization } from 'ml-spectra-processing';
 import Stat, { minMax } from 'ml-stat/array';
 
 /**
@@ -64,14 +64,14 @@ export function getNormalized(spectrum, options = {}) {
         ys = rescale(ys);
         break;
       }
-      case 'align': {
+      case 'calibrate': {
         if (
           filterOptions.from === undefined ||
           filterOptions.to === undefined
         ) {
           break;
         }
-        let shift = xyXShift(
+        let shift = xyCalibrate(
           { x: xs, y: ys },
           { from: filterOptions.from, to: filterOptions.to },
           { nbPeaks: filterOptions.nbPeaks, targetX: filterOptions.targetX },
