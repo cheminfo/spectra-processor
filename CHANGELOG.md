@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.5.1](https://www.github.com/cheminfo/spectra-processor/compare/v2.5.0...v2.5.1) (2021-02-05)
+
+
+### Bug Fixes
+
+* getNormalizationannotations ([8886138](https://www.github.com/cheminfo/spectra-processor/commit/88861388165c790f564dd51497c0e49f2c54dff1))
+
 ## [2.5.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.4.0...v2.5.0) (2021-01-19)
 
 
