@@ -56,7 +56,7 @@ describe('getPostProcessedData', () => {
       filters: [{ name: 'rescale', options: { max: 10 } }],
     });
     result.matrix = result.matrix.map((row) => Array.from(row));
-    expect(result.matrix).toEqual([
+    expect(result.matrix).toStrictEqual([
       [0, 0, 0],
       [5, 5, 5],
       [10, 10, 10],
@@ -68,7 +68,7 @@ describe('getPostProcessedData', () => {
       filters: [{ name: 'centerMean' }],
     });
     result.matrix = result.matrix.map((row) => Array.from(row));
-    expect(result.matrix).toEqual([
+    expect(result.matrix).toStrictEqual([
       [-1, -1, -1],
       [0, 0, 0],
       [1, 1, 1],
