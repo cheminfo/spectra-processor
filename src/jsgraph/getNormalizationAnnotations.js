@@ -6,8 +6,8 @@ export function getNormalizationAnnotations(filter = {}, boundary = {}) {
     let annotation = {
       type: 'rect',
       position: [
-        { x: exclusion.from, y: boundary.y.min },
-        { x: exclusion.to, y: boundary.y.max },
+        { x: exclusion.from, y: '0px' },
+        { x: exclusion.to, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
@@ -18,8 +18,8 @@ export function getNormalizationAnnotations(filter = {}, boundary = {}) {
     annotations.push({
       type: 'rect',
       position: [
-        { x: Number.MIN_SAFE_INTEGER, y: boundary.y.min },
-        { x: filter.from, y: boundary.y.max },
+        { x: Number.MIN_SAFE_INTEGER, y: '0px' },
+        { x: filter.from, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
@@ -29,8 +29,8 @@ export function getNormalizationAnnotations(filter = {}, boundary = {}) {
     annotations.push({
       type: 'rect',
       position: [
-        { x: filter.to, y: boundary.y.min },
-        { x: Number.MAX_SAFE_INTEGER, y: boundary.y.max },
+        { x: filter.to, y: '0px' },
+        { x: Number.MAX_SAFE_INTEGER, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
