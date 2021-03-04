@@ -39,7 +39,7 @@ describe('SpectraProcessor', () => {
     expect(normalized).toMatchSnapshot();
 
     let normalizedTSV = spectraProcessor.getNormalizedText();
-    expect(normalizedTSV).toHaveLength(15421);
+    expect(normalizedTSV).toHaveLength(15431);
     expect(normalizedTSV).toMatchSnapshot();
     writeFileSync(`${__dirname}/normalized.tsv`, normalizedTSV);
 
