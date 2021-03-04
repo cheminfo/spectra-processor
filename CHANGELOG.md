@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.5.2](https://www.github.com/cheminfo/spectra-processor/compare/v2.5.1...v2.5.2) (2021-03-04)
+
+
+### Bug Fixes
+
+* update dependencies and fix testcases ([fc3813f](https://www.github.com/cheminfo/spectra-processor/commit/fc3813f3ec50aaa417e15334b91900b7f38ebb27))
+
 ### [2.5.1](https://www.github.com/cheminfo/spectra-processor/compare/v2.5.0...v2.5.1) (2021-02-05)
 
 
