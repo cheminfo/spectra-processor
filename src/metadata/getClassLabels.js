@@ -5,7 +5,7 @@
  * @param {string} [options.propertyName="category"]
  */
 
-export function getClasses(metadata, options = {}) {
+export function getClassLabels(metadata, options = {}) {
   const { propertyName = 'category' } = options;
   const categories = [];
   for (const metadatum of metadata) {

@@ -1,4 +1,4 @@
-import { getClasses } from '../getClasses';
+import { getClassLabels } from '../getClassLabels';
 
 let metadata = [
   {
@@ -12,7 +12,7 @@ let metadata = [
   },
 ];
 
-test('getClasses', () => {
-  let result = getClasses(metadata);
+test('getClassLabels', () => {
+  let result = getClassLabels(metadata);
   expect(result).toStrictEqual(['A', 'B', 'A']);
 });
