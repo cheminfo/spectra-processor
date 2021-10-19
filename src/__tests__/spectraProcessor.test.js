@@ -123,7 +123,7 @@ describe('SpectraProcessor', () => {
     ]);
 
     expect(
-      spectraProcessor.getClasses({
+      spectraProcessor.getClassesAsNumber({
         ids: [
           '0140_1a.jdx',
           '0140_1b.jdx',
@@ -135,7 +135,7 @@ describe('SpectraProcessor', () => {
     ).toStrictEqual([0, 0, 0, 0, 0]);
 
     expect(
-      spectraProcessor.getClasses({
+      spectraProcessor.getClassesAsNumber({
         ids: [
           '0140_1a.jdx',
           '0140_1b.jdx',
