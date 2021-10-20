@@ -9,7 +9,7 @@ import { getPostProcessedChart } from './jsgraph/getPostProcessedChart';
 import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
 import { getCategoriesStats } from './metadata/getCategoriesStats';
 import { getClassLabels } from './metadata/getClassLabels';
-import { getClassesAsNumber } from './metadata/getClassesAsNumber';
+import { getClasses } from './metadata/getClasses';
 import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
 import parseMatrix from './parser/matrix';
@@ -237,8 +237,8 @@ export class SpectraProcessor {
    * @param {Array} [options.ids] ids of the spectra to select, by default all
    * @param {string} [options.propertyName="category"]
    */
-  getClassesAsNumber(options) {
-    return getClassesAsNumber(this.getMetadata(options), options);
+  getClasses(options) {
+    return getClasses(this.getMetadata(options), options);
   }
 
   /**
