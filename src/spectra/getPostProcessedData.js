@@ -3,8 +3,8 @@ import {
   xyMaxYPoint,
   xSum,
   matrixPQN,
-  matrixYRescale,
-  matrixCenterYMean,
+  matrixZRescale,
+  matrixCenterZMean,
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
@@ -75,11 +75,11 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
         break;
       }
       case 'centerMean': {
-        normalizedData.matrix = matrixCenterYMean(normalizedData.matrix);
+        normalizedData.matrix = matrixCenterZMean(normalizedData.matrix);
         break;
       }
       case 'rescale': {
-        normalizedData.matrix = matrixYRescale(
+        normalizedData.matrix = matrixZRescale(
           normalizedData.matrix,
           filter.options,
         );

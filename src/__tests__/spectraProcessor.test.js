@@ -146,6 +146,25 @@ describe('SpectraProcessor', () => {
         propertyName: 'TITLE',
       }),
     ).toStrictEqual([0, 1, 2, 3, 4]);
+
+    expect(
+      spectraProcessor.getClassLabels({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+        propertyName: 'TITLE',
+      }),
+    ).toStrictEqual([
+      'Z140a_1_a',
+      'Z140a_1_b',
+      'Z140a_1_c',
+      'Z140a_1_d',
+      'Z140a_1_e',
+    ]);
   });
 
   it('test getPostProcesseddData', () => {

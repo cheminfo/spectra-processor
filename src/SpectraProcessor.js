@@ -8,6 +8,7 @@ import { getNormalizedChart } from './jsgraph/getNormalizedChart';
 import { getPostProcessedChart } from './jsgraph/getPostProcessedChart';
 import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
 import { getCategoriesStats } from './metadata/getCategoriesStats';
+import { getClassLabels } from './metadata/getClassLabels';
 import { getClasses } from './metadata/getClasses';
 import { getMetadata } from './metadata/getMetadata';
 import parseJcamp from './parser/jcamp';
@@ -238,6 +239,16 @@ export class SpectraProcessor {
    */
   getClasses(options) {
     return getClasses(this.getMetadata(options), options);
+  }
+
+  /**
+   *
+   * @param {object} [options={}]
+   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {string} [options.propertyName="category"]
+   */
+  getClassLabels(options) {
+    return getClassLabels(this.getMetadata(options), options);
   }
 
   /**

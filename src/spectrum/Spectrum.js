@@ -74,11 +74,13 @@ export class Spectrum {
   }
 }
 
-Spectrum.prototype.getData = function (options) {
+Spectrum.prototype.getData = (options) => {
   return getData(this, options);
 };
 
-Spectrum.prototype.updateNormalization = function (normalization) {
+Spectrum.prototype.updateNormalization = function updateNormalization(
+  normalization,
+) {
   const result = getNormalized(this, normalization);
   this.normalized = result.data;
   this.normalizedAllowedBoundary = result.allowedBoundary;
@@ -87,14 +89,15 @@ Spectrum.prototype.updateNormalization = function (normalization) {
   this.updateNormalizedBoundary();
 };
 
-Spectrum.prototype.updateRangesInfo = function (ranges) {
+Spectrum.prototype.updateRangesInfo = (ranges) => {
   updateRangesInfo(this, ranges);
 };
 
-Spectrum.prototype.updateNormalizedBoundary = function () {
-  this.normalizedBoundary.x = {
-    min: this.normalized.x[0],
-    max: this.normalized.x[this.normalized.x.length - 1],
+Spectrum.prototype.updateNormalizedBoundary =
+  function updateNormalizedBoundary() {
+    this.normalizedBoundary.x = {
+      min: this.normalized.x[0],
+      max: this.normalized.x[this.normalized.x.length - 1],
+    };
+    this.normalizedBoundary.y = minMax(this.normalized.y);
   };
-  this.normalizedBoundary.y = minMax(this.normalized.y);
-};

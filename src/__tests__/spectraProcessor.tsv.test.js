@@ -13,9 +13,8 @@ describe('SpectraProcessor text', () => {
       join(__dirname, 'normalized.tsv'),
       'utf8',
     );
-    const spectraProcessor = SpectraProcessor.fromNormalizedMatrix(
-      normalizedTSV,
-    );
+    const spectraProcessor =
+      SpectraProcessor.fromNormalizedMatrix(normalizedTSV);
     expect(spectraProcessor.getMemoryInfo().keepOriginal).toBe(false);
     const newNormalizedTSV = spectraProcessor.getNormalizedText();
     expect(normalizedTSV).toBe(newNormalizedTSV);
