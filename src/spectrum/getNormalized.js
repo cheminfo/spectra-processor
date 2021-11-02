@@ -1,4 +1,4 @@
-import {isAnyArray} from 'is-any-array';
+import { isAnyArray } from 'is-any-array';
 import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
