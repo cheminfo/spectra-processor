@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.6.0...v2.7.0) (2021-11-02)
+
+
+### Features
+
+* add growingx filter ([806c8a1](https://www.github.com/cheminfo/spectra-processor/commit/806c8a1e7b54f6dc40885d716b62775fdfa99932))
+
 ## [2.6.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.5.2...v2.6.0) (2021-11-02)
 
 
