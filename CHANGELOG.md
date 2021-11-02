@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.5.2...v2.6.0) (2021-11-02)
+
+
+### Features
+
+* add getClassLabels method ([#17](https://www.github.com/cheminfo/spectra-processor/issues/17)) ([f80c484](https://www.github.com/cheminfo/spectra-processor/commit/f80c484bff320b9ae48247c4a9c6c04ef38e7988))
+
+
+### Bug Fixes
+
+* update dependency to fix getEquallySpacedData ([0871c1d](https://www.github.com/cheminfo/spectra-processor/commit/0871c1d2036d5ae3061ebaae4e6f369df0bbcb41))
+
 ### [2.5.2](https://www.github.com/cheminfo/spectra-processor/compare/v2.5.1...v2.5.2) (2021-03-04)
 
 
