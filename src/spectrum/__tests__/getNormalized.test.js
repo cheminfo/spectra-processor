@@ -20,6 +20,29 @@ describe('getNormalized', () => {
     expect(result.y).toStrictEqual([1, 3, 4.5, 3, 1]);
   });
 
+  it('with growingx', () => {
+    let x = [0, 1, 1, 2, 1, 3, 4];
+    let y = [0, 1, 2, 3, 4, 5, 6];
+    let result = getNormalized(
+      {
+        x,
+        y,
+      },
+      {
+        from: 0,
+        to: 4,
+        numberOfPoints: 5,
+        filters: [
+          {
+            name: 'growingx',
+          },
+        ],
+      },
+    ).data;
+    expect(result.x).toStrictEqual([0, 1, 2, 3, 4]);
+    expect(result.y).toStrictEqual([0.125, 1.125, 3, 4.875, 5.125]);
+  });
+
   it('with align', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
     let y = [0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 0, 0, 0];
