@@ -84,7 +84,7 @@ export function getNormalized(spectrum, options = {}) {
         xs = xAdd(xs, shift);
         break;
       }
-      case 'growingx': {
+      case 'growingX': {
         const growing = xyEnsureGrowingX({ x: xs, y: ys });
         xs = growing.x;
         ys = growing.y;
