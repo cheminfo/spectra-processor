@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.8.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.7.0...v2.8.0) (2021-11-03)
+
+
+### Features
+
+* add data in spectrum check first and last point in order to reverse ([ee29058](https://www.github.com/cheminfo/spectra-processor/commit/ee29058a6000e05eeba26f7d761381b631c38727))
+
+
+### Bug Fixes
+
+* growingX and not growingx ([7b23ec5](https://www.github.com/cheminfo/spectra-processor/commit/7b23ec52f1dc53a717879dc407be10bdb85ad380))
+
 ## [2.7.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.6.0...v2.7.0) (2021-11-02)
 
 
