@@ -20,7 +20,7 @@ describe('getNormalized', () => {
     expect(result.y).toStrictEqual([1, 3, 4.5, 3, 1]);
   });
 
-  it('with growingx', () => {
+  it('with growingX', () => {
     let x = [0, 1, 1, 2, 1, 3, 4];
     let y = [0, 1, 2, 3, 4, 5, 6];
     let result = getNormalized(
@@ -34,7 +34,7 @@ describe('getNormalized', () => {
         numberOfPoints: 5,
         filters: [
           {
-            name: 'growingx',
+            name: 'growingX',
           },
         ],
       },
