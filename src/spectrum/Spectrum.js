@@ -25,7 +25,7 @@ export class Spectrum {
   constructor(x, y, id, options = {}) {
     const { meta = {}, normalization = {}, normalized } = options;
 
-    if (x && x.length > 1 && x[0] > x[1]) {
+    if (x && x.length > 1 && x[0] > x[x.length - 1]) {
       this.x = x.reverse();
       this.y = y.reverse();
     } else {
