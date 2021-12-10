@@ -72,32 +72,29 @@ export class Spectrum {
     }
     return { x: this.x, y: this.y };
   }
-}
 
-Spectrum.prototype.getData = (options) => {
-  return getData(this, options);
-};
+  updateRangesInfo(ranges) {
+    updateRangesInfo(this, ranges);
+  }
 
-Spectrum.prototype.updateNormalization = function updateNormalization(
-  normalization,
-) {
-  const result = getNormalized(this, normalization);
-  this.normalized = result.data;
-  this.normalizedAllowedBoundary = result.allowedBoundary;
-  this.ranges = {};
-  this.updateMemory();
-  this.updateNormalizedBoundary();
-};
+  updateNormalization(normalization) {
+    const result = getNormalized(this, normalization);
+    this.normalized = result.data;
+    this.normalizedAllowedBoundary = result.allowedBoundary;
+    this.ranges = {};
+    this.updateMemory();
+    this.updateNormalizedBoundary();
+  }
 
-Spectrum.prototype.updateRangesInfo = (ranges) => {
-  updateRangesInfo(this, ranges);
-};
+  getData(options) {
+    return getData(this, options);
+  }
 
-Spectrum.prototype.updateNormalizedBoundary =
-  function updateNormalizedBoundary() {
+  updateNormalizedBoundary() {
     this.normalizedBoundary.x = {
       min: this.normalized.x[0],
       max: this.normalized.x[this.normalized.x.length - 1],
     };
     this.normalizedBoundary.y = minMax(this.normalized.y);
-  };
+  }
+}
