@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.8.1...v2.9.0) (2022-01-21)
+
+
+### Features
+
+* add xyCalibrate ([9a5a61e](https://www.github.com/cheminfo/spectra-processor/commit/9a5a61ee84f04375ee6e36de4a7b864dd3745707))
+
 ### [2.8.1](https://www.github.com/cheminfo/spectra-processor/compare/v2.8.0...v2.8.1) (2021-12-10)
 
 
