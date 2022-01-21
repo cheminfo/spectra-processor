@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.8.1](https://www.github.com/cheminfo/spectra-processor/compare/v2.8.0...v2.8.1) (2021-12-10)
+
+
+### Bug Fixes
+
+* scope of functions in Spectrum ([d3c149b](https://www.github.com/cheminfo/spectra-processor/commit/d3c149ba20e2e7fe0f9ce4f2e8462643812e3080))
+
 ## [2.8.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.7.0...v2.8.0) (2021-11-03)
 
 
