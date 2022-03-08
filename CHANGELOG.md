@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.10.1](https://github.com/cheminfo/spectra-processor/compare/v2.10.0...v2.10.1) (2022-03-08)
+
+
+### Bug Fixes
+
+* importation of sgg and web build ([d5c6f67](https://github.com/cheminfo/spectra-processor/commit/d5c6f67fd4f747c23e62aeaa2f769a69402bcb4a))
+
 ## [2.10.0](https://github.com/cheminfo/spectra-processor/compare/v2.9.0...v2.10.0) (2022-03-08)
 
 
