@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/cheminfo/spectra-processor/compare/v2.9.0...v2.10.0) (2022-03-08)
+
+
+### Features
+
+* update dependencies ([707adfd](https://github.com/cheminfo/spectra-processor/commit/707adfd34f2a98b2c35f73741a7ea28f81f914a4))
+
 ## [2.9.0](https://www.github.com/cheminfo/spectra-processor/compare/v2.8.1...v2.9.0) (2022-01-21)
 
 
