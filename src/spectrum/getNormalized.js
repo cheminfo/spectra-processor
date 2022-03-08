@@ -2,7 +2,7 @@ import { isAnyArray } from 'is-any-array';
 import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
 import equallySpaced from 'ml-array-xy-equally-spaced';
-import sg from 'ml-savitzky-golay-generalized';
+import { sgg } from 'ml-savitzky-golay-generalized';
 import {
   xAdd,
   xParetoNormalization,
@@ -91,8 +91,8 @@ export function getNormalized(spectrum, options = {}) {
         ys = growing.y;
         break;
       }
-      case 'sg': {
-        ys = sg(ys, xs, filterOptions);
+      case 'sgg': {
+        ys = sgg(ys, xs, filterOptions);
         break;
       }
       case 'xFunction': {
