@@ -44,12 +44,12 @@ export function xyCalibrate(data, range = {}, options = {}) {
 
   const fromIndex = xFindClosestIndex(data.x, from);
   const toIndex = xFindClosestIndex(data.x, to);
-  const sliceddata = {
+  const slicedData = {
     x: data.x.slice(fromIndex, toIndex),
     y: data.y.slice(fromIndex, toIndex),
   };
 
-  let peaks = gsd(sliceddata, gsdOptions)
+  let peaks = gsd(slicedData, gsdOptions)
     .sort((a, b) => b.y - a.y)
     .slice(0, nbPeaks);
 

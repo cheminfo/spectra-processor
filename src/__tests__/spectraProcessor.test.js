@@ -188,9 +188,9 @@ describe('SpectraProcessor', () => {
       scale: { range: { from: 0.9, to: 2.1 }, relative: true },
     });
     expect(scaled.matrix).toStrictEqual([
-      [0, 0, 0, 0],
-      [0.875, 1, 1, 0.875],
-      [1.75, 2, 2, 1.75],
+      new Float64Array([0, 0, 0, 0]),
+      new Float64Array([0.875, 1, 1, 0.875]),
+      new Float64Array([1.75, 2, 2, 1.75]),
     ]);
   });
 
@@ -206,9 +206,9 @@ describe('SpectraProcessor', () => {
     });
 
     expect(scaled.matrix).toStrictEqual([
-      [0, 0, 0, 0],
-      [-0.125, 0, 0, -0.125],
-      [-0.25, 0, 0, -0.25],
+      new Float64Array([0, 0, 0, 0]),
+      new Float64Array([-0.125, 0, 0, -0.125]),
+      new Float64Array([-0.25, 0, 0, -0.25]),
     ]);
   });
 

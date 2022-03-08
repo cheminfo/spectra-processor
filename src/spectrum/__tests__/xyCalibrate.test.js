@@ -1,5 +1,9 @@
 import { xyCalibrate } from '../xyCalibrate.js';
 
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+
+expect.extend({ toBeDeepCloseTo });
+
 describe('xyCalibrate', () => {
   it('undefined params', () => {
     let data = {
@@ -75,7 +79,7 @@ describe('xyCalibrate', () => {
         gsd: gsdOptions,
       },
     );
-
-    expect(xShift).toBe(2);
+    // because we look for the real maximum it is not exactly 2
+    expect(xShift).toBeCloseTo(2);
   });
 });
