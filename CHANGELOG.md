@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.10.2](https://github.com/cheminfo/spectra-processor/compare/v2.10.1...v2.10.2) (2022-03-15)
+
+
+### Bug Fixes
+
+* avoid side effects when reverse ([f634502](https://github.com/cheminfo/spectra-processor/commit/f63450295f56734cd36fab2c31180fe6c9a8e3a3))
+
 ### [2.10.1](https://github.com/cheminfo/spectra-processor/compare/v2.10.0...v2.10.1) (2022-03-08)
 
 
