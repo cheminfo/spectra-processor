@@ -26,8 +26,8 @@ export class Spectrum {
     const { meta = {}, normalization = {}, normalized } = options;
 
     if (x && x.length > 1 && x[0] > x[x.length - 1]) {
-      this.x = x.reverse();
-      this.y = y.reverse();
+      this.x = x.slice().reverse();
+      this.y = y.slice().reverse();
     } else {
       this.x = x || [];
       this.y = y || [];
