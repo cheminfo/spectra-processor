@@ -1,6 +1,6 @@
-import { xyCalibrate } from '../xyCalibrate.js';
-
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+
+import { xyCalibrate } from '../xyCalibrate.js';
 
 expect.extend({ toBeDeepCloseTo });
 
