@@ -438,9 +438,13 @@ export class SpectraProcessor {
    * Returns a JSGraph chart object for all the normalized spectra
    * @param {object} [options={}]
    * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {object} [options.xFilter={}]
+   * @param {array} [options.xFilter.from]
+   * @param {array} [options.xFilter.to]
+   * @param {array} [options.xFilter.exclusions=[]]
    * @returns {object}
    */
-  getNormalizedChart(options) {
+  getNormalizedChart(options = {}) {
     const { ids } = options;
     let spectra = this.getSpectra(ids);
     return getNormalizedChart(spectra, options);
