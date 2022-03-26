@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.11.0](https://github.com/cheminfo/spectra-processor/compare/v2.10.2...v2.11.0) (2022-03-26)
+
+
+### Features
+
+* add baseline normalization ([08a655c](https://github.com/cheminfo/spectra-processor/commit/08a655ce10569e24eeb0d7aad56d24e5ad6a0f87))
+
+
+### Bug Fixes
+
+* allow getNormalizedChart to have empty options ([e7b780d](https://github.com/cheminfo/spectra-processor/commit/e7b780d4ce8e5ee289bae1035ab50a1db772a0b8))
+
 ### [2.10.2](https://github.com/cheminfo/spectra-processor/compare/v2.10.1...v2.10.2) (2022-03-15)
 
 
