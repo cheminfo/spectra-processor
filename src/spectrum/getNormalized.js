@@ -1,3 +1,10 @@
+import {
+  airPLSBaseline,
+  rollingAverageBaseline,
+  iterativePolynomialBaseline,
+  rollingBallBaseline,
+  rollingMedianBaseline,
+} from 'baselines';
 import { isAnyArray } from 'is-any-array';
 import normed from 'ml-array-normed';
 import rescale from 'ml-array-rescale';
@@ -101,6 +108,26 @@ export function getNormalized(spectrum, options = {}) {
       }
       case 'yFunction': {
         ys = applyArrayFunction(ys, 'y', filterOptions.function);
+        break;
+      }
+      case 'airplsbaseline': {
+        ys = airPLSBaseline(ys, filterOptions).correctedSpectrum;
+        break;
+      }
+      case 'rollingaveragebaseline': {
+        ys = rollingAverageBaseline(ys, filterOptions).correctedSpectrum;
+        break;
+      }
+      case 'iterativepolynomialbaseline': {
+        ys = iterativePolynomialBaseline(ys, filterOptions).correctedSpectrum;
+        break;
+      }
+      case 'rollingballbaseline': {
+        ys = rollingBallBaseline(ys, filterOptions).correctedSpectrum;
+        break;
+      }
+      case 'rollingmedianbaseline': {
+        ys = rollingMedianBaseline(ys, filterOptions).correctedSpectrum;
         break;
       }
       case '':
