@@ -14,7 +14,7 @@ const normalizedData = {
 };
 
 test('getBoxPlotChart', () => {
-  let result = getBoxPlotChart(normalizedData, { q2StrokeColor: '#000' });
+  let result = getBoxPlotChart(normalizedData, { medianStrokeColor: '#000' });
 
   expect(result).toMatchSnapshot();
 });

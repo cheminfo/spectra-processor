@@ -9,8 +9,8 @@ export function getBoxPlotChart(normalizedData, options = {}) {
   const {
     q13FillColor = '#000',
     q13FillOpacity = 0.3,
-    q2StrokeColor = '',
-    q2StrokeWidth = 3,
+    medianStrokeColor = '',
+    medianStrokeWidth = 3,
     minMaxFillColor = '#000',
     minMaxFillOpacity = 0.15,
   } = options;
@@ -23,13 +23,13 @@ export function getBoxPlotChart(normalizedData, options = {}) {
     for (let i = 0; i < boxPlotData.x.length; i++) {
       q13.push({
         x: boxPlotData.x[i],
-        y: boxPlotData.Q1[i],
+        y: boxPlotData.q1[i],
       });
     }
     for (let i = boxPlotData.x.length - 1; i >= 0; i--) {
       q13.push({
         x: boxPlotData.x[i],
-        y: boxPlotData.Q3[i],
+        y: boxPlotData.q3[i],
       });
     }
     annotations.push({
@@ -76,18 +76,18 @@ export function getBoxPlotChart(normalizedData, options = {}) {
     type: 'color',
     data: {
       x: boxPlotData.x,
-      y: boxPlotData.Q2,
-      color: q2StrokeColor
-        ? new Array(boxPlotData.x.length).fill(q2StrokeColor)
+      y: boxPlotData.median,
+      color: medianStrokeColor
+        ? new Array(boxPlotData.x.length).fill(medianStrokeColor)
         : getColors(normalizedData.matrix),
     },
     styles: {
       unselected: {
-        lineWidth: q2StrokeWidth,
+        lineWidth: medianStrokeWidth,
         lineStyle: 1,
       },
       selected: {
-        lineWidth: q2StrokeWidth,
+        lineWidth: medianStrokeWidth,
         lineStyle: 1,
       },
     },
