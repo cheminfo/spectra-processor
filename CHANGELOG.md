@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/cheminfo/spectra-processor/compare/v2.11.0...v3.0.0) (2022-05-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* use ml-signal-processing
+
+### Features
+
+* use ml-signal-processing ([55b53ce](https://github.com/cheminfo/spectra-processor/commit/55b53ce69f6cc78984880bf76d7e7beb72ac4c22))
+
 ## [2.11.0](https://github.com/cheminfo/spectra-processor/compare/v2.10.2...v2.11.0) (2022-03-26)
 
 
