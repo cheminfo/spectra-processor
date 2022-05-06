@@ -1,11 +1,11 @@
 import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 
 import { SpectraProcessor } from '../SpectraProcessor';
 
-expect.extend({ toBeDeepCloseTo });
+expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 const testFilesDir = '../../testFiles/xtc';
 
@@ -19,7 +19,7 @@ describe('SpectraProcessor', () => {
       from: 1000,
       to: 2600,
       numberOfPoints: 16,
-      filters: [{ name: 'centerMean' }, { name: 'scaleSD' }],
+      filters: [{ name: 'centerMean' }, { name: 'divideBySD' }],
     });
     for (let file of files) {
       let jcamp = readFileSync(join(__dirname, testFilesDir, file), 'utf8');
@@ -39,7 +39,7 @@ describe('SpectraProcessor', () => {
     expect(normalized).toMatchSnapshot();
 
     let normalizedTSV = spectraProcessor.getNormalizedText();
-    expect(normalizedTSV).toHaveLength(15431);
+    expect(normalizedTSV).toHaveLength(15360);
     expect(normalizedTSV).toMatchSnapshot();
     writeFileSync(`${__dirname}/normalized.tsv`, normalizedTSV);
 
@@ -52,9 +52,7 @@ describe('SpectraProcessor', () => {
         numberOfPoints: 16,
         applySNV: true,
       });
-    }).toThrow(
-      'getNormalized: Can not get normalized data, missing original data',
-    );
+    }).toThrow('Data must be an object of x and y arrays');
 
     expect(spectraProcessor.getIDs()).toStrictEqual([
       '0140_1a.jdx',
@@ -242,11 +240,10 @@ describe('SpectraProcessor', () => {
 
   it('test getNormalizedMinMaxX of non uniform data', () => {
     let spectraProcessor = getLogSpectra();
-
     let boundary = spectraProcessor.getNormalizedCommonBoundary();
-    expect(boundary).toStrictEqual({
+    expect(boundary).toMatchCloseTo({
       x: { min: -1, max: 1 },
-      y: { min: 1, max: 5 },
+      y: { min: 1.4999999999999998, max: 4.41140808993222 },
     });
   });
 });
@@ -284,10 +281,10 @@ function getNonUniformDataProcessor() {
 function getLogSpectra() {
   const spectraProcessor = new SpectraProcessor({
     normalization: {
-      from: 0,
-      to: 5,
-      numberOfPoints: 4,
       filters: [{ name: 'xFunction', options: { function: 'log10(x)' } }],
+      from: -1,
+      to: 1,
+      numberOfPoints: 4,
     },
   });
 

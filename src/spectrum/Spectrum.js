@@ -1,4 +1,4 @@
-import { minMax } from 'ml-stat/array';
+import { xMinMaxValues } from 'ml-spectra-processing';
 
 import { getData } from './getData';
 import { getNormalized } from './getNormalized';
@@ -95,6 +95,6 @@ export class Spectrum {
       min: this.normalized.x[0],
       max: this.normalized.x[this.normalized.x.length - 1],
     };
-    this.normalizedBoundary.y = minMax(this.normalized.y);
+    this.normalizedBoundary.y = xMinMaxValues(this.normalized.y);
   }
 }

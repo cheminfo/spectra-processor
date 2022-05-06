@@ -1,7 +1,6 @@
 import chroma from 'chroma-js';
-import maxFct from 'ml-array-max';
-import minFct from 'ml-array-min';
 import { Matrix } from 'ml-matrix';
+import { xMinMaxValues } from 'ml-spectra-processing';
 
 import { getBoxPlotData } from '../spectra/getBoxPlotData';
 
@@ -100,8 +99,7 @@ export function getBoxPlotChart(normalizedData, options = {}) {
 function getColors(dataset) {
   const matrix = new Matrix(dataset);
   const stdevs = matrix.standardDeviation('column');
-  const min = minFct(stdevs);
-  const max = maxFct(stdevs);
+  const { min, max } = xMinMaxValues(stdevs);
   const colorCallback = chroma
     .scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])

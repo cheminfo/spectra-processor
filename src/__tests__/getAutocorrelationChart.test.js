@@ -23,7 +23,6 @@ describe('getAutocorrelationChart', () => {
       { x: [0, 1, 2, 3], y: [3, 6, 9, 0] },
       { id: 3 },
     );
-
     let result = getAutocorrelationChart(spectraProcessor);
 
     expect(result).toMatchSnapshot();

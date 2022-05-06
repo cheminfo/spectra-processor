@@ -92,6 +92,7 @@ export class SpectraProcessor {
   getAutocorrelation(index, options = {}) {
     const { x } = options;
     const normalizedData = this.getNormalizedData(options);
+
     if (index === undefined && x !== undefined) {
       index = xFindClosestIndex(normalizedData.x, x);
     }

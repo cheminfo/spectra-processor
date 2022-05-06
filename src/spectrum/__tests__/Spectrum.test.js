@@ -19,7 +19,7 @@ describe('Spectrum', () => {
 
     expect(() => {
       result.updateNormalization({});
-    }).toThrow('Can not get normalized data');
+    }).toThrow('Data must be an object of x and y arrays');
   });
 
   it('keeping the original data', () => {

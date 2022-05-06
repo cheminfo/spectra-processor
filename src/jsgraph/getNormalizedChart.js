@@ -1,4 +1,4 @@
-import filterX from 'ml-array-xy-filter-x';
+import { xyFilterX } from 'ml-spectra-processing';
 
 import { addChartDataStyle } from './addChartDataStyle';
 
@@ -6,8 +6,8 @@ import { addChartDataStyle } from './addChartDataStyle';
  * @param {Array<Spectrum>} spectra
  * @param {object} [options={}]
  * @param {object} [options.xFilter={}]
- * @param {array} [options.xFilter.from]
- * @param {array} [options.xFilter.to]
+ * @param {number} [options.xFilter.from]
+ * @param {number} [options.xFilter.to]
  * @param {array} [options.xFilter.exclusions=[]]
  */
 
@@ -19,7 +19,7 @@ export function getNormalizedChart(spectra, options = {}) {
   for (let spectrum of spectra) {
     let data = spectrum.normalized;
     if (xFilter) {
-      data = filterX({ x: data.x, y: data.y }, xFilter);
+      data = xyFilterX(data, xFilter);
     }
     addChartDataStyle(data, spectrum);
     chart.data.push(data);

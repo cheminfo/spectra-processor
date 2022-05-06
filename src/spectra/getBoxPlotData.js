@@ -2,7 +2,8 @@ import { xBoxPlot } from 'ml-spectra-processing';
 
 /**
  * @private
- * @param {*} spectra
+ * @param {object} normalizedData
+ * @returns {x:[],q1:[],q3:[],media:[],min:[],max:[]}
  */
 
 export function getBoxPlotData(normalizedData) {

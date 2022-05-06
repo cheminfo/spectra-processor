@@ -1,7 +1,5 @@
 import chroma from 'chroma-js';
-import maxFct from 'ml-array-max';
-import minFct from 'ml-array-min';
-import filterX from 'ml-array-xy-filter-x';
+import { xMinMaxValues, xyFilterX } from 'ml-spectra-processing';
 
 /**
  * Retrieve a chart with autocorrelation color
@@ -11,8 +9,9 @@ import filterX from 'ml-array-xy-filter-x';
  * @param {Array} [options.autocorrelation] precalculated autocorrelation {x,y}
  * @param {Array} [options.maxDataPoints=]
  * @param {Array} [options.ids] ids of the spectra to select, by default all
- * @param {array} [options.xFilter.from]
- * @param {array} [options.xFilter.to]
+ * @param {object} [options.xFilter={}]
+ * @param {number} [options.xFilter.from]
+ * @param {number} [options.xFilter.to]
  * @param {array} [options.xFilter.exclusions=[]]
  */
 export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
@@ -22,9 +21,7 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     ids,
   } = options;
 
-  let max = maxFct(autocorrelation.y);
-  let min = minFct(autocorrelation.y);
-
+  const { min, max } = xMinMaxValues(autocorrelation.y);
   let colorCallback = chroma
     .scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])
@@ -36,7 +33,7 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
 
   let mean = spectraProcessor.getMeanData({ ids });
   if (xFilter) {
-    mean = filterX({ x: mean.x, y: mean.y }, xFilter);
+    mean = xyFilterX({ x: mean.x, y: mean.y }, xFilter);
   }
 
   let colorSpectrum = {

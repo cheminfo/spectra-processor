@@ -1,7 +1,7 @@
 import { getNormalized } from '../getNormalized';
 
 describe('getNormalized', () => {
-  it('no SNV', () => {
+  it('no filters', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
     let result = getNormalized(
@@ -34,7 +34,7 @@ describe('getNormalized', () => {
         numberOfPoints: 5,
         filters: [
           {
-            name: 'growingX',
+            name: 'ensureGrowing',
           },
         ],
       },
@@ -57,7 +57,7 @@ describe('getNormalized', () => {
         numberOfPoints: 5,
         filters: [
           {
-            name: 'calibrate',
+            name: 'calibrateX',
             options: {
               from: 1,
               to: 16,
@@ -83,7 +83,7 @@ describe('getNormalized', () => {
         from: 1,
         to: 9,
         numberOfPoints: 5,
-        filters: [{ name: 'centerMean' }, { name: 'scaleSD' }],
+        filters: [{ name: 'centerMean' }, { name: 'divideBySD' }],
       },
     ).data;
 
