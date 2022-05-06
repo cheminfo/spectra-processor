@@ -41,7 +41,7 @@
     "codecov": "^3.8.3",
     "eslint": "^8.14.0",
     "eslint-config-cheminfo": "^7.3.0",
-    "jest": "^28.0.3",
+    "jest": "^28.1.0",
     "jest-matcher-deep-close-to": "^3.0.2",
     "prettier": "^2.6.2",
     "rollup": "^2.72.0"
