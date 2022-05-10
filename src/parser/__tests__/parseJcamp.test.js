@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import jcampParser from '../jcamp';
+import parseJcamp from '../parseJcamp';
 
-test('jcampParser absorbance', () => {
+test('parseJcamp absorbance', () => {
   const path = join(__dirname, '../../../testFiles/absorbance.jdx');
-  const jcamp = readFileSync(path, 'utf8');
-  const spectrum = jcampParser(jcamp);
-
+  const jcamp = readFileSync(path);
+  const spectra = parseJcamp(jcamp);
+  const spectrum = spectra[0];
   expect(spectrum.data.x).toHaveLength(1738);
   expect(spectrum.data.y).toHaveLength(1738);
   expect(spectrum.kind).toStrictEqual({
@@ -21,10 +21,10 @@ test('jcampParser absorbance', () => {
   });
 });
 
-test('jcampParser transmittance', () => {
+test('parseJcamp transmittance', () => {
   const path = join(__dirname, '../../../testFiles/transmittance1.jdx');
-  const jcamp = readFileSync(path, 'utf8');
-  const spectrum = jcampParser(jcamp);
+  const jcamp = readFileSync(path);
+  const spectrum = parseJcamp(jcamp)[0];
   expect(spectrum.data.x).toHaveLength(1991);
   expect(spectrum.data.x).toHaveLength(1991);
 });

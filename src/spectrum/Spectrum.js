@@ -14,16 +14,18 @@ import { updateRangesInfo } from './updateRangesInfo';
 export class Spectrum {
   /**
    *
-   * @param {array} x
-   * @param {array} y
+   * @param {DataXY} data
    * @param {string} id
    * @param {object} [options={}]
+   * @param {string} [options.groupID]
    * @param {object} [options.meta={}]
    * @param {object} [options.normalization]
    * @param {object} [options.normalized]
    */
-  constructor(x, y, id, options = {}) {
-    const { meta = {}, normalization = {}, normalized } = options;
+  constructor(data, id, options = {}) {
+    const { meta = {}, normalization = {}, normalized, groupID = id } = options;
+
+    const { x, y } = data;
 
     if (x && x.length > 1 && x[0] > x[x.length - 1]) {
       this.x = x.slice().reverse();
@@ -33,6 +35,7 @@ export class Spectrum {
       this.y = y || [];
     }
     this.id = id;
+    this.groupID = groupID;
     this.meta = meta;
     this.normalizedBoundary = { x: { min: 0, max: 0 }, y: { min: 0, max: 0 } };
     if (normalized) {

@@ -11,7 +11,7 @@ import { getCategoriesStats } from './metadata/getCategoriesStats';
 import { getClassLabels } from './metadata/getClassLabels';
 import { getClasses } from './metadata/getClasses';
 import { getMetadata } from './metadata/getMetadata';
-import parseJcamp from './parser/jcamp';
+import parseJcamp from './parser/parseJcamp';
 import parseMatrix from './parser/matrix';
 import parseText from './parser/text';
 import { getAutocorrelation } from './spectra/getAutocorrelation';
@@ -159,15 +159,18 @@ export class SpectraProcessor {
   }
 
   /**
-
    * Returns an object contains 4 parameters with the scaled data
-   * @param {object} [options={}] scale spectra based on various parameters
-   * @param {object} [options.range] from - to
-   * @param {Array} [options.ids] ids of selected spectra, by default all
-   * @param {string} [options.targetID=spectra[0].id]
-   * @param {string} [options.method='max'] min, max, range, minMax
-   * @param {boolean} [options.relative=false]
-   * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
+   * @param {object}   [options={}] scale spectra based on various parameters
+   * @param {Array}    [options.ids] ids of selected spectra
+   * @param {Array}    [options.filters=[]] Array of object containing {name:'', options:''}
+   * @param {object}   [options.scale={}] object containing the options for rescaling
+   * @param {string}   [options.scale.targetID=spectra[0].id]
+   * @param {string}   [options.scale.method='max'] min, max, integration, minMax
+   * @param {Array}    [options.scale.range] from - to to apply the method and rescale
+   * @param {boolean}  [options.scale.relative=false]
+   * @param {Array}    [options.ranges] Array of object containing {from:'', to:'', label:''}
+   * @param {Array}    [options.calculations] Array of object containing {label:'', formula:''}
+   * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[], ranges:[object] }
    */
   getPostProcessedData(options) {
     return getPostProcessedData(this, options);
@@ -198,11 +201,12 @@ export class SpectraProcessor {
   /**
    * Add jcamp
    * By default TITLE from the jcamp will be in the meta information
-   * @param {string} jcamp
+   * @param {string|ArrayBuffer|Uint8Array} jcamp
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
    * @param {string} [options.meta.color]
-   * @param {object} [options.id={}]
+   * @param {string} [options.id=randomID]
+   * @param {string} [options.groupID=randomID]
    * @param {boolean} [options.force=false] replace existing spectrum (same ID)
    */
 
@@ -210,7 +214,7 @@ export class SpectraProcessor {
     if (options.force !== true && options.id && this.contains(options.id)) {
       return;
     }
-    let parsed = parseJcamp(jcamp);
+    let parsed = parseJcamp(jcamp)[0];
     let meta = { ...parsed.meta, ...(options.meta || {}) };
     this.addFromData(parsed.data, { meta, id: options.id });
   }
@@ -266,7 +270,7 @@ export class SpectraProcessor {
    * @param {object} data {x, y}}
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
-   * @param {object} [options.id]
+   * @param {string} [options.id=randomID]
    * @param {object} [options.normalization={}]
    * @param {object} [options.normalized]
    * @return {Spectrum}
@@ -277,7 +281,7 @@ export class SpectraProcessor {
     const id = options.id || Math.random().toString(36).substring(2, 10);
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
-    let spectrum = new Spectrum(data.x, data.y, id, {
+    let spectrum = new Spectrum(data, id, {
       meta: options.meta,
       normalized: options.normalized,
       normalization: this.normalization,
@@ -308,6 +312,21 @@ export class SpectraProcessor {
     let index = this.getSpectrumIndex(id);
     if (index === undefined) return undefined;
     return this.spectra.splice(index, 1);
+  }
+
+  /**
+   * Remove all the spectra from the SpectraProcessor that shares the specified groupID
+   * @param {string} groupID
+   */
+  removeSpectraByGroupID(groupID) {
+    let index = 0;
+    while (index < this.spectra.length) {
+      if (this.spectra[index] === groupID) {
+        this.spectra.splice(index, 1);
+      } else {
+        index++;
+      }
+    }
   }
 
   /**

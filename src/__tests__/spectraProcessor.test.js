@@ -165,6 +165,155 @@ describe('SpectraProcessor', () => {
     ]);
   });
 
+  it.skip('Load one jcamp with many spectra', () => {
+    let spectraProcessor = new SpectraProcessor();
+    spectraProcessor.setNormalization({
+      from: 1000,
+      to: 2600,
+      numberOfPoints: 16,
+    });
+    let jcamp = readFileSync(join(__dirname, '../../testFiles/raman_6x6.jdx'));
+    spectraProcessor.addFromJcamp(jcamp, { id: '6x6' });
+
+    expect(spectraProcessor.spectra).toHaveLength(36);
+    let normalized = spectraProcessor.getNormalizedData();
+    expect(normalized.ids).toHaveLength(16);
+    expect(normalized.matrix[0]).toHaveLength(16);
+    let normalizedSelection = spectraProcessor.getNormalizedData({
+      ids: ['0140_1a.jdx', '0140_1b.jdx', '0140_1c.jdx', 'asdf'],
+    });
+    expect(normalizedSelection.ids).toHaveLength(3);
+    expect(normalizedSelection.matrix[0]).toHaveLength(16);
+
+    expect(normalized).toMatchSnapshot();
+
+    let normalizedTSV = spectraProcessor.getNormalizedText();
+    expect(normalizedTSV).toHaveLength(15360);
+    expect(normalizedTSV).toMatchSnapshot();
+    writeFileSync(`${__dirname}/normalized.tsv`, normalizedTSV);
+
+    spectraProcessor.removeOriginals();
+
+    expect(() => {
+      spectraProcessor.setNormalization({
+        from: 1000,
+        to: 2600,
+        numberOfPoints: 16,
+        applySNV: true,
+      });
+    }).toThrow('Data must be an object of x and y arrays');
+
+    expect(spectraProcessor.getIDs()).toStrictEqual([
+      '0140_1a.jdx',
+      '0140_1b.jdx',
+      '0140_1c.jdx',
+      '0140_1d.jdx',
+      '0140_1e.jdx',
+      '0140_2a.jdx',
+      '0140_2b.jdx',
+      '0140_2c.jdx',
+      '0140_2d.jdx',
+      '0140_2e.jdx',
+      '0140_3a.jdx',
+      '0140_3b.jdx',
+      '0140_3c.jdx',
+      '0140_3d.jdx',
+      '0140_3e.jdx',
+      '0189_1a.jdx',
+      '0189_1b.jdx',
+      '0189_1c.jdx',
+      '0189_1d.jdx',
+      '0189_1e.jdx',
+      '0189_2a.jdx',
+      '0189_2b.jdx',
+      '0189_2c.jdx',
+      '0189_2d.jdx',
+      '0189_2e.jdx',
+      '0189_3a.jdx',
+      '0189_3b.jdx',
+      '0189_3c.jdx',
+      '0189_3d.jdx',
+      '0189_3e.jdx',
+      '0235_1a.jdx',
+      '0235_1b.jdx',
+      '0235_1c.jdx',
+      '0235_1d.jdx',
+      '0235_1e.jdx',
+      '0235_2a.jdx',
+      '0235_2b.jdx',
+      '0235_2c.jdx',
+      '0235_2d.jdx',
+      '0235_2e.jdx',
+      '0235_3a.jdx',
+      '0235_3b.jdx',
+      '0235_3c.jdx',
+      '0235_3d.jdx',
+      '0235_3e.jdx',
+    ]);
+
+    expect(
+      spectraProcessor.getMetadata({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+      }),
+    ).toStrictEqual([
+      { TITLE: 'Z140a_1_a' },
+      { TITLE: 'Z140a_1_b' },
+      { TITLE: 'Z140a_1_c' },
+      { TITLE: 'Z140a_1_d' },
+      { TITLE: 'Z140a_1_e' },
+    ]);
+
+    expect(
+      spectraProcessor.getClasses({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+      }),
+    ).toStrictEqual([0, 0, 0, 0, 0]);
+
+    expect(
+      spectraProcessor.getClasses({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+        propertyName: 'TITLE',
+      }),
+    ).toStrictEqual([0, 1, 2, 3, 4]);
+
+    expect(
+      spectraProcessor.getClassLabels({
+        ids: [
+          '0140_1a.jdx',
+          '0140_1b.jdx',
+          '0140_1c.jdx',
+          '0140_1d.jdx',
+          '0140_1e.jdx',
+        ],
+        propertyName: 'TITLE',
+      }),
+    ).toStrictEqual([
+      'Z140a_1_a',
+      'Z140a_1_b',
+      'Z140a_1_c',
+      'Z140a_1_d',
+      'Z140a_1_e',
+    ]);
+  });
+
   it('test getPostProcesseddData', () => {
     let spectraProcessor = getSimpleDataProcessor();
 
