@@ -47,7 +47,6 @@
     "rollup": "^2.72.1"
   },
   "dependencies": {
-    "cheminfo-types": "^1.1.0",
     "chroma-js": "^2.4.2",
     "is-any-array": "^2.0.0",
     "jcampconverter": "^9.0.1",
