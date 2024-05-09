@@ -1,31 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getAutocorrelationChart check jsgraph chart 1`] = `
-Object {
-  "color": Array [
+{
+  "color": [
     "rgb(204,204,204)",
     "rgb(204,204,204)",
     "rgb(204,204,204)",
     "rgb(204,204,204)",
   ],
-  "styles": Object {
-    "selected": Object {
+  "styles": {
+    "selected": {
       "lineStyle": 1,
       "lineWidth": 3,
     },
-    "unselected": Object {
+    "unselected": {
       "lineStyle": 1,
       "lineWidth": 1,
     },
   },
   "type": "color",
-  "x": Array [
+  "x": [
     0,
     1,
     2,
     3,
   ],
-  "y": Array [
+  "y": [
     2,
     4,
     5.5,

@@ -1,4 +1,3 @@
-/* eslint-disable no-tabs */
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { SpectraProcessor } from '../../SpectraProcessor';
