@@ -57,9 +57,9 @@ describe('getPostProcessedData', () => {
     });
     result.matrix = result.matrix.map((row) => Array.from(row));
     expect(result.matrix).toStrictEqual([
-      [0, 0, 0],
-      [5, 5, 5],
-      [10, 10, 10],
+      [0, 2.5, 5],
+      [2.5, 5, 7.5],
+      [5, 7.5, 10],
     ]);
   });
 
