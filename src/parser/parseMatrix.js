@@ -5,7 +5,7 @@
  * @param {string} [options.fs='\t'] Field separator
  * @return {object} - {matrix, data, x, ids}
  */
-export default function matrix(text, options = {}) {
+export default function parseMatrix(text, options = {}) {
   const lines = text.split(/[\r\n]+/).filter((value) => value);
   const { fs = '\t' } = options;
   let currentMatrix = [];

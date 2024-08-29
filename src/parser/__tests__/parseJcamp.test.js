@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import jcampParser from '../jcamp';
+import jcampParser from '../parseJcamp';
 
 test('jcampParser absorbance', () => {
   const path = join(__dirname, '../../../testFiles/absorbance.jdx');

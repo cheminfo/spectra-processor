@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import textParser from '../text';
+import textParser from '../parseText';
 
 test('textParser', () => {
   const text = readFileSync(join(__dirname, './data.txt'), 'utf8');

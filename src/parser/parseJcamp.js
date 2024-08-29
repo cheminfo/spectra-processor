@@ -6,8 +6,8 @@ import { getJcampKind } from '../Kinds';
  * @param {string} jcampText - String containing the JCAMP data
  * @return {Spectrum} - new instance of Spectrum with the provided data
  */
-export default function jcamp(jcampText) {
-  const parsed = convert(jcampText, { xy: true, keepRecordsRegExp: /TITLE/ })
+export default function parseJcamp(jcampText) {
+  const parsed = convert(jcampText, { keepRecordsRegExp: /TITLE/ })
     .flatten[0];
   const kind = getJcampKind(parsed);
   const data = parsed.spectra[0].data;

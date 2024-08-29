@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import matrixParser from '../matrix';
+import matrixParser from '../parseMatrix';
 
 describe('matrix', () => {
   it('small tsv', () => {

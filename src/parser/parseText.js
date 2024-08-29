@@ -5,7 +5,7 @@ import { parseXY } from 'xy-parser';
  * @param {string} value - String containing the JCAMP data
  * @return {Spectrum} - new instance of Spectrum with the provided data
  */
-export default function text(value, options = {}) {
+export default function parseText(value, options = {}) {
   const { kind, parserOptions = {} } = options;
 
   const data = parseXY(value, parserOptions);
