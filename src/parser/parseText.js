@@ -3,7 +3,8 @@ import { parseXY } from 'xy-parser';
 /**
  * Create a spectrum from a text file
  * @param {string} value - String containing the JCAMP data
- * @return {Spectrum} - new instance of Spectrum with the provided data
+ * @param options
+ * @returns {Spectrum} - new instance of Spectrum with the provided data
  */
 export default function parseText(value, options = {}) {
   const { kind, parserOptions = {} } = options;

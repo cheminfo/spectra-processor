@@ -105,6 +105,6 @@ function getColors(dataset) {
     .domain([min, max])
     .mode('lch');
 
-  const colors = stdevs.map((y) => `rgb(${colorCallback(y).rgb().join()})`);
+  const colors = stdevs.map((y) => `rgb(${colorCallback(y).rgb().join(',')})`);
   return colors;
 }

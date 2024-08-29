@@ -29,14 +29,14 @@ export class SpectraProcessor {
    * and skip the original data.
    * @param {object} [options={}]
    * @param {boolean} [options.maxMemory=64M]
-   * @param {object} [options.normalization={}] options to normalize the spectra before comparison
+   * @param {object} [options.normalization={}] - options to normalize the spectra before comparison
    * @param {number} [options.normalization.from]
    * @param {number} [options.normalization.to]
    * @param {number} [options.normalization.numberOfPoints]
-   * @param {array<object>} [options.normalization.filters]
+   * @param {Array<object>} [options.normalization.filters]
    * @param {string} [options.normalization.filters.X.name]
    * @param {object} [options.normalization.filters.X.options]
-   * @param {array<object>} [options.normalization.exclusions]
+   * @param {Array<object>} [options.normalization.exclusions]
    * @param {string} [options.normalization.exclusions.X.from]
    * @param {object} [options.normalization.exclusions.X.to]
    */
@@ -60,12 +60,13 @@ export class SpectraProcessor {
    * @param {number} [normalization.from]
    * @param {number} [normalization.to]
    * @param {number} [normalization.numberOfPoints]
-   * @param {array<object>} [normalization.filters]
+   * @param {Array<object>} [normalization.filters]
    * @param {string} [normalization.filters.X.name]
    * @param {object} [normalization.filters.X.options]
-   * @param {array<object>} [normalization.exclusions]
+   * @param {Array<object>} [normalization.exclusions]
    * @param {string} [normalization.exclusions.X.from]
    * @param {object} [normalization.exclusions.X.to]
+   * @param normalization
    */
   setNormalization(normalization = {}) {
     if (JSON.stringify(this.normalization) === JSON.stringify(normalization)) {
@@ -84,10 +85,11 @@ export class SpectraProcessor {
   /**
    * Returns an object {x:[], y:[]} containing the autocorrelation for the
    * specified index
-   * @param {integer} [index|undefined] x index of the spectrum to autocorrelate
+   * @param {integer} [index|undefined] - x index of the spectrum to autocorrelate
+   * @param index
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]] list of ids, by default all spectra
-   * @param {array} [options.x] x value if index is undefined
+   * @param {Array} [options.ids=[]] - list of ids, by default all spectra
+   * @param {Array} [options.x] - x value if index is undefined
    */
   getAutocorrelation(index, options = {}) {
     const { x } = options;
@@ -103,7 +105,7 @@ export class SpectraProcessor {
   /**
    * Returns a {x:[], y:[]} containg the average of specified spectra
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]] list of ids, by default all spectra
+   * @param {Array} [options.ids=[]] - list of ids, by default all spectra
    */
   getMeanData(options) {
     return getMeanData(this.getNormalizedData(options));
@@ -113,7 +115,7 @@ export class SpectraProcessor {
    * Returns an object contains 4 parameters with the normalized data
    * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
    * @param {object} [options={}]
-   * @param {Array} [options.ids] List of spectra ids to export, by default all
+   * @param {Array} [options.ids] - List of spectra ids to export, by default all
    */
   getNormalizedData(options = {}) {
     const { ids } = options;
@@ -124,9 +126,9 @@ export class SpectraProcessor {
   /**
    * Returns a tab separated value containing the normalized data
    * @param {object} [options={}]
-   * @param {Array} [options.ids] List of spectra ids to export, by default all
-   * @param {string} [options.fs='\t'] field separator
-   * @param {string} [options.rs='\n'] record (line) separator
+   * @param {Array} [options.ids] - List of spectra ids to export, by default all
+   * @param {string} [options.fs='\t'] - field separator
+   * @param {string} [options.rs='\n'] - record (line) separator
    * @returns {string}
    */
   getNormalizedText(options = {}) {
@@ -138,9 +140,9 @@ export class SpectraProcessor {
   /**
    * Returns a tab separated value containing the post processed data
    * @param {object} [options={}]
-   * @param {Array} [options.ids] List of spectra ids to export, by default all
-   * @param {string} [options.fs='\t'] field separator
-   * @param {string} [options.rs='\n'] record (line) separator
+   * @param {Array} [options.ids] - List of spectra ids to export, by default all
+   * @param {string} [options.fs='\t'] - field separator
+   * @param {string} [options.rs='\n'] - record (line) separator
    * @param {object} [postProcessing={}]
    * @returns {string}
    */
@@ -159,13 +161,13 @@ export class SpectraProcessor {
   }
 
   /**
-
+   *
    * Returns an object contains 4 parameters with the scaled data
-   * @param {object} [options={}] scale spectra based on various parameters
-   * @param {object} [options.range] from - to
-   * @param {Array} [options.ids] ids of selected spectra, by default all
+   * @param {object} [options={}] - scale spectra based on various parameters
+   * @param {object} [options.range] - from - to
+   * @param {Array} [options.ids] - ids of selected spectra, by default all
    * @param {string} [options.targetID=spectra[0].id]
-   * @param {string} [options.method='max'] min, max, range, minMax
+   * @param {string} [options.method='max'] - min, max, range, minMax
    * @param {boolean} [options.relative=false]
    * @returns {object} { ids:[], matrix:[Array], meta:[object], x:[] }
    */
@@ -178,12 +180,12 @@ export class SpectraProcessor {
    * By default TITLE from the jcamp will be in the meta information
    * @param {string} text
    * @param {object} [options={}]
-   * @param {object} [options.parserOptions={}] XY parser options
+   * @param {object} [options.parserOptions={}] - XY parser options
    * @param {object} [options.meta={}]
    * @param {string} [options.meta.color]
    * @param {object} [options.id={}]
    * @param {object} [options.kind]
-   * @param {boolean} [options.force=false] replace existing spectrum (same ID)
+   * @param {boolean} [options.force=false] - replace existing spectrum (same ID)
    */
 
   addFromText(text, options = {}) {
@@ -191,7 +193,7 @@ export class SpectraProcessor {
       return;
     }
     let parsed = parseText(text, options);
-    let meta = { ...parsed.meta, ...(options.meta || {}) };
+    let meta = { ...parsed.meta, ...options.meta };
     this.addFromData(parsed.data, { meta, id: options.id });
   }
 
@@ -203,7 +205,7 @@ export class SpectraProcessor {
    * @param {object} [options.meta={}]
    * @param {string} [options.meta.color]
    * @param {object} [options.id={}]
-   * @param {boolean} [options.force=false] replace existing spectrum (same ID)
+   * @param {boolean} [options.force=false] - replace existing spectrum (same ID)
    */
 
   addFromJcamp(jcamp, options = {}) {
@@ -211,7 +213,7 @@ export class SpectraProcessor {
       return;
     }
     let parsed = parseJcamp(jcamp);
-    let meta = { ...parsed.meta, ...(options.meta || {}) };
+    let meta = { ...parsed.meta, ...options.meta };
     this.addFromData(parsed.data, { meta, id: options.id });
   }
 
@@ -224,7 +226,7 @@ export class SpectraProcessor {
   /**
    * Returns the metadata for a set of spectra
    * @param {object} [options={}]
-   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {Array} [options.ids] - ids of the spectra to select, by default all
    * @returns {object}
    */
   getMetadata(options = {}) {
@@ -235,7 +237,7 @@ export class SpectraProcessor {
   /**
    *
    * @param {object} [options={}]
-   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {Array} [options.ids] - ids of the spectra to select, by default all
    * @param {string} [options.propertyName="category"]
    */
   getClasses(options) {
@@ -245,7 +247,7 @@ export class SpectraProcessor {
   /**
    *
    * @param {object} [options={}]
-   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {Array} [options.ids] - ids of the spectra to select, by default all
    * @param {string} [options.propertyName="category"]
    */
   getClassLabels(options) {
@@ -263,18 +265,18 @@ export class SpectraProcessor {
 
   /**
    * Add a spectrum based on the data
-   * @param {object} data {x, y}}
+   * @param {object} data - {x, y}}
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
    * @param {object} [options.id]
    * @param {object} [options.normalization={}]
    * @param {object} [options.normalized]
-   * @return {Spectrum}
+   * @returns {Spectrum}
    */
 
   addFromData(data, options = {}) {
     if (this.spectra.length === 0) this.keepOriginal = true;
-    const id = options.id || Math.random().toString(36).substring(2, 10);
+    const id = options.id || Math.random().toString(36).slice(2, 10);
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
     let spectrum = new Spectrum(data.x, data.y, id, {
@@ -312,7 +314,7 @@ export class SpectraProcessor {
 
   /**
    * Remove all the spectra not present in the list
-   * @param {Array} [ids] Array of ids of the spectra to keep
+   * @param {Array} [ids] - Array of ids of the spectra to keep
    */
   removeSpectraNotIn(ids) {
     let currentIDs = this.spectra.map((spectrum) => spectrum.id);
@@ -328,7 +330,7 @@ export class SpectraProcessor {
    * @param {string} id
    */
   contains(id) {
-    return !isNaN(this.getSpectrumIndex(id));
+    return this.getSpectrumIndex(id) !== undefined;
   }
 
   /**
@@ -347,7 +349,7 @@ export class SpectraProcessor {
 
   /**
    * Returns an array of all the ids
-   * @returns {array}
+   * @returns {Array}
    */
   getIDs() {
     return this.spectra.map((spectrum) => spectrum.id);
@@ -383,6 +385,7 @@ export class SpectraProcessor {
 
   /**
    * Returns a JSGraph chart object for all the spectra
+   * @param options
    * @returns {object}
    */
   getChart(options) {
@@ -391,8 +394,9 @@ export class SpectraProcessor {
 
   /**
    * Returns a JSGraph chart object for all the spectra
+   * @param index
    * @param {object} [options={}]
-   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {Array} [options.ids] - ids of the spectra to select, by default all
    * @returns {object}
    */
   getAutocorrelationChart(index, options) {
@@ -401,11 +405,12 @@ export class SpectraProcessor {
 
   /**
    * Returns a JSGraph annotation object for the specified index
+   * @param index
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]]
-   * @param {array} [options.showSpectrumID=true]
-   * @param {array} [options.sortY=true]
-   * @param {object} [options.limit=20]
+   * @param {Array} [options.ids=[]]
+   * @param {Array} [options.showSpectrumID=true]
+   * @param {Array} [options.sortY=true]
+   * @param {object} [options.limit=20]- -
    * ids, showSpectrumID = true, sort = true, limit = 20
    * @returns {object}
    */
@@ -416,7 +421,7 @@ export class SpectraProcessor {
   /**
    * Returns a JSGraph annotation object for box plot
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]] list of ids, by default all spectra
+   * @param {Array} [options.ids=[]] - list of ids, by default all spectra
    * @returns {object}
    */
   getBoxPlotChart(options = {}) {
@@ -427,7 +432,7 @@ export class SpectraProcessor {
   /**
    * Returns boxplot information
    * @param {object} [options={}]
-   * @param {array} [options.ids=[]] list of ids, by default all spectra
+   * @param {Array} [options.ids=[]] - list of ids, by default all spectra
    * @returns {object}
    */
   getBoxPlotData(options = {}) {
@@ -438,11 +443,11 @@ export class SpectraProcessor {
   /**
    * Returns a JSGraph chart object for all the normalized spectra
    * @param {object} [options={}]
-   * @param {Array} [options.ids] ids of the spectra to select, by default all
+   * @param {Array} [options.ids] - ids of the spectra to select, by default all
    * @param {object} [options.xFilter={}]
-   * @param {array} [options.xFilter.from]
-   * @param {array} [options.xFilter.to]
-   * @param {array} [options.xFilter.exclusions=[]]
+   * @param {Array} [options.xFilter.from]
+   * @param {Array} [options.xFilter.to]
+   * @param {Array} [options.xFilter.exclusions=[]]
    * @returns {object}
    */
   getNormalizedChart(options = {}) {
@@ -454,10 +459,10 @@ export class SpectraProcessor {
   /**
    * Returns a JSGraph chart object for all the scaled normalized spectra
    * @param {object} [options={}]
-   * @param {Array} [options.ids] ids of the spectra to select, by default all
-   * @param {object} [options.range] from - to
+   * @param {Array} [options.ids] - ids of the spectra to select, by default all
+   * @param {object} [options.range] - from - to
    * @param {string} [options.targetID=spectra[0].id]
-   * @param {string} [options.method='max'] min, max, range, minMax
+   * @param {string} [options.method='max'] - min, max, range, minMax
    * @param {boolean} [options.relative=false]
    * @returns {object}
    */
@@ -467,12 +472,12 @@ export class SpectraProcessor {
 
   getMemoryInfo() {
     let memoryInfo = { original: 0, normalized: 0, total: 0 };
-    this.spectra.forEach((spectrum) => {
+    for (const spectrum of this.spectra) {
       let memory = spectrum.memory;
       memoryInfo.original += memory.original;
       memoryInfo.normalized += memory.normalized;
       memoryInfo.total += memory.total;
-    });
+    }
     memoryInfo.keepOriginal = this.keepOriginal;
     memoryInfo.maxMemory = this.maxMemory;
     return memoryInfo;
@@ -542,7 +547,7 @@ export class SpectraProcessor {
 
     spectraProcessor.setNormalization({
       from: parsed.x[0],
-      to: parsed.x[parsed.x.length - 1],
+      to: parsed.x.at(-1),
       numberOfPoints: parsed.x.length,
     });
 

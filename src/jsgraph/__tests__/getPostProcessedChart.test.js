@@ -1,3 +1,5 @@
+import { test, expect } from 'vitest';
+
 import { SpectraProcessor } from '../../SpectraProcessor';
 import { getPostProcessedChart } from '../getPostProcessedChart';
 

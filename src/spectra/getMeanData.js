@@ -1,6 +1,7 @@
 import { Matrix } from 'ml-matrix';
 
 /**
+ * @param normalized
  * @private
  */
 

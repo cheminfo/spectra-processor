@@ -2,7 +2,7 @@
  * @private
  * @param {*} spectra
  * @param {object} [options={}]
- * @param {Array} [options.ids] ids of selected spectra
+ * @param {Array} [options.ids] - ids of selected spectra
  */
 
 export function getNormalizedData(spectra, options = {}) {

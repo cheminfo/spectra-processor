@@ -3,7 +3,7 @@ import { getCategoriesStats } from './getCategoriesStats';
 /**
  * @private
  * @param {Array<object>} [metadata]
- * @param {object} [options={}] scale spectra based on various parameters
+ * @param {object} [options={}] - scale spectra based on various parameters
  * @param {string} [options.propertyName="category"]
  */
 

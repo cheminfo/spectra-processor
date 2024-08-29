@@ -1,8 +1,9 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+import { test, expect } from 'vitest';
+
+import { minMax } from '../minMax';
 
 expect.extend({ toBeDeepCloseTo });
-
-const { minMax } = require('../minMax');
 
 test('recale minMax', () => {
   let matrix = [

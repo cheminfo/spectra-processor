@@ -6,13 +6,13 @@ import { xMinMaxValues, xyFilterX } from 'ml-spectra-processing';
  * @param {SpectraProcessor} [spectraProcessor]
  * @param {number} [index]
  * @param {object} [options={}]
- * @param {Array} [options.autocorrelation] precalculated autocorrelation {x,y}
- * @param {Array} [options.maxDataPoints=]
- * @param {Array} [options.ids] ids of the spectra to select, by default all
+ * @param {Array} [options.autocorrelation] - precalculated autocorrelation {x,y}
+ * @param {Array} - - [options.maxDataPoints=]
+ * @param {Array} [options.ids] - ids of the spectra to select, by default all
  * @param {object} [options.xFilter={}]
  * @param {number} [options.xFilter.from]
  * @param {number} [options.xFilter.to]
- * @param {array} [options.xFilter.exclusions=[]]
+ * @param {Array} [options.xFilter.exclusions=[]]
  */
 export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
   const {
@@ -28,7 +28,7 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     .mode('lch');
 
   let colorScale = autocorrelation.y.map(
-    (y) => `rgb(${colorCallback(y).rgb().join()})`,
+    (y) => `rgb(${colorCallback(y).rgb().join(',')})`,
   );
 
   let mean = spectraProcessor.getMeanData({ ids });

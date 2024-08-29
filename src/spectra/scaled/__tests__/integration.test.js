@@ -1,9 +1,9 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+import { test, expect } from 'vitest';
+
+import { integration } from '../integration';
 
 expect.extend({ toBeDeepCloseTo });
-
-const { integration } = require('../integration');
-
 test('recale integration', () => {
   let matrix = [
     [1, 2, 3, 4],

@@ -14,8 +14,8 @@ import { updateRangesInfo } from './updateRangesInfo';
 export class Spectrum {
   /**
    *
-   * @param {array} x
-   * @param {array} y
+   * @param {Array} x
+   * @param {Array} y
    * @param {string} id
    * @param {object} [options={}]
    * @param {object} [options.meta={}]
@@ -25,7 +25,7 @@ export class Spectrum {
   constructor(x, y, id, options = {}) {
     const { meta = {}, normalization = {}, normalized } = options;
 
-    if (x && x.length > 1 && x[0] > x[x.length - 1]) {
+    if (x && x.length > 1 && x[0] > x.at(-1)) {
       this.x = x.slice().reverse();
       this.y = y.slice().reverse();
     } else {
@@ -51,11 +51,11 @@ export class Spectrum {
   }
 
   get maxX() {
-    return this.x[this.x.length - 1];
+    return this.x.at(-1);
   }
 
   updateMemory() {
-    let original = ((this.x && this.x.length) || 0) * 16;
+    let original = ((this.x && this.x.length > 0) || 0) * 16;
     let normalized = this.normalized.x.length * 16;
     this.memory = { original, normalized, total: original + normalized };
   }
@@ -93,7 +93,7 @@ export class Spectrum {
   updateNormalizedBoundary() {
     this.normalizedBoundary.x = {
       min: this.normalized.x[0],
-      max: this.normalized.x[this.normalized.x.length - 1],
+      max: this.normalized.x.at(-1),
     };
     this.normalizedBoundary.y = xMinMaxValues(this.normalized.y);
   }

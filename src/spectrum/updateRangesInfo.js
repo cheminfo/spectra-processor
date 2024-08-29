@@ -13,7 +13,7 @@ import {
 export function updateRangesInfo(spectrum, ranges = []) {
   spectrum.ranges = {};
   for (let range of ranges) {
-    range = JSON.parse(JSON.stringify(range));
+    range = structuredClone(range);
     spectrum.ranges[range.label] = range;
     let fromToIndex = {
       fromIndex: xFindClosestIndex(spectrum.normalized.x, range.from),

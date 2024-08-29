@@ -2,11 +2,11 @@
  * Creates a g
  * @param {string} text - String containing the text data
  * @param {object} [options={}]
- * @param {string} [options.fs='\t'] Field separator
- * @return {object} - {matrix, data, x, ids}
+ * @param {string} [options.fs='\t'] - Field separator
+ * @returns {object} - {matrix, data, x, ids}
  */
 export default function parseMatrix(text, options = {}) {
-  const lines = text.split(/[\r\n]+/).filter((value) => value);
+  const lines = text.split(/[\n\r]+/).filter(Boolean);
   const { fs = '\t' } = options;
   let currentMatrix = [];
   let ids = [];
@@ -15,13 +15,12 @@ export default function parseMatrix(text, options = {}) {
 
   let headers = lines[0].split(fs);
   let labels = [];
-
   for (let i = 0; i < headers.length; i++) {
     let header = headers[i];
-    if (isNaN(header)) {
+    if (Number.isNaN(Number(header))) {
       labels[i] = header;
     } else {
-      x = headers.slice(i).map((value) => Number(value));
+      x = headers.slice(i).map(Number);
       break;
     }
   }
@@ -36,9 +35,7 @@ export default function parseMatrix(text, options = {}) {
       if (j < labels.length) {
         oneMeta[labels[j]] = parts[j];
       } else {
-        currentMatrix.push(
-          parts.slice(labels.length).map((value) => Number(value)),
-        );
+        currentMatrix.push(parts.slice(labels.length).map(Number));
         break;
       }
     }

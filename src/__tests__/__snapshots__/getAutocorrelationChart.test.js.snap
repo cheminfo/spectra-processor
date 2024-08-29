@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getAutocorrelationChart check jsgraph chart 1`] = `
+exports[`getAutocorrelationChart > check jsgraph chart 1`] = `
 {
   "color": [
     "rgb(204,204,204)",

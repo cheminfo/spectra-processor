@@ -1,3 +1,5 @@
+import { test, expect } from 'vitest';
+
 import { getNormalizedData } from '../getNormalizedData';
 
 test('getNormalizedData', () => {

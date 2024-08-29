@@ -1,14 +1,15 @@
 import { addChartDataStyle } from './addChartDataStyle';
+
 /**
  *
  * @param {SpectraProcessor} spectraProcessor
- * @param {object}   [options={}] scale spectra based on various parameters
- * @param {Array}    [options.ids] ids of selected spectra
- * @param {Array}    [options.filters=[]] Array of object containing {name:'', options:''}
- * @param {object}   [options.scale={}] object containing the options for rescaling
+ * @param {object}   [options={}] - scale spectra based on various parameters
+ * @param {Array}    [options.ids] - ids of selected spectra
+ * @param {Array}    [options.filters=[]] - Array of object containing {name:'', options:''}
+ * @param {object}   [options.scale={}] - object containing the options for rescaling
  * @param {string}   [options.scale.targetID=spectra[0].id]
- * @param {string}   [options.scale.method='max'] min, max, integration, minMax
- * @param {Array}    [options.scale.range] from - to to apply the method and rescale
+ * @param {string}   [options.scale.method='max'] - min, max, integration, minMax
+ * @param {Array}    [options.scale.range] - from - to to apply the method and rescale
  * @param {boolean}  [options.scale.relative=false]
  */
 export function getPostProcessedChart(spectraProcessor, options = {}) {

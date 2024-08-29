@@ -1,4 +1,5 @@
 import { xyFilterX } from 'ml-spectra-processing';
+
 /**
  *
  * @private
@@ -7,7 +8,7 @@ import { xyFilterX } from 'ml-spectra-processing';
  * @param {object} [options.xFilter={}]
  * @param {number} [options.xFilter.from]
  * @param {number} [options.xFilter.to]
- * @param {array} [options.xFilter.exclusions=[]]
+ * @param {Array} [options.xFilter.exclusions=[]]
  * @param {number} [options.yFactor=1]
  */
 

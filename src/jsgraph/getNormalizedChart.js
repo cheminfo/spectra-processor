@@ -8,7 +8,7 @@ import { addChartDataStyle } from './addChartDataStyle';
  * @param {object} [options.xFilter={}]
  * @param {number} [options.xFilter.from]
  * @param {number} [options.xFilter.to]
- * @param {array} [options.xFilter.exclusions=[]]
+ * @param {Array} [options.xFilter.exclusions=[]]
  */
 
 export function getNormalizedChart(spectra, options = {}) {

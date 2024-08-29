@@ -1,3 +1,5 @@
+import { expect, describe, it } from 'vitest';
+
 import { getBoxPlotData } from '../getBoxPlotData';
 
 const nomralizedData = {

@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import { SpectraProcessor } from '../SpectraProcessor';
 import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart';
 

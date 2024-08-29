@@ -1,8 +1,10 @@
 import { addChartDataStyle } from './addChartDataStyle';
+
 /**
  * Retrieve a chart with selected original data
+ * @param spectra
  * @param {object} [options={}]
- * @param {Array} [options.ids] List of spectra ids, by default all
+ * @param {Array} [options.ids] - List of spectra ids, by default all
  * @param {Array} [options.yFactor=1]
  */
 export function getChart(spectra, options = {}) {

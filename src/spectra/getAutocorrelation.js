@@ -1,6 +1,8 @@
 import { xCorrelation } from 'ml-spectra-processing';
 
 /**
+ * @param normalized
+ * @param index
  * @private
  */
 

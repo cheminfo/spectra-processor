@@ -1,4 +1,5 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+import { test, expect } from 'vitest';
 
 import { SpectraProcessor } from '../../SpectraProcessor';
 import { getPostProcessedText } from '../getPostProcessedText';

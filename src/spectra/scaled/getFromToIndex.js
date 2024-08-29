@@ -6,7 +6,7 @@ export function getFromToIndex(xs, range) {
     from = xs[0];
   }
   if (to === undefined) {
-    to = xs[xs.length - 1];
+    to = xs.at(-1);
   }
 
   return {

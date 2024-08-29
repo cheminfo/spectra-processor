@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import { getTrackAnnotation } from '../getTrackAnnotation';
 
 let spectra = [
