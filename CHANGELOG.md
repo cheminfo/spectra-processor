@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/cheminfo/spectra-processor/compare/v3.0.0...v3.1.0) (2024-09-17)
+
+
+### Features
+
+* jcamp parser append all info and meta information ([035e12a](https://github.com/cheminfo/spectra-processor/commit/035e12a9df675c7626751af20828e9ad9f6fe05f))
+
 ## [3.0.0](https://github.com/cheminfo/spectra-processor/compare/v2.11.0...v3.0.0) (2022-05-06)
 
 
