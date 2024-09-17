@@ -8,14 +8,13 @@ import { getJcampKind } from '../Kinds';
  * @returns {Spectrum} - new instance of Spectrum with the provided data
  */
 export default function parseJcamp(jcampText) {
-  const parsed = convert(jcampText, { keepRecordsRegExp: /TITLE/ }).flatten[0];
+  const parsed = convert(jcampText, { keepRecordsRegExp: /.*/ }).flatten[0];
   const kind = getJcampKind(parsed);
   const data = parsed.spectra[0].data;
-  const meta = parsed.info;
+  const { meta, info } = parsed;
   // we convert the data
   if (kind && kind.importation && kind.importation.converter) {
     data.y = data.y.map(kind.importation.converter);
   }
-
-  return { data, kind, meta };
+  return { data, kind, meta, info };
 }

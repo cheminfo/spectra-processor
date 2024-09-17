@@ -213,7 +213,7 @@ export class SpectraProcessor {
       return;
     }
     let parsed = parseJcamp(jcamp);
-    let meta = { ...parsed.meta, ...options.meta };
+    let meta = { ...parsed.info, ...parsed.meta, ...options.meta };
     this.addFromData(parsed.data, { meta, id: options.id });
   }
 

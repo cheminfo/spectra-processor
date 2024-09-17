@@ -26,7 +26,6 @@ describe('SpectraProcessor', () => {
       let jcamp = readFileSync(join(__dirname, testFilesDir, file), 'utf8');
       spectraProcessor.addFromJcamp(jcamp, { id: file });
     }
-
     expect(spectraProcessor.spectra).toHaveLength(45);
     let normalized = spectraProcessor.getNormalizedData();
     expect(normalized.ids).toHaveLength(45);
@@ -40,7 +39,7 @@ describe('SpectraProcessor', () => {
     expect(normalized).toMatchSnapshot();
 
     let normalizedTSV = spectraProcessor.getNormalizedText();
-    expect(normalizedTSV).toHaveLength(15360);
+    expect(normalizedTSV).toHaveLength(50412);
     expect(normalizedTSV).toMatchSnapshot();
     writeFileSync(`${__dirname}/normalized.tsv`, normalizedTSV);
 
@@ -102,17 +101,18 @@ describe('SpectraProcessor', () => {
       '0235_3d.jdx',
       '0235_3e.jdx',
     ]);
-
     expect(
-      spectraProcessor.getMetadata({
-        ids: [
-          '0140_1a.jdx',
-          '0140_1b.jdx',
-          '0140_1c.jdx',
-          '0140_1d.jdx',
-          '0140_1e.jdx',
-        ],
-      }),
+      spectraProcessor
+        .getMetadata({
+          ids: [
+            '0140_1a.jdx',
+            '0140_1b.jdx',
+            '0140_1c.jdx',
+            '0140_1d.jdx',
+            '0140_1e.jdx',
+          ],
+        })
+        .map((meta) => ({ TITLE: meta.TITLE })),
     ).toStrictEqual([
       { TITLE: 'Z140a_1_a' },
       { TITLE: 'Z140a_1_b' },
@@ -120,6 +120,20 @@ describe('SpectraProcessor', () => {
       { TITLE: 'Z140a_1_d' },
       { TITLE: 'Z140a_1_e' },
     ]);
+
+    expect(
+      spectraProcessor
+        .getMetadata({
+          ids: [
+            '0140_1a.jdx',
+            '0140_1b.jdx',
+            '0140_1c.jdx',
+            '0140_1d.jdx',
+            '0140_1e.jdx',
+          ],
+        })
+        .map((meta) => meta.RESOLUTION),
+    ).toStrictEqual([4, 4, 4, 4, 4]);
 
     expect(
       spectraProcessor.getClasses({

@@ -23,10 +23,17 @@ export function convertToText(data, options = {}) {
     line = [];
     line.push(ids[i]);
     for (let key of allKeys) {
-      line.push(meta[i][key]);
+      line.push(removeSpecialCharacters(meta[i][key]));
     }
     line.push(...matrix[i]);
     lines.push(line.join(fs));
   }
   return lines.join(rs);
+}
+
+function removeSpecialCharacters(string) {
+  if (typeof string !== 'string') {
+    return string;
+  }
+  return string.replaceAll(/[\t\n\r]+/g, ' ');
 }

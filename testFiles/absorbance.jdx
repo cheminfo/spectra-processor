@@ -4,6 +4,7 @@
 ##ORIGIN=University Lausanne
 ##OWNER=Nicolet
 ##LONGDATE=2007/12/12
+##$TEST_META=A meta param
 ##TIME=07:47:06
 ##DATA PROCESSING=
 Multiplied by a scalar
