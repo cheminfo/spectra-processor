@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/cheminfo/spectra-processor/compare/v3.1.0...v3.2.0) (2024-10-09)
+
+
+### Features
+
+* add baseline and correctedIntegral in ranges ([5319de5](https://github.com/cheminfo/spectra-processor/commit/5319de5c8e73f2bac10f943cdd53cde7a8833339))
+
 ## [3.1.0](https://github.com/cheminfo/spectra-processor/compare/v3.0.0...v3.1.0) (2024-09-17)
 
 
