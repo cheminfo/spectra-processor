@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/cheminfo/spectra-processor/compare/v3.2.0...v3.3.0) (2024-11-14)
+
+
+### Features
+
+* update signal-processing and add more filters ([7d7449a](https://github.com/cheminfo/spectra-processor/commit/7d7449a92a5c7e1c14c1e5ce844997c340364345))
+
 ## [3.2.0](https://github.com/cheminfo/spectra-processor/compare/v3.1.0...v3.2.0) (2024-10-09)
 
 
