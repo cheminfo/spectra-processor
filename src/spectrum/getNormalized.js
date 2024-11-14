@@ -4,7 +4,7 @@ import { xMinMaxValues, xyCheck } from 'ml-spectra-processing';
 /**
  *
  * @private
- * @param {DataXY} input
+ * @param {import('cheminfo-types').DataXY} input
  * @param {object} [options={}]
  * @param {number} [options.from=x[0]]
  * @param {number} [options.to=x[x.length-1]]
