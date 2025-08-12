@@ -11,19 +11,21 @@ import { xMinMaxValues, xyCheck } from 'ml-spectra-processing';
  * @param {number} [options.numberOfPoints=1024]
  * @param {Array} [options.filters=[]]
  * @param {Array} [options.exclusions=[]]
+ * @param {boolean} [options.applyRangeSelectionFirst=false]
  */
 export function getNormalized(input, options = {}) {
   xyCheck(input);
 
   let {
+    filters = [],
     from = input.x[0],
     to = input.x.at(-1),
     numberOfPoints = 1024,
-    filters = [],
+    applyRangeSelectionFirst = false,
     exclusions = [],
   } = options;
 
-  // we will add a get
+  filters = structuredClone(filters);
   const equallySpacedFilter = {
     name: 'equallySpaced',
     options: {
@@ -33,7 +35,12 @@ export function getNormalized(input, options = {}) {
       exclusions,
     },
   };
-  const output = filterXY(input, filters.concat(equallySpacedFilter)).data;
+  if (applyRangeSelectionFirst) {
+    filters.unshift(equallySpacedFilter);
+  } else {
+    filters.push(equallySpacedFilter);
+  }
+  const output = filterXY(input, filters).data;
 
   const allowedBoundary = {
     x: {

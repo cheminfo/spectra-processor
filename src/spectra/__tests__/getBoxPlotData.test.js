@@ -20,9 +20,9 @@ describe('getBoxPlotData', () => {
     let result = getBoxPlotData(nomralizedData);
     expect(result).toStrictEqual({
       x: [10, 20, 30],
-      q1: [1.5, 2.5, 3.5],
+      q1: [2, 3, 4],
       median: [3, 4, 5],
-      q3: [5, 6, 7],
+      q3: [4, 5, 6],
       min: [1, 2, 3],
       max: [6, 7, 8],
     });

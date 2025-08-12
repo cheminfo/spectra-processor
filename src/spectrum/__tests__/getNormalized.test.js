@@ -1,6 +1,9 @@
+import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import { describe, expect, it } from 'vitest';
 
 import { getNormalized } from '../getNormalized';
+
+expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('getNormalized', () => {
   it('no filters', () => {
@@ -43,6 +46,33 @@ describe('getNormalized', () => {
     ).data;
     expect(result.x).toStrictEqual([0, 1, 2, 3, 4]);
     expect(result.y).toStrictEqual([0.125, 1.125, 3, 4.875, 5.125]);
+  });
+
+  it('applyRangeSelectionFirst', () => {
+    const x = [0, 1, 2, 3, 4];
+    const y = [0, 1, 2, 3, 4];
+    const result = getNormalized(
+      { x, y },
+      {
+        from: 1,
+        to: 4,
+        numberOfPoints: 3,
+        filters: [{ name: 'rescale' }],
+      },
+    ).data;
+    expect(result.y).toStrictEqual([0.25, 0.625, 0.765625]);
+
+    const result2 = getNormalized(
+      { x, y },
+      {
+        from: 1,
+        to: 4,
+        numberOfPoints: 3,
+        filters: [{ name: 'rescale' }],
+        applyRangeSelectionFirst: true,
+      },
+    ).data;
+    expect(result2.y).toBeDeepCloseTo([0, 0.7272727272727273, 1]);
   });
 
   it('with align', () => {
