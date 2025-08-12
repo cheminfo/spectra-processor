@@ -1,4 +1,4 @@
-import chroma from 'chroma-js';
+import { scale } from 'chroma-js';
 import { Matrix } from 'ml-matrix';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
@@ -100,8 +100,7 @@ function getColors(dataset) {
   const matrix = new Matrix(dataset);
   const stdevs = matrix.standardDeviation('column');
   const { min, max } = xMinMaxValues(stdevs);
-  const colorCallback = chroma
-    .scale(['blue', 'cyan', 'yellow', 'red'])
+  const colorCallback = scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])
     .mode('lch');
 

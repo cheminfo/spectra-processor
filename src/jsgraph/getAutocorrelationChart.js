@@ -1,4 +1,4 @@
-import chroma from 'chroma-js';
+import { scale } from 'chroma-js';
 import { xMinMaxValues, xyFilterX } from 'ml-spectra-processing';
 
 /**
@@ -22,8 +22,7 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
   } = options;
 
   const { min, max } = xMinMaxValues(autocorrelation.y);
-  let colorCallback = chroma
-    .scale(['blue', 'cyan', 'yellow', 'red'])
+  let colorCallback = scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])
     .mode('lch');
 

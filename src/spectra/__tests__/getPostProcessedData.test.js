@@ -116,8 +116,9 @@ describe('getPostProcessedData', () => {
     let result3 = getPostProcessedData(spectraProcessor, {
       scale: { method: 'minMax' },
     });
+    const equals = result === result3;
 
-    expect(result === result3).toBe(false);
+    expect(equals).toBe(false);
   });
 
   it('min', () => {
