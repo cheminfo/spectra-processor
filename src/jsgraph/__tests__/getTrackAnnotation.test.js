@@ -1,33 +1,31 @@
-import { describe, it, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { getTrackAnnotation } from '../getTrackAnnotation';
 
-let spectra = [
-  {
-    normalized: {
-      x: [10, 20, 30],
-      y: [1, 2, 3],
+test('check jsgraph annotations', () => {
+  let spectra = [
+    {
+      normalized: {
+        x: [10, 20, 30],
+        y: [1, 2, 3],
+      },
+      meta: {
+        color: 'red',
+      },
+      id: 1,
     },
-    meta: {
-      color: 'red',
+    {
+      normalized: {
+        x: [10, 20, 30],
+        y: [2, 3, 4],
+      },
+      meta: {
+        color: 'green',
+      },
+      id: 2,
     },
-    id: 1,
-  },
-  {
-    normalized: {
-      x: [10, 20, 30],
-      y: [2, 3, 4],
-    },
-    meta: {
-      color: 'green',
-    },
-    id: 2,
-  },
-];
+  ];
+  let result = getTrackAnnotation(spectra, 1);
 
-describe('getTrackAnnotation', () => {
-  it('check jsgraph annotations', () => {
-    let result = getTrackAnnotation(spectra, 1);
-    expect(result).toMatchSnapshot();
-  });
+  expect(result).toMatchSnapshot();
 });

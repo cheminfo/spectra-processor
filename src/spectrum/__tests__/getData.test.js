@@ -22,6 +22,7 @@ describe('getData', () => {
         },
       },
     );
+
     expect(result.x).toStrictEqual([1, 4, 7, 8, 9]);
     expect(result.y).toStrictEqual([1, 4, 3, 2, 1]);
   });
@@ -38,6 +39,7 @@ describe('getData', () => {
         yFactor: -100,
       },
     );
+
     expect(result.x).toStrictEqual([0, 1, 2, 3, 4]);
     expect(result.y).toStrictEqual([-100, -200, -300, -400, -500]);
   });

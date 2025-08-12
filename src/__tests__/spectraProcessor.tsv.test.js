@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { SpectraProcessor } from '../SpectraProcessor';
 
@@ -16,8 +16,11 @@ describe('SpectraProcessor text', () => {
     );
     const spectraProcessor =
       SpectraProcessor.fromNormalizedMatrix(normalizedTSV);
+
     expect(spectraProcessor.getMemoryInfo().keepOriginal).toBe(false);
+
     const newNormalizedTSV = spectraProcessor.getNormalizedText();
+
     expect(normalizedTSV).toBe(newNormalizedTSV);
   });
 });

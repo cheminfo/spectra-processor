@@ -1,4 +1,4 @@
-import { xSum, xMultiply } from 'ml-spectra-processing';
+import { xMultiply, xSum } from 'ml-spectra-processing';
 
 import { getFromToIndex } from './getFromToIndex';
 

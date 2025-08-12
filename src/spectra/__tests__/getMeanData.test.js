@@ -1,23 +1,21 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
-import { describe, it, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { getMeanData } from '../getMeanData';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
-let normalized = {
-  x: [1, 2],
-  matrix: [
-    [1, 3],
-    [2, 2],
-    [3, 1],
-  ],
-};
+test('Simple dataset', () => {
+  let normalized = {
+    x: [1, 2],
+    matrix: [
+      [1, 3],
+      [2, 2],
+      [3, 1],
+    ],
+  };
+  let result = getMeanData(normalized, 0);
 
-describe('getMeanData', () => {
-  it('Simple dataset', () => {
-    let result = getMeanData(normalized, 0);
-    expect(result.x).toStrictEqual([1, 2]);
-    expect(result.y).toStrictEqual([2, 2]);
-  });
+  expect(result.x).toStrictEqual([1, 2]);
+  expect(result.y).toStrictEqual([2, 2]);
 });

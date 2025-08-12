@@ -1,39 +1,44 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-import { it, describe, expect } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { SpectraProcessor } from '../../SpectraProcessor';
 import { getPostProcessedData } from '../getPostProcessedData';
 
 expect.extend({ toBeDeepCloseTo });
 
-let spectraProcessor = new SpectraProcessor();
-spectraProcessor.spectra = [
-  {
-    id: 1,
-    normalized: {
-      x: [10, 20, 30],
-      y: [1, 2, 3],
+let spectraProcessor;
+
+beforeEach(() => {
+  spectraProcessor = new SpectraProcessor();
+  spectraProcessor.spectra = [
+    {
+      id: 1,
+      normalized: {
+        x: [10, 20, 30],
+        y: [1, 2, 3],
+      },
     },
-  },
-  {
-    id: 2,
-    normalized: {
-      x: [10, 20, 30],
-      y: [2, 3, 4],
+    {
+      id: 2,
+      normalized: {
+        x: [10, 20, 30],
+        y: [2, 3, 4],
+      },
     },
-  },
-  {
-    id: 3,
-    normalized: {
-      x: [10, 20, 30],
-      y: [3, 4, 5],
+    {
+      id: 3,
+      normalized: {
+        x: [10, 20, 30],
+        y: [3, 4, 5],
+      },
     },
-  },
-];
+  ];
+});
 
 describe('getPostProcessedData', () => {
   it('No options', () => {
     let result = getPostProcessedData(spectraProcessor);
+
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [2, 3, 4],
@@ -45,6 +50,7 @@ describe('getPostProcessedData', () => {
     let result = getPostProcessedData(spectraProcessor, {
       filters: [{ name: 'pqn', options: { max: 10 } }],
     });
+
     expect(result.matrix).toBeDeepCloseTo([
       [2.672612419124244, 5.345224838248488, 8.017837257372733],
       [3.7139067635410377, 5.570860145311556, 7.427813527082075],
@@ -57,6 +63,7 @@ describe('getPostProcessedData', () => {
       filters: [{ name: 'rescale', options: { max: 10 } }],
     });
     result.matrix = result.matrix.map((row) => Array.from(row));
+
     expect(result.matrix).toStrictEqual([
       [0, 2.5, 5],
       [2.5, 5, 7.5],
@@ -69,6 +76,7 @@ describe('getPostProcessedData', () => {
       filters: [{ name: 'centerMean' }],
     });
     result.matrix = result.matrix.map((row) => Array.from(row));
+
     expect(result.matrix).toStrictEqual([
       [-1, -1, -1],
       [0, 0, 0],
@@ -80,6 +88,7 @@ describe('getPostProcessedData', () => {
     let result = getPostProcessedData(spectraProcessor, {
       scale: { method: 'minMax' },
     });
+
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [1, 2, 3],
@@ -94,17 +103,20 @@ describe('getPostProcessedData', () => {
     let result2 = getPostProcessedData(spectraProcessor, {
       scale: { method: 'minMax' },
     });
-    expect(result === result2).toBe(true);
+
+    expect(result).toStrictEqual(result2);
     expect(result2.matrix).toStrictEqual([
       [1, 2, 3],
       [1, 2, 3],
       [1, 2, 3],
     ]);
+
     // same values but other pointer, normalized changed we can not use the cache
     spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
     let result3 = getPostProcessedData(spectraProcessor, {
       scale: { method: 'minMax' },
     });
+
     expect(result === result3).toBe(false);
   });
 
@@ -118,6 +130,7 @@ describe('getPostProcessedData', () => {
     result.matrix[0] = Array.from(result.matrix[0]);
     result.matrix[1] = Array.from(result.matrix[1]);
     result.matrix[2] = Array.from(result.matrix[2]);
+
     expect(result.matrix).toStrictEqual([
       [3, 6, 9],
       [3, 4.5, 6],
@@ -132,6 +145,7 @@ describe('getPostProcessedData', () => {
     result.matrix[0] = Array.from(result.matrix[0]);
     result.matrix[1] = Array.from(result.matrix[1]);
     result.matrix[2] = Array.from(result.matrix[2]);
+
     expect(result.matrix).toBeDeepCloseTo(
       [
         [1.3333333, 2.666666, 4],
@@ -149,6 +163,7 @@ describe('getPostProcessedData', () => {
     result.matrix[0] = Array.from(result.matrix[0]);
     result.matrix[1] = Array.from(result.matrix[1]);
     result.matrix[2] = Array.from(result.matrix[2]);
+
     expect(result.matrix).toBeDeepCloseTo(
       [
         [1.5, 3, 4.5],
@@ -166,6 +181,7 @@ describe('getPostProcessedData', () => {
         { label: 'B', from: 16, to: 34 },
       ],
     });
+
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [2, 3, 4],
@@ -206,6 +222,7 @@ describe('getPostProcessedData', () => {
         },
       ],
     });
+
     expect(result.matrix).toStrictEqual([
       [1, 2, 3],
       [2, 3, 4],

@@ -1,5 +1,5 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { minMax } from '../minMax';
 

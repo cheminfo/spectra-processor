@@ -44,6 +44,7 @@ describe('getNormalized', () => {
         ],
       },
     ).data;
+
     expect(result.x).toStrictEqual([0, 1, 2, 3, 4]);
     expect(result.y).toStrictEqual([0.125, 1.125, 3, 4.875, 5.125]);
   });
@@ -60,6 +61,7 @@ describe('getNormalized', () => {
         filters: [{ name: 'rescale' }],
       },
     ).data;
+
     expect(result.y).toStrictEqual([0.25, 0.625, 0.765625]);
 
     const result2 = getNormalized(
@@ -72,6 +74,7 @@ describe('getNormalized', () => {
         applyRangeSelectionFirst: true,
       },
     ).data;
+
     expect(result2.y).toBeDeepCloseTo([0, 0.7272727272727273, 1]);
   });
 
@@ -100,9 +103,11 @@ describe('getNormalized', () => {
         ],
       },
     ).data;
+
     expect(result.x).toStrictEqual([0, 4, 8, 12, 16]);
     expect(result.y).toStrictEqual([3.75, 2, 0, 0, 0]);
   });
+
   it('with SNV', () => {
     let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];

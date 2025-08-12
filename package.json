@@ -32,27 +32,27 @@
   },
   "homepage": "https://github.com/cheminfo/spectra-processor#readme",
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.25.9",
-    "@vitest/coverage-v8": "^2.1.5",
-    "cheminfo-build": "^1.2.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "cheminfo-build": "^1.2.1",
     "cheminfo-types": "^1.8.1",
     "codecov": "^3.8.3",
-    "eslint": "^9.14.0",
-    "eslint-config-cheminfo": "^12.0.1",
+    "eslint": "^9.33.0",
+    "eslint-config-cheminfo": "^15.0.1",
     "jest-matcher-deep-close-to": "^3.0.2",
-    "prettier": "^3.3.3",
-    "rollup": "^4.26.0"
+    "prettier": "^3.6.2",
+    "rollup": "^4.46.2"
   },
   "dependencies": {
     "chroma-js": "^3.1.2",
     "is-any-array": "^2.0.1",
-    "jcampconverter": "^10.0.1",
-    "ml-matrix": "^6.12.0",
+    "jcampconverter": "^11.0.4",
+    "ml-matrix": "^6.12.1",
     "ml-pca": "^4.1.1",
-    "ml-signal-processing": "^1.2.0",
-    "ml-spectra-processing": "^14.6.2",
+    "ml-signal-processing": "^2.0.0",
+    "ml-spectra-processing": "^14.15.0",
     "object-hash": "^3.0.0",
-    "vitest": "^2.1.5",
+    "vitest": "^3.2.4",
     "xy-parser": "^5.0.5"
   }
 }

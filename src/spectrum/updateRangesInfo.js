@@ -1,8 +1,8 @@
 import {
+  xFindClosestIndex,
   xyIntegration,
   xyMaxYPoint,
   xyMinYPoint,
-  xFindClosestIndex,
 } from 'ml-spectra-processing';
 
 /**

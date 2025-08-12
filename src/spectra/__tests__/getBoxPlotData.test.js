@@ -1,4 +1,4 @@
-import { expect, describe, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { getBoxPlotData } from '../getBoxPlotData';
 
@@ -18,6 +18,7 @@ const nomralizedData = {
 describe('getBoxPlotData', () => {
   it('Load set of data', () => {
     let result = getBoxPlotData(nomralizedData);
+
     expect(result).toStrictEqual({
       x: [10, 20, 30],
       q1: [2, 3, 4],

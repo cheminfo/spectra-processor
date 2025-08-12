@@ -8,6 +8,8 @@ export default [
         __dirname: 'readonly',
       },
     },
-    rules: {},
+    rules: {
+      'unicorn/no-array-reverse': 'off',
+    },
   },
 ];

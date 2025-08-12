@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { SpectraProcessor } from '../SpectraProcessor';
 
@@ -26,21 +26,28 @@ describe('SpectraProcessor', () => {
       let jcamp = readFileSync(join(__dirname, testFilesDir, file), 'utf8');
       spectraProcessor.addFromJcamp(jcamp, { id: file });
     }
+
     expect(spectraProcessor.spectra).toHaveLength(45);
+
     let normalized = spectraProcessor.getNormalizedData();
+
     expect(normalized.ids).toHaveLength(45);
     expect(normalized.matrix[0]).toHaveLength(16);
+
     let normalizedSelection = spectraProcessor.getNormalizedData({
       ids: ['0140_1a.jdx', '0140_1b.jdx', '0140_1c.jdx', 'asdf'],
     });
+
     expect(normalizedSelection.ids).toHaveLength(3);
     expect(normalizedSelection.matrix[0]).toHaveLength(16);
 
     expect(normalized).toMatchSnapshot();
 
     let normalizedTSV = spectraProcessor.getNormalizedText();
+
     expect(normalizedTSV).toHaveLength(50412);
     expect(normalizedTSV).toMatchSnapshot();
+
     writeFileSync(`${__dirname}/normalized.tsv`, normalizedTSV);
 
     spectraProcessor.removeOriginals();
@@ -200,6 +207,7 @@ describe('SpectraProcessor', () => {
     let scaled = spectraProcessor.getPostProcessedData({
       scale: { range: { from: 0.9, to: 2.1 }, relative: true },
     });
+
     expect(scaled.matrix).toStrictEqual([
       new Float64Array([0, 0, 0, 0]),
       new Float64Array([0.875, 1, 1, 0.875]),
@@ -243,6 +251,7 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getNonUniformDataProcessor();
 
     let spectra = spectraProcessor.getNormalizedData();
+
     expect(spectra).toMatchSnapshot();
   });
 
@@ -250,12 +259,14 @@ describe('SpectraProcessor', () => {
     let spectraProcessor = getNonUniformDataProcessor();
 
     let minMaxX = spectraProcessor.getMinMaxX();
+
     expect(minMaxX).toStrictEqual({ min: 0, max: 5 });
   });
 
   it('test getNormalizedMinMaxX of non uniform data', () => {
     let spectraProcessor = getLogSpectra();
     let boundary = spectraProcessor.getNormalizedCommonBoundary();
+
     expect(boundary).toMatchCloseTo({
       x: { min: -1, max: 1 },
       y: { min: 1.4999999999999998, max: 4.41140808993222 },

@@ -1,4 +1,4 @@
-import { xMinValue, xMaxValue } from 'ml-spectra-processing';
+import { xMaxValue, xMinValue } from 'ml-spectra-processing';
 
 import { getFromToIndex } from './getFromToIndex';
 

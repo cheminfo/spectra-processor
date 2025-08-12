@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import jcampParser from '../parseJcamp';
 
@@ -27,6 +27,7 @@ test('jcampParser transmittance', () => {
   const path = join(__dirname, '../../../testFiles/transmittance1.jdx');
   const jcamp = readFileSync(path, 'utf8');
   const spectrum = jcampParser(jcamp);
+
   expect(spectrum.meta).toStrictEqual({
     'NIST SOURCE': 'COBLENTZ',
     'NIST IMAGE': 'cob3577',

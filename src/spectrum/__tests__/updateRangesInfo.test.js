@@ -25,6 +25,7 @@ describe('updateRangesInfo', () => {
         to: 6,
       },
     ]);
+
     expect(spectrum.ranges).toStrictEqual({
       A: {
         label: 'A',

@@ -1,10 +1,10 @@
 import {
-  xSubtract,
-  xyMaxYPoint,
-  xSum,
+  matrixCenterZMean,
   matrixPQN,
   matrixZRescale,
-  matrixCenterZMean,
+  xSubtract,
+  xSum,
+  xyMaxYPoint,
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
