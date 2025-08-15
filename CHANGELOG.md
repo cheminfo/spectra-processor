@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.0](https://github.com/cheminfo/spectra-processor/compare/v3.3.0...v3.4.0) (2025-08-15)
+
+
+### Features
+
+* add applyRangeSelectionFirst option to getNormalized ([bc95507](https://github.com/cheminfo/spectra-processor/commit/bc9550716cf1f72971c5f8f8c0ed39d1aa5401e3))
+
 ## [3.3.0](https://github.com/cheminfo/spectra-processor/compare/v3.2.0...v3.3.0) (2024-11-14)
 
 
