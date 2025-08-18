@@ -1,5 +1,5 @@
-export { SpectraProcessor } from './SpectraProcessor';
+export { SpectraProcessor } from './SpectraProcessor.js';
 
 export { xFindClosestIndex } from 'ml-spectra-processing';
 
-export { getFilterAnnotations } from './jsgraph/getFilterAnnotations';
+export { getFilterAnnotations } from './jsgraph/getFilterAnnotations.js';

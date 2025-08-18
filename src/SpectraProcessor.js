@@ -1,27 +1,27 @@
 import { xFindClosestIndex } from 'ml-spectra-processing';
 
-import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart';
-import { getBoxPlotChart } from './jsgraph/getBoxPlotChart';
-import { getChart } from './jsgraph/getChart';
-import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations';
-import { getNormalizedChart } from './jsgraph/getNormalizedChart';
-import { getPostProcessedChart } from './jsgraph/getPostProcessedChart';
-import { getTrackAnnotation } from './jsgraph/getTrackAnnotation';
-import { getCategoriesStats } from './metadata/getCategoriesStats';
-import { getClassLabels } from './metadata/getClassLabels';
-import { getClasses } from './metadata/getClasses';
-import { getMetadata } from './metadata/getMetadata';
-import parseJcamp from './parser/parseJcamp';
-import parseMatrix from './parser/parseMatrix';
-import parseText from './parser/parseText';
-import { getAutocorrelation } from './spectra/getAutocorrelation';
-import { getBoxPlotData } from './spectra/getBoxPlotData';
-import { getMeanData } from './spectra/getMeanData';
-import { getNormalizedData } from './spectra/getNormalizedData';
-import { getNormalizedText } from './spectra/getNormalizedText';
-import { getPostProcessedData } from './spectra/getPostProcessedData';
-import { getPostProcessedText } from './spectra/getPostProcessedText';
-import { Spectrum } from './spectrum/Spectrum';
+import { getAutocorrelationChart } from './jsgraph/getAutocorrelationChart.js';
+import { getBoxPlotChart } from './jsgraph/getBoxPlotChart.js';
+import { getChart } from './jsgraph/getChart.js';
+import { getNormalizationAnnotations } from './jsgraph/getNormalizationAnnotations.js';
+import { getNormalizedChart } from './jsgraph/getNormalizedChart.js';
+import { getPostProcessedChart } from './jsgraph/getPostProcessedChart.js';
+import { getTrackAnnotation } from './jsgraph/getTrackAnnotation.js';
+import { getCategoriesStats } from './metadata/getCategoriesStats.js';
+import { getClassLabels } from './metadata/getClassLabels.js';
+import { getClasses } from './metadata/getClasses.js';
+import { getMetadata } from './metadata/getMetadata.js';
+import parseJcamp from './parser/parseJcamp.js';
+import parseMatrix from './parser/parseMatrix.js';
+import parseText from './parser/parseText.js';
+import { getAutocorrelation } from './spectra/getAutocorrelation.js';
+import { getBoxPlotData } from './spectra/getBoxPlotData.js';
+import { getMeanData } from './spectra/getMeanData.js';
+import { getNormalizedData } from './spectra/getNormalizedData.js';
+import { getNormalizedText } from './spectra/getNormalizedText.js';
+import { getPostProcessedData } from './spectra/getPostProcessedData.js';
+import { getPostProcessedText } from './spectra/getPostProcessedText.js';
+import { Spectrum } from './spectrum/Spectrum.js';
 
 export class SpectraProcessor {
   /**

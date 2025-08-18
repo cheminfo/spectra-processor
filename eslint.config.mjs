@@ -9,7 +9,8 @@ export default [
       },
     },
     rules: {
-      'unicorn/no-array-reverse': 'off',
+      // 'unicorn/no-array-reverse': 'off',
+      'import/extensions': ['error', 'always'],
     },
   },
 ];

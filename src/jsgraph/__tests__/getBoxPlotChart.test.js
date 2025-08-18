@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getBoxPlotChart } from '../getBoxPlotChart';
+import { getBoxPlotChart } from '../getBoxPlotChart.js';
 
 const normalizedData = {
   ids: [undefined, undefined, undefined, undefined, undefined],

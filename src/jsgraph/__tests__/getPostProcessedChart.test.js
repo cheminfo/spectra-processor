@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { SpectraProcessor } from '../../SpectraProcessor';
-import { getPostProcessedChart } from '../getPostProcessedChart';
+import { SpectraProcessor } from '../../SpectraProcessor.js';
+import { getPostProcessedChart } from '../getPostProcessedChart.js';
 
 test('getPostProcessedChart', () => {
   const spectraProcessor = new SpectraProcessor({

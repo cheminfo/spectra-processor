@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getTrackAnnotation } from '../getTrackAnnotation';
+import { getTrackAnnotation } from '../getTrackAnnotation.js';
 
 test('check jsgraph annotations', () => {
   let spectra = [

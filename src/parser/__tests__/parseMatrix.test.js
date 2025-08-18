@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import matrixParser from '../parseMatrix';
+import matrixParser from '../parseMatrix.js';
 
 describe('matrix', () => {
   it('small tsv', () => {

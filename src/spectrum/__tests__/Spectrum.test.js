@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { Spectrum } from '../Spectrum';
+import { Spectrum } from '../Spectrum.js';
 
 describe('Spectrum', () => {
   it('removing the original data', () => {

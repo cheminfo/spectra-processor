@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getCategoriesStats } from '../getCategoriesStats';
+import { getCategoriesStats } from '../getCategoriesStats.js';
 
 test('getCategoriesStats', () => {
   let metadata = [

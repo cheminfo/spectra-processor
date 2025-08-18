@@ -8,12 +8,12 @@ import {
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
-import { getNormalizedData } from './getNormalizedData';
-import { getFromToIndex } from './scaled/getFromToIndex';
-import { integration } from './scaled/integration';
-import { max } from './scaled/max';
-import { min } from './scaled/min';
-import { minMax } from './scaled/minMax';
+import { getNormalizedData } from './getNormalizedData.js';
+import { getFromToIndex } from './scaled/getFromToIndex.js';
+import { integration } from './scaled/integration.js';
+import { max } from './scaled/max.js';
+import { min } from './scaled/min.js';
+import { minMax } from './scaled/minMax.js';
 
 /**
  * Allows to calculate relative intensity between normalized spectra

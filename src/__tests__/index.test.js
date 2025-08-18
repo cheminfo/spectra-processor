@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SpectraProcessor, xFindClosestIndex } from '..';
+import { SpectraProcessor, xFindClosestIndex } from '../index.js';
 
 describe('index', () => {
   it('contains right properties', () => {

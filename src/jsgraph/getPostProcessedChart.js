@@ -1,4 +1,4 @@
-import { addChartDataStyle } from './addChartDataStyle';
+import { addChartDataStyle } from './addChartDataStyle.js';
 
 /**
  *

@@ -1,8 +1,8 @@
 import { xMinMaxValues } from 'ml-spectra-processing';
 
-import { getData } from './getData';
-import { getNormalized } from './getNormalized';
-import { updateRangesInfo } from './updateRangesInfo';
+import { getData } from './getData.js';
+import { getNormalized } from './getNormalized.js';
+import { updateRangesInfo } from './updateRangesInfo.js';
 
 /**
  * Class allowing manipulate one IR spectrum
@@ -26,8 +26,8 @@ export class Spectrum {
     const { meta = {}, normalization = {}, normalized } = options;
 
     if (x && x.length > 1 && x[0] > x.at(-1)) {
-      this.x = x.slice().reverse();
-      this.y = y.slice().reverse();
+      this.x = x.toReversed();
+      this.y = y.toReversed();
     } else {
       this.x = x || [];
       this.y = y || [];

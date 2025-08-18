@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getBoxPlotData } from '../getBoxPlotData';
+import { getBoxPlotData } from '../getBoxPlotData.js';
 
 const nomralizedData = {
   ids: [undefined, undefined, undefined, undefined, undefined],

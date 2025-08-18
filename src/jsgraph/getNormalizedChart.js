@@ -1,6 +1,6 @@
 import { xyFilterX } from 'ml-spectra-processing';
 
-import { addChartDataStyle } from './addChartDataStyle';
+import { addChartDataStyle } from './addChartDataStyle.js';
 
 /**
  * @param {Array<Spectrum>} spectra

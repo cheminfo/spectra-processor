@@ -1,6 +1,6 @@
 import { xMinValue, xMultiply } from 'ml-spectra-processing';
 
-import { getFromToIndex } from './getFromToIndex';
+import { getFromToIndex } from './getFromToIndex.js';
 
 export function min(matrix, normalizedTarget, range = {}) {
   let fromToIndex = getFromToIndex(normalizedTarget.x, range);

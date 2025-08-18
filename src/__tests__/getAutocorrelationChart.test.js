@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { SpectraProcessor } from '../SpectraProcessor';
-import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart';
+import { SpectraProcessor } from '../SpectraProcessor.js';
+import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart.js';
 
 describe('getAutocorrelationChart', () => {
   it('check jsgraph chart', () => {

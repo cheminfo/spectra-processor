@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getData } from '../getData';
+import { getData } from '../getData.js';
 
 describe('getData', () => {
   it('check from to and exclusions', () => {

@@ -2,7 +2,7 @@ import { scale } from 'chroma-js';
 import { Matrix } from 'ml-matrix';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
-import { getBoxPlotData } from '../spectra/getBoxPlotData';
+import { getBoxPlotData } from '../spectra/getBoxPlotData.js';
 
 export function getBoxPlotChart(normalizedData, options = {}) {
   const {

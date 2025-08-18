@@ -1,4 +1,4 @@
-import { getCategoriesStats } from './getCategoriesStats';
+import { getCategoriesStats } from './getCategoriesStats.js';
 
 /**
  * @private

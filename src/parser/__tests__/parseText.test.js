@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import { expect, test } from 'vitest';
 
-import textParser from '../parseText';
+import textParser from '../parseText.js';
 
 test('textParser', () => {
   const text = readFileSync(join(__dirname, './data.txt'), 'utf8');

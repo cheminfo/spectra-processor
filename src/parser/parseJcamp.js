@@ -1,6 +1,6 @@
 import { convert } from 'jcampconverter';
 
-import { getJcampKind } from '../Kinds';
+import { getJcampKind } from '../Kinds.js';
 
 /**
  * Create a spectrum from a jcamp

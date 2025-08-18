@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import { expect, test } from 'vitest';
 
-import jcampParser from '../parseJcamp';
+import jcampParser from '../parseJcamp.js';
 
 test('jcampParser absorbance', () => {
   const path = join(__dirname, '../../../testFiles/absorbance.jdx');

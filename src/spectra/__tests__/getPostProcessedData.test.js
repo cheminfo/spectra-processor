@@ -1,8 +1,8 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { SpectraProcessor } from '../../SpectraProcessor';
-import { getPostProcessedData } from '../getPostProcessedData';
+import { SpectraProcessor } from '../../SpectraProcessor.js';
+import { getPostProcessedData } from '../getPostProcessedData.js';
 
 expect.extend({ toBeDeepCloseTo });
 

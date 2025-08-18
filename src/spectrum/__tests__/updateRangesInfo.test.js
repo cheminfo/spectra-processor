@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { updateRangesInfo } from '../updateRangesInfo';
+import { updateRangesInfo } from '../updateRangesInfo.js';
 
 describe('updateRangesInfo', () => {
   it('simple case', () => {

@@ -1,6 +1,6 @@
 import { xMaxValue, xMultiply } from 'ml-spectra-processing';
 
-import { getFromToIndex } from './getFromToIndex';
+import { getFromToIndex } from './getFromToIndex.js';
 
 export function max(matrix, normalizedTarget, range = {}) {
   let fromToIndex = getFromToIndex(normalizedTarget.x, range);

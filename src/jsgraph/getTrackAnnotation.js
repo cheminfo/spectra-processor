@@ -1,4 +1,4 @@
-import { getNormalizedData } from '../spectra/getNormalizedData';
+import { getNormalizedData } from '../spectra/getNormalizedData.js';
 
 export function getTrackAnnotation(spectra, index, options = {}) {
   const { ids, showSpectrumID = true, sortY = true, limit = 20 } = options;

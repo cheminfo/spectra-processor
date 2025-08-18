@@ -1,7 +1,7 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import { expect, test } from 'vitest';
 
-import { getAutocorrelation } from '../getAutocorrelation';
+import { getAutocorrelation } from '../getAutocorrelation.js';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getClassLabels } from '../getClassLabels';
+import { getClassLabels } from '../getClassLabels.js';
 
 test('getClassLabels', () => {
   let metadata = [

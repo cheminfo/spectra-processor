@@ -1,7 +1,7 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 import { expect, test } from 'vitest';
 
-import { min } from '../min';
+import { min } from '../min.js';
 
 expect.extend({ toBeDeepCloseTo });
 
