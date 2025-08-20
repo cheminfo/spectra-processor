@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/cheminfo/spectra-processor/compare/v4.0.0...v4.0.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* use node 24 for lactame build ([b66ed09](https://github.com/cheminfo/spectra-processor/commit/b66ed097c3ed0bf53f62753d7027d2034740c6ca))
+
 ## [4.0.0](https://github.com/cheminfo/spectra-processor/compare/v3.3.0...v4.0.0) (2025-08-18)
 
 
