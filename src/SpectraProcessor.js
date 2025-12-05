@@ -32,6 +32,7 @@ export class SpectraProcessor {
    * @param {object} [options.normalization={}] - options to normalize the spectra before comparison
    * @param {number} [options.normalization.from]
    * @param {number} [options.normalization.to]
+   * @param {boolean} [options.normalization.applyRangeSelectionFirst]
    * @param {number} [options.normalization.numberOfPoints]
    * @param {Array<object>} [options.normalization.filters]
    * @param {string} [options.normalization.filters.X.name]
@@ -60,6 +61,7 @@ export class SpectraProcessor {
    * @param {number} [normalization.from]
    * @param {number} [normalization.to]
    * @param {number} [normalization.numberOfPoints]
+   * @param {boolean} [normalization.applyRangeSelectionFirst]
    * @param {Array<object>} [normalization.filters]
    * @param {string} [normalization.filters.X.name]
    * @param {object} [normalization.filters.X.options]
