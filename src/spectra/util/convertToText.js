@@ -15,13 +15,11 @@ export function convertToText(data, options = {}) {
   let allKeys = Object.keys(allKeysObject);
 
   let lines = [];
-  let line = [];
-  line.push('id', ...allKeys, ...x);
+  let line = ['id', ...allKeys, ...x];
   lines.push(line.join(fs));
 
   for (let i = 0; i < ids.length; i++) {
-    line = [];
-    line.push(ids[i]);
+    line = [ids[i]];
     for (let key of allKeys) {
       line.push(removeSpecialCharacters(meta[i][key]));
     }

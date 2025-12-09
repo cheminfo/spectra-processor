@@ -412,7 +412,7 @@ export class SpectraProcessor {
    * @param {Array} [options.ids=[]]
    * @param {Array} [options.showSpectrumID=true]
    * @param {Array} [options.sortY=true]
-   * @param {object} [options.limit=20]- -
+   * @param {object} [options.limit=20]-
    * ids, showSpectrumID = true, sort = true, limit = 20
    * @returns {object}
    */

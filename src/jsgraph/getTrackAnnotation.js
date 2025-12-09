@@ -35,7 +35,7 @@ export function getTrackAnnotation(spectra, index, options = {}) {
   }
 
   if (sortY) {
-    peaks = peaks.sort((a, b) => b.y - a.y);
+    peaks.sort((a, b) => b.y - a.y);
   }
   if (limit) {
     peaks = peaks.slice(0, limit);

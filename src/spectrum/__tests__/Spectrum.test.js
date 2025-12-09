@@ -22,7 +22,7 @@ describe('Spectrum', () => {
 
     expect(() => {
       result.updateNormalization({});
-    }).toThrow('data must be an object of x and y arrays');
+    }).toThrowError('data must be an object of x and y arrays');
   });
 
   it('keeping the original data', () => {
