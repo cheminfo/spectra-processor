@@ -2,7 +2,7 @@ import { xMinMaxValues } from 'ml-spectra-processing';
 
 import { getData } from './getData.js';
 import { getNormalized } from './getNormalized.js';
-import { updateRangesInfo } from './updateRangesInfo.js';
+import { updateRangesInfo } from './updateRangesInfo.ts';
 
 /**
  * Class allowing manipulate one IR spectrum

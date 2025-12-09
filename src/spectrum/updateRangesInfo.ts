@@ -1,3 +1,4 @@
+import type { DataXY } from 'cheminfo-types';
 import {
   xFindClosestIndex,
   xyIntegration,
@@ -5,17 +6,31 @@ import {
   xyMinYPoint,
 } from 'ml-spectra-processing';
 
+import type { RangeInfo } from './RangeInfo.ts';
+
 /**
- * @private
- * @param {*} spectrum
- * @param {*} ranges
+ * Spectrum object with normalized data and ranges
  */
-export function updateRangesInfo(spectrum, ranges = []) {
+interface Spectrum {
+  normalized: DataXY;
+  ranges?: Record<string, RangeInfo>;
+}
+
+/**
+ * Updates range information for a spectrum
+ * @private
+ * @param spectrum - The spectrum object to update
+ * @param ranges - Array of range objects to process
+ */
+export function updateRangesInfo(
+  spectrum: Spectrum,
+  ranges: RangeInfo[] = [],
+): void {
   spectrum.ranges = {};
   for (let range of ranges) {
     range = structuredClone(range);
     spectrum.ranges[range.label] = range;
-    let fromToIndex = {
+    const fromToIndex = {
       fromIndex: xFindClosestIndex(spectrum.normalized.x, range.from),
       toIndex: xFindClosestIndex(spectrum.normalized.x, range.to),
     };
@@ -31,13 +46,15 @@ export function updateRangesInfo(spectrum, ranges = []) {
     range.correctedIntegration = range.integration - range.baseline;
     range.maxPoint = xyMaxYPoint(spectrum.normalized, fromToIndex);
     range.minPoint = xyMinYPoint(spectrum.normalized, fromToIndex);
-    range.x = spectrum.normalized.x.slice(
-      fromToIndex.fromIndex,
-      fromToIndex.toIndex + 1,
-    );
-    range.y = spectrum.normalized.y.slice(
-      fromToIndex.fromIndex,
-      fromToIndex.toIndex + 1,
-    );
+    range.x =
+      spectrum.normalized.x.slice(
+        fromToIndex.fromIndex,
+        fromToIndex.toIndex + 1,
+      ) || [];
+    range.y =
+      spectrum.normalized.y.slice(
+        fromToIndex.fromIndex,
+        fromToIndex.toIndex + 1,
+      ) || [];
   }
 }
