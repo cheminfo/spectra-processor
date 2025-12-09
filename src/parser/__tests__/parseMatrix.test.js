@@ -7,7 +7,7 @@ import matrixParser from '../parseMatrix.js';
 
 describe('matrix', () => {
   it('small tsv', () => {
-    const text = readFileSync(join(__dirname, 'matrix.tsv'), 'utf8');
+    const text = readFileSync(join(import.meta.dirname, 'matrix.tsv'), 'utf8');
     const result = matrixParser(text);
 
     expect(result.matrix).toHaveLength(4);
@@ -17,7 +17,7 @@ describe('matrix', () => {
   });
 
   it('larger tsv', () => {
-    const text = readFileSync(join(__dirname, 'matrix2.tsv'), 'utf8');
+    const text = readFileSync(join(import.meta.dirname, 'matrix2.tsv'), 'utf8');
     const result = matrixParser(text);
 
     expect(result.matrix).toHaveLength(3080);

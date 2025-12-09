@@ -6,7 +6,7 @@ import { expect, test } from 'vitest';
 import jcampParser from '../parseJcamp.js';
 
 test('jcampParser absorbance', () => {
-  const path = join(__dirname, '../../../testFiles/absorbance.jdx');
+  const path = join(import.meta.dirname, '../../../testFiles/absorbance.jdx');
   const jcamp = readFileSync(path, 'utf8');
   const spectrum = jcampParser(jcamp);
 
@@ -24,7 +24,10 @@ test('jcampParser absorbance', () => {
 });
 
 test('jcampParser transmittance', () => {
-  const path = join(__dirname, '../../../testFiles/transmittance1.jdx');
+  const path = join(
+    import.meta.dirname,
+    '../../../testFiles/transmittance1.jdx',
+  );
   const jcamp = readFileSync(path, 'utf8');
   const spectrum = jcampParser(jcamp);
 

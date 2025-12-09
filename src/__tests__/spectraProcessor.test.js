@@ -12,8 +12,8 @@ const testFilesDir = '../../testFiles/xtc';
 
 describe('SpectraProcessor', () => {
   it('Load set of data', () => {
-    let files = readdirSync(join(__dirname, testFilesDir)).filter((file) =>
-      file.match(/0140|0189|0235/),
+    let files = readdirSync(join(import.meta.dirname, testFilesDir)).filter(
+      (file) => file.match(/0140|0189|0235/),
     );
     let spectraProcessor = new SpectraProcessor();
     spectraProcessor.setNormalization({
@@ -23,7 +23,10 @@ describe('SpectraProcessor', () => {
       filters: [{ name: 'centerMean' }, { name: 'divideBySD' }],
     });
     for (let file of files) {
-      let jcamp = readFileSync(join(__dirname, testFilesDir, file), 'utf8');
+      let jcamp = readFileSync(
+        join(import.meta.dirname, testFilesDir, file),
+        'utf8',
+      );
       spectraProcessor.addFromJcamp(jcamp, { id: file });
     }
 
@@ -48,7 +51,7 @@ describe('SpectraProcessor', () => {
     expect(normalizedTSV).toHaveLength(50412);
     expect(normalizedTSV).toMatchSnapshot();
 
-    writeFileSync(`${__dirname}/normalized.tsv`, normalizedTSV);
+    writeFileSync(`${import.meta.dirname}/normalized.tsv`, normalizedTSV);
 
     spectraProcessor.removeOriginals();
 

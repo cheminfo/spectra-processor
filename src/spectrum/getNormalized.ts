@@ -1,23 +1,46 @@
+import type { FilterXYType } from 'ml-signal-processing';
 import { filterXY } from 'ml-signal-processing';
 import { xMinMaxValues, xyCheck } from 'ml-spectra-processing';
+
+interface NormalizeOptions {
+  from?: number;
+  to?: number;
+  numberOfPoints?: number;
+  filters?: FilterXYType[];
+  exclusions?: any[];
+  applyRangeSelectionFirst?: boolean;
+}
+
+interface AllowedBoundary {
+  x: {
+    min: number;
+    max: number;
+  };
+  y: {
+    min: number;
+    max: number;
+  };
+}
+
+interface NormalizeResult {
+  data: Record<string, any>;
+  allowedBoundary: AllowedBoundary;
+}
 
 /**
  *
  * @private
- * @param {import('cheminfo-types').DataXY} input
- * @param {object} [options={}]
- * @param {number} [options.from=x[0]]
- * @param {number} [options.to=x[x.length-1]]
- * @param {number} [options.numberOfPoints=1024]
- * @param {Array} [options.filters=[]]
- * @param {Array} [options.exclusions=[]]
- * @param {boolean} [options.applyRangeSelectionFirst=false]
+ * @param input
+ * @param [options={}]
  */
-export function getNormalized(input, options = {}) {
+export function getNormalized(
+  input: Record<string, any>,
+  options: NormalizeOptions = {},
+): NormalizeResult {
   xyCheck(input);
 
-  let {
-    filters = [],
+  let { filters = [] } = options;
+  const {
     from = input.x[0],
     to = input.x.at(-1),
     numberOfPoints = 1024,
@@ -26,7 +49,7 @@ export function getNormalized(input, options = {}) {
   } = options;
 
   filters = structuredClone(filters);
-  const equallySpacedFilter = {
+  const equallySpacedFilter: FilterXYType = {
     name: 'equallySpaced',
     options: {
       from,
@@ -45,7 +68,7 @@ export function getNormalized(input, options = {}) {
   const allowedBoundary = {
     x: {
       min: output.x[0],
-      max: output.x.at(-1),
+      max: output.x.at(-1) as number,
     },
     y: xMinMaxValues(output.y),
   };

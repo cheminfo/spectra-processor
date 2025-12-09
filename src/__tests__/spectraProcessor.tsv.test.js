@@ -11,7 +11,7 @@ expect.extend({ toBeDeepCloseTo });
 describe('SpectraProcessor text', () => {
   it('Parse normalized matrix text', () => {
     const normalizedTSV = readFileSync(
-      join(__dirname, 'normalized.tsv'),
+      join(import.meta.dirname, 'normalized.tsv'),
       'utf8',
     );
     const spectraProcessor =

@@ -1,16 +1,7 @@
-import cheminfo from 'eslint-config-cheminfo';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import cheminfo from 'eslint-config-cheminfo-typescript';
 
-export default [
-  ...cheminfo,
-  {
-    languageOptions: {
-      globals: {
-        __dirname: 'readonly',
-      },
-    },
-    rules: {
-      // 'unicorn/no-array-reverse': 'off',
-      'import/extensions': ['error', 'always'],
-    },
-  },
-];
+export default defineConfig(
+  globalIgnores(['coverage', 'lib', 'web', 'dist']),
+  cheminfo,
+);

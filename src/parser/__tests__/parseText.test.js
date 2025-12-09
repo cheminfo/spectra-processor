@@ -6,7 +6,7 @@ import { expect, test } from 'vitest';
 import textParser from '../parseText.js';
 
 test('textParser', () => {
-  const text = readFileSync(join(__dirname, './data.txt'), 'utf8');
+  const text = readFileSync(join(import.meta.dirname, './data.txt'), 'utf8');
   const spectrum = textParser(text, {
     parserOptions: { xColumn: 1, yColumn: 2 },
   });
