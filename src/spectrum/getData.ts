@@ -1,3 +1,4 @@
+import type { DataXY } from 'cheminfo-types';
 import type { XYFilterXOptions } from 'ml-spectra-processing';
 import { xyFilterX } from 'ml-spectra-processing';
 
@@ -16,20 +17,15 @@ export interface DataOptions {
   yFactor?: number;
 }
 
-export interface Data {
-  x: number[];
-  y: number[];
-}
-
 /**
  * Get spectrum data with optional filtering and scaling
  * @param spectrum - The spectrum object containing x and y arrays
  * @param options - Configuration options
  * @returns Data object with filtered/scaled x and y arrays
  */
-export function getData(spectrum: Spectrum, options: DataOptions = {}): Data {
+export function getData(spectrum: Spectrum, options: DataOptions = {}): DataXY {
   const { xFilter = {}, yFactor = 1 } = options;
-  let data: Data = { x: spectrum.x, y: spectrum.y };
+  let data = { x: spectrum.x, y: spectrum.y };
 
   if (xFilter) {
     data = xyFilterX(spectrum, xFilter);

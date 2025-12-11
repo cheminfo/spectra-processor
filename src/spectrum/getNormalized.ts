@@ -1,3 +1,4 @@
+import type { DataXY } from 'cheminfo-types';
 import type { FilterXYType } from 'ml-signal-processing';
 import { filterXY } from 'ml-signal-processing';
 import { xMinMaxValues, xyCheck } from 'ml-spectra-processing';
@@ -11,7 +12,7 @@ interface NormalizeOptions {
   applyRangeSelectionFirst?: boolean;
 }
 
-interface AllowedBoundary {
+export interface AllowedBoundary {
   x: {
     min: number;
     max: number;
@@ -22,8 +23,8 @@ interface AllowedBoundary {
   };
 }
 
-interface NormalizeResult {
-  data: Record<string, any>;
+export interface NormalizeResult {
+  data: DataXY;
   allowedBoundary: AllowedBoundary;
 }
 
@@ -34,7 +35,7 @@ interface NormalizeResult {
  * @param [options={}]
  */
 export function getNormalized(
-  input: Record<string, any>,
+  input: DataXY,
   options: NormalizeOptions = {},
 ): NormalizeResult {
   xyCheck(input);
