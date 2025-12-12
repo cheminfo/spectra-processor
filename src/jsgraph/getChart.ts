@@ -2,7 +2,7 @@ import type { XYFilterXOptions } from 'ml-spectra-processing';
 
 import type { Spectrum } from '../spectrum/Spectrum.js';
 
-import type { ChartData } from './addChartDataStyle.js';
+import type { Chart, ChartData } from './addChartDataStyle.js';
 import { addChartDataStyle } from './addChartDataStyle.js';
 
 export interface GetChartOptions {
@@ -19,10 +19,6 @@ export interface GetChartOptions {
    * Filter options for x values
    */
   xFilter?: XYFilterXOptions;
-}
-
-export interface Chart {
-  data: ChartData[];
 }
 
 /**

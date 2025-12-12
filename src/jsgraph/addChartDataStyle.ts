@@ -20,6 +20,10 @@ export interface ChartData extends DataXY {
   label?: string;
 }
 
+export interface Chart {
+  data: ChartData[];
+}
+
 /**
  * Add chart data styling based on spectrum metadata
  * @param data - Data object to style

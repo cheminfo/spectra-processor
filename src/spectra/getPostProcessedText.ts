@@ -24,8 +24,20 @@ export function getPostProcessedText(
 ): string {
   const { fs = '\t', rs = '\n', postProcessing: postProcessingOptions = {} } =
     options;
+  const data = getPostProcessedData(spectraProcessor, postProcessingOptions);
+  
+  // Only convert if we have valid data
+  if (!data.matrix || !data.x || !data.ids || !data.meta) {
+    return '';
+  }
+  
   return convertToText(
-    getPostProcessedData(spectraProcessor, postProcessingOptions),
+    {
+      matrix: data.matrix,
+      x: data.x,
+      ids: data.ids,
+      meta: data.meta,
+    },
     {
       rs,
       fs,

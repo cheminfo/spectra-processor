@@ -1,5 +1,5 @@
 import type { DoubleArray } from 'cheminfo-types';
-import { scale } from 'chroma-js';
+import chroma from 'chroma-js';
 import type { XYFilterXOptions } from 'ml-spectra-processing';
 import { xMinMaxValues, xyFilterX } from 'ml-spectra-processing';
 
@@ -61,7 +61,7 @@ export function getAutocorrelationChart(
   } = options;
 
   const { min, max } = xMinMaxValues(autocorrelation.y);
-  const colorCallback = scale(['blue', 'cyan', 'yellow', 'red'])
+  const colorCallback = chroma.scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])
     .mode('lch');
 

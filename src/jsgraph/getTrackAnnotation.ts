@@ -1,5 +1,5 @@
-import type { Spectrum } from '../spectrum/Spectrum.js';
 import { getNormalizedData } from '../spectra/getNormalizedData.js';
+import type { Spectrum } from '../spectrum/Spectrum.js';
 
 export interface AnnotationPosition {
   x: number | string;
@@ -64,14 +64,14 @@ export function getTrackAnnotation(
   annotations.push({
     type: 'line',
     position: [
-      { x: `${70}px`, y: `${15 + 15 * line}px` },
-      { x: `${85}px`, y: `${15 + 15 * line}px` },
+      { x: `70px`, y: `${15 + 15 * line}px` },
+      { x: `85px`, y: `${15 + 15 * line}px` },
     ],
     strokeWidth: 0.0000001,
     label: {
       size: 16,
       text: `x: ${normalized.x[index].toPrecision(6)}`,
-      position: { x: `${130}px`, y: `${20 + 15 * line}px` },
+      position: { x: `130px`, y: `${20 + 15 * line}px` },
     },
   });
   line++;
@@ -96,14 +96,14 @@ export function getTrackAnnotation(
     annotations.push({
       type: 'line',
       position: [
-        { x: `${70}px`, y: `${15 + 15 * line}px` },
-        { x: `${85}px`, y: `${15 + 15 * line}px` },
+        { x: `70px`, y: `${15 + 15 * line}px` },
+        { x: `85px`, y: `${15 + 15 * line}px` },
       ],
       strokeColor: meta.color,
       strokeWidth: 2,
       label: {
         text: `${y.toPrecision(4)}${showSpectrumID ? ` - ${id}` : ''}`,
-        position: { x: `${90}px`, y: `${20 + 15 * line}px` },
+        position: { x: `90px`, y: `${20 + 15 * line}px` },
       },
     });
     line++;

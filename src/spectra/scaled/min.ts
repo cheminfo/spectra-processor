@@ -19,10 +19,10 @@ export function min(
   const fromToIndex = getFromToIndex(normalizedTarget.x as DoubleArray, range);
 
   const targetValue = xMinValue(normalizedTarget.y as DoubleArray, fromToIndex);
-  const values = matrix.map((row) => xMinValue(row as DoubleArray, fromToIndex));
+  const values = matrix.map((row) => xMinValue(row, fromToIndex));
 
   for (let i = 0; i < matrix.length; i++) {
     const factor = targetValue / values[i];
-    matrix[i] = xMultiply(matrix[i] as DoubleArray, factor);
+    matrix[i] = xMultiply(matrix[i], factor);
   }
 }

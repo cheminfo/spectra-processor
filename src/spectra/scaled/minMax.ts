@@ -27,8 +27,8 @@ export function minMax(
 
   const values = matrix.map((row) => {
     return {
-      min: xMinValue(row as DoubleArray, fromToIndex),
-      max: xMaxValue(row as DoubleArray, fromToIndex),
+      min: xMinValue(row, fromToIndex),
+      max: xMaxValue(row, fromToIndex),
     };
   });
   for (let i = 0; i < matrix.length; i++) {

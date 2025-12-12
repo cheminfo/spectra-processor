@@ -201,7 +201,7 @@ export class SpectraProcessor {
   /**
    * Returns an object containing 4 parameters with the normalized data
    * @param options - Options for normalization
-   * @returns { ids:[], matrix:[Array], meta:[object], x:[] }
+   * @returns
    */
   getNormalizedData(options: GetNormalizedDataOptions = {}) {
     const { ids } = options;
@@ -242,7 +242,7 @@ export class SpectraProcessor {
   /**
    * Returns an object containing 4 parameters with the scaled data
    * @param options - Options for post-processing
-   * @returns { ids:[], matrix:[Array], meta:[object], x:[] }
+   * @returns
    */
   getPostProcessedData(options?: GetPostProcessedDataOptions) {
     return getPostProcessedData(this, options);
@@ -259,7 +259,7 @@ export class SpectraProcessor {
       return;
     }
     const parsed = parseText(text, options);
-    const meta = { ...parsed.data.meta, ...options.meta };
+    const meta = { ...options.meta };
     this.addFromData(parsed.data, { meta, id: options.id });
   }
 
@@ -299,7 +299,7 @@ export class SpectraProcessor {
    * @param options - Options for classification
    * @returns Array of class numbers
    */
-  getClasses(options?: GetClassesOptions) {
+  getClasses(options?: GetClassesOptions & GetMetadataOptions) {
     return getClasses(this.getMetadata(options), options);
   }
 
@@ -308,7 +308,7 @@ export class SpectraProcessor {
    * @param options - Options for label extraction
    * @returns Array of class labels
    */
-  getClassLabels(options?: GetClassLabelsOptions) {
+  getClassLabels(options?: GetClassLabelsOptions & GetMetadataOptions) {
     return getClassLabels(this.getMetadata(options), options);
   }
 
@@ -332,7 +332,7 @@ export class SpectraProcessor {
     const id = options.id || Math.random().toString(36).slice(2, 10);
     let index = this.getSpectrumIndex(id);
     if (index === undefined) index = this.spectra.length;
-    const spectrum = new Spectrum(data.x, data.y, id, {
+    const spectrum = new Spectrum(data.x as number[], data.y as number[], id, {
       meta: options.meta,
       normalized: options.normalized,
       normalization: this.normalization,
@@ -475,7 +475,7 @@ export class SpectraProcessor {
    * @param options - Chart options
    * @returns Chart object
    */
-  getBoxPlotChart(options: GetBoxPlotChartOptions = {}) {
+  getBoxPlotChart(options: GetBoxPlotChartOptions & GetNormalizedDataOptions = {}) {
     const normalizedData = this.getNormalizedData(options);
     return getBoxPlotChart(normalizedData, options);
   }
@@ -495,7 +495,7 @@ export class SpectraProcessor {
    * @param options - Chart options
    * @returns Chart object
    */
-  getNormalizedChart(options: GetNormalizedChartOptions = {}) {
+  getNormalizedChart(options: GetNormalizedChartOptions & GetNormalizedDataOptions = {}) {
     const { ids, ...chartOptions } = options;
     const spectra = this.getSpectra(ids);
     return getNormalizedChart(spectra, chartOptions);
@@ -514,9 +514,11 @@ export class SpectraProcessor {
     const memoryInfo: MemoryStats = { original: 0, normalized: 0, total: 0 };
     for (const spectrum of this.spectra) {
       const memory = spectrum.memory;
-      memoryInfo.original += memory.original;
-      memoryInfo.normalized += memory.normalized;
-      memoryInfo.total += memory.total;
+      if (memory) {
+        memoryInfo.original += memory.original;
+        memoryInfo.normalized += memory.normalized;
+        memoryInfo.total += memory.total;
+      }
     }
     return {
       ...memoryInfo,
@@ -558,17 +560,19 @@ export class SpectraProcessor {
       y: { min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY },
     };
     for (const spectrum of this.spectra) {
-      if (spectrum.normalizedAllowedBoundary.x.min > boundary.x.min) {
-        boundary.x.min = spectrum.normalizedAllowedBoundary.x.min;
-      }
-      if (spectrum.normalizedAllowedBoundary.x.max < boundary.x.max) {
-        boundary.x.max = spectrum.normalizedAllowedBoundary.x.max;
-      }
-      if (spectrum.normalizedAllowedBoundary.y.min < boundary.y.min) {
-        boundary.y.min = spectrum.normalizedAllowedBoundary.y.min;
-      }
-      if (spectrum.normalizedAllowedBoundary.y.max > boundary.y.max) {
-        boundary.y.max = spectrum.normalizedAllowedBoundary.y.max;
+      if (spectrum.normalizedAllowedBoundary) {
+        if (spectrum.normalizedAllowedBoundary.x.min > boundary.x.min) {
+          boundary.x.min = spectrum.normalizedAllowedBoundary.x.min;
+        }
+        if (spectrum.normalizedAllowedBoundary.x.max < boundary.x.max) {
+          boundary.x.max = spectrum.normalizedAllowedBoundary.x.max;
+        }
+        if (spectrum.normalizedAllowedBoundary.y.min < boundary.y.min) {
+          boundary.y.min = spectrum.normalizedAllowedBoundary.y.min;
+        }
+        if (spectrum.normalizedAllowedBoundary.y.max > boundary.y.max) {
+          boundary.y.max = spectrum.normalizedAllowedBoundary.y.max;
+        }
       }
     }
     return boundary;
@@ -578,11 +582,12 @@ export class SpectraProcessor {
    * Create SpectraProcessor from normalized TSV
    * @param text - TSV text
    * @param options - Parsing options
+   * @param options.fs
    * @returns SpectraProcessor instance
    */
   static fromNormalizedMatrix(
     text: string,
-    options: { separator?: string } = {},
+    options: { fs?: string } = {},
   ): SpectraProcessor {
     const parsed = parseMatrix(text, options);
     if (!parsed) {

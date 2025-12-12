@@ -1,6 +1,7 @@
 import type { DoubleArray } from 'cheminfo-types';
-import { scale } from 'chroma-js';
+import chroma from 'chroma-js';
 import { Matrix } from 'ml-matrix';
+import type { DoubleMatrix } from 'ml-spectra-processing';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
 import type { NormalizedData } from '../spectra/getBoxPlotData.js';
@@ -177,11 +178,11 @@ export function getBoxPlotChart(
   return colorSpectrum;
 }
 
-function getColors(dataset: number[][]): string[] {
-  const matrix = new Matrix(dataset);
+function getColors(dataset: DoubleMatrix): string[] {
+  const matrix = new Matrix(dataset as number[][]);
   const stdevs = matrix.standardDeviation('column');
   const { min, max } = xMinMaxValues(stdevs);
-  const colorCallback = scale(['blue', 'cyan', 'yellow', 'red'])
+  const colorCallback = chroma.scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])
     .mode('lch');
 

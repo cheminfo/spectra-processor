@@ -19,7 +19,7 @@ export function getPostProcessedChart(
   const chart: Chart = {
     data: [],
   };
-  if (!scaled || !scaled.matrix) return chart;
+  if (!scaled?.matrix || !scaled.x || !scaled.meta || !scaled.ids) return chart;
 
   for (let i = 0; i < scaled.matrix.length; i++) {
     const data: ChartData = {

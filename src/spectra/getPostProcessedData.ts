@@ -1,6 +1,5 @@
 import type { DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix } from 'ml-spectra-processing';
-import type { PointWithIndex, XYFilterXOptions } from 'ml-spectra-processing';
+import type { DoubleMatrix, PointWithIndex, XYFilterXOptions } from 'ml-spectra-processing';
 import {
   matrixCenterZMean,
   matrixPQN,
@@ -93,7 +92,8 @@ export function getPostProcessedData(
 ): PostProcessedDataResult {
   const optionsHash = hash(options);
 
-  if (!spectraProcessor.spectra || !spectraProcessor.spectra[0]) return {};
+  if (!spectraProcessor.spectra || spectraProcessor.spectra.length === 0)
+    {return {};}
   const { scale = {}, ids, ranges, calculations, filters = [] } = options;
 
   const { range, targetID, relative, method = '' } = scale;
@@ -113,7 +113,7 @@ export function getPostProcessedData(
     weakMap.set(spectrum.normalized, true);
   }
 
-  let normalizedData = getNormalizedData(spectra);
+  const normalizedData = getNormalizedData(spectra);
 
   for (const filter of filters) {
     switch (filter.name) {
@@ -144,8 +144,12 @@ export function getPostProcessedData(
   }
 
   const normalizedTarget = targetID
-    ? spectraProcessor.getSpectrum(targetID)!.normalized
+    ? spectraProcessor.getSpectrum(targetID)?.normalized
     : spectraProcessor.spectra[0].normalized;
+
+  if (!normalizedTarget) {
+    throw new Error('No normalized target found');
+  }
 
   if (method) {
     switch (method.toLowerCase()) {
@@ -175,24 +179,27 @@ export function getPostProcessedData(
     }
   }
 
-  let result: PostProcessedDataResult = normalizedData;
+  const result: PostProcessedDataResult = normalizedData;
 
   if (ranges) {
     result.ranges = [];
-    for (let i = 0; i < normalizedData.matrix.length; i++) {
+    for (const spectrum of normalizedData.matrix) {
       const rangesCopy = structuredClone(ranges);
-      const yNormalized = normalizedData.matrix[i];
+      const yNormalized = spectrum;
       const resultRanges: Record<string, RangeWithLabel> = {};
       result.ranges.push(resultRanges);
       for (const currentRange of rangesCopy) {
         if (currentRange.label) {
-          const fromToIndex = getFromToIndex(normalizedTarget.x as DoubleArray, currentRange);
+          const fromToIndex = getFromToIndex(
+            normalizedTarget.x as DoubleArray,
+            currentRange,
+          );
 
           const deltaX = normalizedTarget.x[1] - normalizedTarget.x[0];
 
-          currentRange.integration = xSum(yNormalized as DoubleArray, fromToIndex) * deltaX;
+          currentRange.integration = xSum(yNormalized, fromToIndex) * deltaX;
           currentRange.maxPoint = xyMaxYPoint(
-            { x: normalizedData.x, y: yNormalized as DoubleArray },
+            { x: normalizedData.x, y: yNormalized },
             fromToIndex,
           );
           resultRanges[currentRange.label] = currentRange;

@@ -1,9 +1,7 @@
-export interface CategoryStats {
-  [category: string]: {
+export type CategoryStats = Record<string, {
     classNumber: number;
     counter: number;
-  };
-}
+  }>;
 
 export interface GetCategoriesStatsOptions {
   /**

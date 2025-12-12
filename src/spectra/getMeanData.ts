@@ -1,6 +1,6 @@
 import type { DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix } from 'ml-spectra-processing';
 import { Matrix } from 'ml-matrix';
+import type { DoubleMatrix } from 'ml-spectra-processing';
 
 export interface NormalizedData {
   x: DoubleArray;
