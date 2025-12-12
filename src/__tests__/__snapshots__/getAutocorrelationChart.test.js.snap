@@ -3,10 +3,10 @@
 exports[`getAutocorrelationChart > check jsgraph chart 1`] = `
 {
   "color": [
-    "rgb(204,204,204)",
-    "rgb(204,204,204)",
-    "rgb(204,204,204)",
-    "rgb(204,204,204)",
+    "rgb(255,0,0)",
+    "rgb(255,0,0)",
+    "rgb(255,35,0)",
+    "rgb(0,0,255)",
   ],
   "styles": {
     "selected": {

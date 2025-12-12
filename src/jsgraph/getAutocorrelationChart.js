@@ -26,9 +26,13 @@ export function getAutocorrelationChart(spectraProcessor, index, options = {}) {
     .domain([min, max])
     .mode('lch');
 
-  let colorScale = autocorrelation.y.map(
-    (y) => `rgb(${colorCallback(y).rgb().join(',')})`,
-  );
+  // annoying but it seems the color library does not handle TypedArray well
+
+  let ys = ArrayBuffer.isView(autocorrelation.y)
+    ? Array.from(autocorrelation.y)
+    : autocorrelation.y;
+
+  let colorScale = ys.map((y) => `rgb(${colorCallback(y).rgb().join(',')})`);
 
   let mean = spectraProcessor.getMeanData({ ids });
   if (xFilter) {
