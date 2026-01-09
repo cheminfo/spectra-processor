@@ -181,6 +181,7 @@ function getColors(dataset: DoubleMatrix): string[] {
   const matrix = new Matrix(dataset as number[][]);
   const stdevs = matrix.standardDeviation('column');
   const { min, max } = xMinMaxValues(stdevs);
+  // eslint-disable-next-line import/no-named-as-default-member
   const colorCallback = chroma
     .scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])

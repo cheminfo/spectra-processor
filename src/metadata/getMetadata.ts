@@ -4,7 +4,7 @@ export interface GetMetadataOptions {
   /**
    * IDs of selected spectra
    */
-  ids?: unknown[];
+  ids?: string[];
 }
 
 /**

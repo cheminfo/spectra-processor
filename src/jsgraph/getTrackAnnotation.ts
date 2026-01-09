@@ -22,7 +22,7 @@ export interface GetTrackAnnotationOptions {
   /**
    * IDs of the spectra to select
    */
-  ids?: unknown[];
+  ids?: string[];
   /**
    * Show spectrum ID in annotations
    * @default true

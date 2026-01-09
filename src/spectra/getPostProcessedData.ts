@@ -72,7 +72,7 @@ export interface GetPostProcessedDataOptions extends GetNormalizedDataOptions {
 }
 
 export interface PostProcessedDataResult {
-  ids?: unknown[];
+  ids?: string[];
   matrix?: DoubleMatrix;
   meta?: Array<Record<string, any>>;
   x?: DoubleArray;
@@ -195,10 +195,7 @@ export function getPostProcessedData(
       result.ranges.push(resultRanges);
       for (const currentRange of rangesCopy) {
         if (currentRange.label) {
-          const fromToIndex = xGetFromToIndex(
-            normalizedTarget.x,
-            currentRange,
-          );
+          const fromToIndex = xGetFromToIndex(normalizedTarget.x, currentRange);
 
           const deltaX = normalizedTarget.x[1] - normalizedTarget.x[0];
 
@@ -219,7 +216,7 @@ export function getPostProcessedData(
     });
     const parameters = Object.keys(result.ranges[0]);
     for (const calculation of calculations) {
-      // eslint-disable-next-line no-new-func
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
       const callback = new Function(
         ...parameters,
         `return ${calculation.formula}`,

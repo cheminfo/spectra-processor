@@ -18,7 +18,7 @@ export interface GetAutocorrelationChartOptions {
   /**
    * IDs of the spectra to select, by default all
    */
-  ids?: unknown[];
+  ids?: string[];
   /**
    * Filter options for x values
    */
@@ -61,6 +61,7 @@ export function getAutocorrelationChart(
   } = options;
 
   const { min, max } = xMinMaxValues(autocorrelation.y);
+  // eslint-disable-next-line import/no-named-as-default-member
   const colorCallback = chroma
     .scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])

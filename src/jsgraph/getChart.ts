@@ -9,7 +9,7 @@ export interface GetChartOptions {
   /**
    * List of spectra ids, by default all
    */
-  ids?: unknown[];
+  ids?: string[];
   /**
    * Y-axis multiplication factor
    * @default 1

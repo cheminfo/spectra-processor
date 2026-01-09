@@ -16,7 +16,7 @@ export interface ConvertToTextOptions {
 export interface DataWithMeta {
   matrix: DoubleMatrix;
   meta: Array<Record<string, any>>;
-  ids: unknown[];
+  ids: string[];
   x: DoubleArray;
 }
 
@@ -50,7 +50,7 @@ export function convertToText(
   lines.push(line.join(fs));
 
   for (let i = 0; i < ids.length; i++) {
-    line = [ids[i] as string];
+    line = [ids[i]];
     for (const key of allKeys) {
       line.push(removeSpecialCharacters(meta[i][key]));
     }
