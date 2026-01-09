@@ -1,15 +1,15 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import { describe, expect, it } from 'vitest';
 
-import { getNormalized } from '../getNormalized.js';
+import { getNormalized } from '../getNormalized.ts';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('getNormalized', () => {
   it('no filters', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let result = getNormalized(
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+    const result = getNormalized(
       {
         x,
         y,
@@ -26,9 +26,9 @@ describe('getNormalized', () => {
   });
 
   it('with growingX', () => {
-    let x = [0, 1, 1, 2, 1, 3, 4];
-    let y = [0, 1, 2, 3, 4, 5, 6];
-    let result = getNormalized(
+    const x = [0, 1, 1, 2, 1, 3, 4];
+    const y = [0, 1, 2, 3, 4, 5, 6];
+    const result = getNormalized(
       {
         x,
         y,
@@ -79,9 +79,9 @@ describe('getNormalized', () => {
   });
 
   it('with align', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-    let y = [0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 0, 0, 0];
-    let result = getNormalized(
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    const y = [0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 0, 0, 0];
+    const result = getNormalized(
       {
         x,
         y,
@@ -109,9 +109,9 @@ describe('getNormalized', () => {
   });
 
   it('with SNV', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let result = getNormalized(
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+    const result = getNormalized(
       {
         x,
         y,

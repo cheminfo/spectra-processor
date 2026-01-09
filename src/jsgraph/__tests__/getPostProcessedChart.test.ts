@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { SpectraProcessor } from '../../SpectraProcessor.js';
-import { getPostProcessedChart } from '../getPostProcessedChart.js';
+import { SpectraProcessor } from '../../SpectraProcessor.ts';
+import { getPostProcessedChart } from '../getPostProcessedChart.ts';
 
 test('getPostProcessedChart', () => {
   const spectraProcessor = new SpectraProcessor({
@@ -16,7 +16,7 @@ test('getPostProcessedChart', () => {
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [2, 4, 6, 8] }, { id: 2 });
   spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 6, 9, 0] }, { id: 3 });
 
-  let result = getPostProcessedChart(spectraProcessor);
+  const result = getPostProcessedChart(spectraProcessor);
 
   expect(result).toHaveProperty('data');
 });

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { getData } from '../getData.js';
+import { getData } from '../getData.ts';
 
 describe('getData', () => {
   it('check from to and exclusions', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let result = getData(
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+    const result = getData(
       {
         x,
         y,
@@ -28,9 +28,9 @@ describe('getData', () => {
   });
 
   it('check yFactor', () => {
-    let x = [0, 1, 2, 3, 4];
-    let y = [1, 2, 3, 4, 5];
-    let result = getData(
+    const x = [0, 1, 2, 3, 4];
+    const y = [1, 2, 3, 4, 5];
+    const result = getData(
       {
         x,
         y,

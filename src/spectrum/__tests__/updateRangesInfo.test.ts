@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { updateRangesInfo } from '../updateRangesInfo.js';
+import { updateRangesInfo } from '../updateRangesInfo.ts';
 
 describe('updateRangesInfo', () => {
   it('simple case', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let spectrum = {
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+    const spectrum = {
       normalized: {
         x,
         y,

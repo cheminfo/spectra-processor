@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getBoxPlotChart } from '../getBoxPlotChart.js';
+import { getBoxPlotChart } from '../getBoxPlotChart.ts';
 
 const normalizedData = {
   ids: [undefined, undefined, undefined, undefined, undefined],
@@ -16,7 +16,7 @@ const normalizedData = {
 };
 
 test('getBoxPlotChart', () => {
-  let result = getBoxPlotChart(normalizedData, { medianStrokeColor: '#000' });
+  const result = getBoxPlotChart(normalizedData, { medianStrokeColor: '#000' });
 
   expect(result).toMatchSnapshot();
 });

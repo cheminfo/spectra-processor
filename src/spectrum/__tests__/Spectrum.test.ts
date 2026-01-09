@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { Spectrum } from '../Spectrum.js';
+import { Spectrum } from '../Spectrum.ts';
 
 describe('Spectrum', () => {
   it('removing the original data', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let result = new Spectrum(x, y, 'test', {
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+    const result = new Spectrum(x, y, 'test', {
       normalization: {
         numberOfPoints: 6,
       },
@@ -26,9 +26,9 @@ describe('Spectrum', () => {
   });
 
   it('keeping the original data', () => {
-    let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    let y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
-    let spectrum = new Spectrum(x, y, 'test', {
+    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
+    const spectrum = new Spectrum(x, y, 'test', {
       normalization: {
         numberOfPoints: 6,
       },
