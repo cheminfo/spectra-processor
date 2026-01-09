@@ -1,8 +1,5 @@
-import type { DataXY, DoubleArray } from 'cheminfo-types';
-import type {
-  DoubleMatrix,
-  XGetFromToIndexOptions,
-} from 'ml-spectra-processing';
+import type { DataXY, DoubleArray, DoubleMatrix } from 'cheminfo-types';
+import type { XGetFromToIndexOptions } from 'ml-spectra-processing';
 import { xGetFromToIndex, xMaxValue, xMultiply } from 'ml-spectra-processing';
 
 /**

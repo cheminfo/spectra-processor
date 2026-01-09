@@ -1,4 +1,4 @@
-import type { DataXY, NumberArray } from 'cheminfo-types';
+import type { DataXY, DoubleArray, NumberArray } from 'cheminfo-types';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
 import type { RangeInfo } from './RangeInfo.ts';
@@ -31,7 +31,7 @@ export interface MemoryStats {
 export interface SpectrumOptions {
   meta?: Record<string, any>;
   normalization?: Record<string, any>;
-  normalized?: DataXY;
+  normalized?: DataXY<DoubleArray>;
 }
 
 /**
@@ -48,7 +48,7 @@ export class Spectrum {
   id: string;
   meta: Record<string, any>;
   normalizedBoundary: AxisBoundary;
-  normalized: DataXY;
+  normalized: DataXY<DoubleArray>;
   normalizedAllowedBoundary?: AllowedBoundary;
   memory?: MemoryStats;
   ranges?: Record<string, any>;
@@ -149,7 +149,7 @@ export class Spectrum {
    * Update normalization
    * @param normalization - normalization configuration
    */
-  updateNormalization(normalization: Record<string, any>): DataXY {
+  updateNormalization(normalization: Record<string, any>): DataXY<DoubleArray> {
     const result = getNormalized(this, normalization);
     this.normalized = result.data;
     this.normalizedAllowedBoundary = result.allowedBoundary;

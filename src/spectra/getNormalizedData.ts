@@ -1,5 +1,4 @@
-import type { DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix } from 'ml-spectra-processing';
+import type { DoubleArray, DoubleMatrix } from 'cheminfo-types';
 
 import type { Spectrum } from '../spectrum/Spectrum.js';
 
@@ -7,14 +6,14 @@ export interface GetNormalizedDataOptions {
   /**
    * IDs of selected spectra
    */
-  ids?: unknown[];
+  ids?: string[];
 }
 
 export interface NormalizedDataResult {
-  ids: unknown[];
-  matrix: DoubleMatrix;
+  ids: string[];
   meta: Array<Record<string, any>>;
   x: DoubleArray;
+  matrix: DoubleMatrix;
 }
 
 /**
@@ -31,18 +30,18 @@ export function getNormalizedData(
 
   const matrix: DoubleMatrix = [];
   const meta: Array<Record<string, any>> = [];
-  const currentIDs: unknown[] = [];
+  const currentIDs: string[] = [];
   let x: DoubleArray = [];
 
   if (Array.isArray(spectra) && spectra.length > 0) {
     for (const spectrum of spectra) {
       if (!ids || ids.includes(spectrum.id)) {
         currentIDs.push(spectrum.id);
-        matrix.push(spectrum.normalized.y as DoubleArray);
+        matrix.push(spectrum.normalized.y);
         meta.push(spectrum.meta);
       }
     }
-    x = spectra[0].normalized.x as DoubleArray;
+    x = spectra[0].normalized.x;
   }
 
   return { ids: currentIDs, matrix, meta, x };

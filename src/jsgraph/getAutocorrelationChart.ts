@@ -28,7 +28,7 @@ export interface GetAutocorrelationChartOptions {
 export interface ColorSpectrum {
   type: string;
   x: DoubleArray;
-  y: number[];
+  y: DoubleArray;
   color: string[];
   styles: {
     unselected: {

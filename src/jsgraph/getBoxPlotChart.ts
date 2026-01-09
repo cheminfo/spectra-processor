@@ -1,7 +1,6 @@
-import type { DoubleArray } from 'cheminfo-types';
+import type { DoubleArray, DoubleMatrix } from 'cheminfo-types';
 import chroma from 'chroma-js';
 import { Matrix } from 'ml-matrix';
-import type { DoubleMatrix } from 'ml-spectra-processing';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
 import type { NormalizedData } from '../spectra/getBoxPlotData.js';

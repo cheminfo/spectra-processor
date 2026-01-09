@@ -1,4 +1,9 @@
-import type { DataXMatrix, DataXY } from 'cheminfo-types';
+import type {
+  DataXMatrix,
+  DataXY,
+  DoubleArray,
+  DoubleMatrix,
+} from 'cheminfo-types';
 import { Matrix } from 'ml-matrix';
 
 /**
@@ -6,7 +11,9 @@ import { Matrix } from 'ml-matrix';
  * @param normalized - Normalized data with x and matrix
  * @returns Mean data with x and y values
  */
-export function getMeanData(normalized: DataXMatrix): DataXY {
+export function getMeanData(
+  normalized: DataXMatrix<DoubleArray, DoubleMatrix>,
+): DataXY<DoubleArray> {
   const matrix = new Matrix(normalized.matrix);
   return {
     x: normalized.x,

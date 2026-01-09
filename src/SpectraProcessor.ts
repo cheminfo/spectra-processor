@@ -1,4 +1,9 @@
-import type { DataXY } from 'cheminfo-types';
+import type {
+  DataXMatrix,
+  DataXY,
+  DoubleArray,
+  DoubleMatrix,
+} from 'cheminfo-types';
 import { xFindClosestIndex } from 'ml-spectra-processing';
 
 import type { GetAutocorrelationChartOptions } from './jsgraph/getAutocorrelationChart.js';
@@ -29,7 +34,6 @@ import parseText from './parser/parseText.js';
 import type { AutocorrelationResult } from './spectra/getAutocorrelation.js';
 import { getAutocorrelation } from './spectra/getAutocorrelation.js';
 import { getBoxPlotData } from './spectra/getBoxPlotData.js';
-import type { MeanData } from './spectra/getMeanData.js';
 import { getMeanData } from './spectra/getMeanData.js';
 import type { GetNormalizedDataOptions } from './spectra/getNormalizedData.js';
 import { getNormalizedData } from './spectra/getNormalizedData.js';
@@ -76,7 +80,7 @@ export interface AddFromDataOptions {
   /**
    * Pre-normalized data
    */
-  normalized?: DataXY;
+  normalized?: DataXY<DoubleArray>;
 }
 
 export interface AddFromTextOptions extends ParseTextOptions {
@@ -196,7 +200,7 @@ export class SpectraProcessor {
    * @param options - Options for mean calculation
    * @returns Mean data
    */
-  getMeanData(options?: GetNormalizedDataOptions): MeanData {
+  getMeanData(options?: GetNormalizedDataOptions): DataXY<DoubleArray> {
     return getMeanData(this.getNormalizedData(options));
   }
 
@@ -205,7 +209,9 @@ export class SpectraProcessor {
    * @param options - Options for normalization
    * @returns
    */
-  getNormalizedData(options: GetNormalizedDataOptions = {}) {
+  getNormalizedData(
+    options: GetNormalizedDataOptions = {},
+  ): DataXMatrix<DoubleArray, DoubleMatrix> {
     const { ids } = options;
     const spectra = this.getSpectra(ids);
     return getNormalizedData(spectra);

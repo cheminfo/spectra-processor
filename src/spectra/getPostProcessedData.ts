@@ -196,7 +196,7 @@ export function getPostProcessedData(
       for (const currentRange of rangesCopy) {
         if (currentRange.label) {
           const fromToIndex = xGetFromToIndex(
-            normalizedTarget.x as DoubleArray,
+            normalizedTarget.x,
             currentRange,
           );
 
