@@ -1,7 +1,10 @@
-export type CategoryStats = Record<string, {
+export type CategoryStats = Record<
+  string,
+  {
     classNumber: number;
     counter: number;
-  }>;
+  }
+>;
 
 export interface GetCategoriesStatsOptions {
   /**

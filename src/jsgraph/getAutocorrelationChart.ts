@@ -61,7 +61,8 @@ export function getAutocorrelationChart(
   } = options;
 
   const { min, max } = xMinMaxValues(autocorrelation.y);
-  const colorCallback = chroma.scale(['blue', 'cyan', 'yellow', 'red'])
+  const colorCallback = chroma
+    .scale(['blue', 'cyan', 'yellow', 'red'])
     .domain([min, max])
     .mode('lch');
 

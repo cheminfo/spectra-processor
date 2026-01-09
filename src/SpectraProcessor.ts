@@ -39,7 +39,7 @@ import type { GetPostProcessedDataOptions } from './spectra/getPostProcessedData
 import { getPostProcessedData } from './spectra/getPostProcessedData.js';
 import type { GetPostProcessedTextOptions } from './spectra/getPostProcessedText.js';
 import { getPostProcessedText } from './spectra/getPostProcessedText.js';
-import type { AxisBoundary, MemoryStats, SpectrumOptions } from './spectrum/Spectrum.js';
+import type { AxisBoundary, MemoryStats } from './spectrum/Spectrum.js';
 import { Spectrum } from './spectrum/Spectrum.js';
 
 export interface NormalizationOptions extends NormalizationFilter {
@@ -184,9 +184,11 @@ export class SpectraProcessor {
     let actualIndex = index;
     if (actualIndex === undefined && x !== undefined) {
       actualIndex = xFindClosestIndex(normalizedData.x, x);
+    } else {
+      actualIndex = 0;
     }
 
-    return getAutocorrelation(normalizedData, actualIndex!);
+    return getAutocorrelation(normalizedData, actualIndex);
   }
 
   /**
@@ -475,7 +477,9 @@ export class SpectraProcessor {
    * @param options - Chart options
    * @returns Chart object
    */
-  getBoxPlotChart(options: GetBoxPlotChartOptions & GetNormalizedDataOptions = {}) {
+  getBoxPlotChart(
+    options: GetBoxPlotChartOptions & GetNormalizedDataOptions = {},
+  ) {
     const normalizedData = this.getNormalizedData(options);
     return getBoxPlotChart(normalizedData, options);
   }
@@ -495,7 +499,9 @@ export class SpectraProcessor {
    * @param options - Chart options
    * @returns Chart object
    */
-  getNormalizedChart(options: GetNormalizedChartOptions & GetNormalizedDataOptions = {}) {
+  getNormalizedChart(
+    options: GetNormalizedChartOptions & GetNormalizedDataOptions = {},
+  ) {
     const { ids, ...chartOptions } = options;
     const spectra = this.getSpectra(ids);
     return getNormalizedChart(spectra, chartOptions);

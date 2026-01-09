@@ -6,8 +6,7 @@ import type { ConvertToTextOptions } from './util/convertToText.js';
 import { convertToText } from './util/convertToText.js';
 
 export interface GetNormalizedTextOptions
-  extends GetNormalizedDataOptions,
-    ConvertToTextOptions {}
+  extends GetNormalizedDataOptions, ConvertToTextOptions {}
 
 /**
  * Get normalized data as text

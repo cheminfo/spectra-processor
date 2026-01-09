@@ -1,5 +1,9 @@
 import type { DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix, PointWithIndex, XYFilterXOptions } from 'ml-spectra-processing';
+import type {
+  DoubleMatrix,
+  PointWithIndex,
+  XYFilterXOptions,
+} from 'ml-spectra-processing';
 import {
   matrixCenterZMean,
   matrixPQN,
@@ -92,8 +96,9 @@ export function getPostProcessedData(
 ): PostProcessedDataResult {
   const optionsHash = hash(options);
 
-  if (!spectraProcessor.spectra || spectraProcessor.spectra.length === 0)
-    {return {};}
+  if (!spectraProcessor.spectra || spectraProcessor.spectra.length === 0) {
+    return {};
+  }
   const { scale = {}, ids, ranges, calculations, filters = [] } = options;
 
   const { range, targetID, relative, method = '' } = scale;

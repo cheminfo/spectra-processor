@@ -22,15 +22,18 @@ export function getPostProcessedText(
   spectraProcessor: SpectraProcessor,
   options: GetPostProcessedTextOptions = {},
 ): string {
-  const { fs = '\t', rs = '\n', postProcessing: postProcessingOptions = {} } =
-    options;
+  const {
+    fs = '\t',
+    rs = '\n',
+    postProcessing: postProcessingOptions = {},
+  } = options;
   const data = getPostProcessedData(spectraProcessor, postProcessingOptions);
-  
+
   // Only convert if we have valid data
   if (!data.matrix || !data.x || !data.ids || !data.meta) {
     return '';
   }
-  
+
   return convertToText(
     {
       matrix: data.matrix,
