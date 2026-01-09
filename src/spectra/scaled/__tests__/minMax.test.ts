@@ -13,7 +13,7 @@ test('recale minMax', () => {
     [3, 5, 7, 9],
   ];
 
-  let normalizedTarget = { x: [0, 1, 2, 3], y: [1, 2, 3, 4] };
+  const normalizedTarget = { x: [0, 1, 2, 3], y: [1, 2, 3, 4] };
 
   minMax(matrix, normalizedTarget, { from: 0.9, to: 2.1 });
 

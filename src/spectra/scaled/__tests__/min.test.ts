@@ -1,20 +1,20 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 import { expect, test } from 'vitest';
 
-import { integration } from '../integration.js';
+import { min } from '../min.js';
 
 expect.extend({ toBeDeepCloseTo });
 
-test('recale integration', () => {
+test('recale min', () => {
   let matrix = [
     [1, 2, 3, 4],
     [2, 3, 4, 5],
     [3, 4, 5, 6],
   ];
 
-  let normalizedTarget = { x: [0, 1, 2, 3], y: [2, 3, 4, 5] };
+  const normalizedTarget = { x: [0, 1, 2, 3], y: [1, 2, 3, 4] };
 
-  integration(matrix, normalizedTarget, {
+  min(matrix, normalizedTarget, {
     from: 0.9,
     to: 2.1,
   });
@@ -23,9 +23,9 @@ test('recale integration', () => {
 
   expect(matrix).toBeDeepCloseTo(
     [
-      [1.4, 2.8, 4.2, 5.6],
-      [2, 3, 4, 5],
-      [2.33, 3.11, 3.89, 4.67],
+      [1, 2, 3, 4],
+      [1.33, 2, 2.67, 3.33],
+      [1.5, 2, 2.5, 3],
     ],
     2,
   );

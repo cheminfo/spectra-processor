@@ -12,7 +12,7 @@ test('recale max', () => {
     [3, 4, 5, 6],
   ];
 
-  let normalizedTarget = { x: [0, 1, 2, 3], y: [1, 2, 3, 4] };
+  const normalizedTarget = { x: [0, 1, 2, 3], y: [1, 2, 3, 4] };
 
   max(matrix, normalizedTarget, {
     from: 0.9,
