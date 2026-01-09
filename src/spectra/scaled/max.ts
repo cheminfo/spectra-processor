@@ -1,9 +1,9 @@
 import type { DataXY, DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix } from 'ml-spectra-processing';
-import { xMaxValue, xMultiply } from 'ml-spectra-processing';
-
-import type { Range } from './getFromToIndex.js';
-import { getFromToIndex } from './getFromToIndex.js';
+import type {
+  DoubleMatrix,
+  XGetFromToIndexOptions,
+} from 'ml-spectra-processing';
+import { xGetFromToIndex, xMaxValue, xMultiply } from 'ml-spectra-processing';
 
 /**
  * Scale matrix rows to match maximum value of target
@@ -14,9 +14,9 @@ import { getFromToIndex } from './getFromToIndex.js';
 export function max(
   matrix: DoubleMatrix,
   normalizedTarget: DataXY,
-  range: Range = {},
+  range: XGetFromToIndexOptions = {},
 ): void {
-  const fromToIndex = getFromToIndex(normalizedTarget.x as DoubleArray, range);
+  const fromToIndex = xGetFromToIndex(normalizedTarget.x as DoubleArray, range);
 
   const targetValue = xMaxValue(normalizedTarget.y as DoubleArray, fromToIndex);
   const values = matrix.map((row) => xMaxValue(row, fromToIndex));

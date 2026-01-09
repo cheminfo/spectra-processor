@@ -1,9 +1,9 @@
-import type { DataXY, DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix } from 'ml-spectra-processing';
-import { xMultiply, xSum } from 'ml-spectra-processing';
-
-import type { Range } from './getFromToIndex.js';
-import { getFromToIndex } from './getFromToIndex.js';
+import type { DataXY, DoubleArray, FromTo } from 'cheminfo-types';
+import type {
+  DoubleMatrix,
+  XGetFromToIndexOptions,
+} from 'ml-spectra-processing';
+import { xGetFromToIndex, xMultiply, xSum } from 'ml-spectra-processing';
 
 /**
  * Scale matrix rows to match integration (sum) of target
@@ -14,9 +14,9 @@ import { getFromToIndex } from './getFromToIndex.js';
 export function integration(
   matrix: DoubleMatrix,
   normalizedTarget: DataXY,
-  range: Range = {},
+  range: XGetFromToIndexOptions = {},
 ): void {
-  const fromToIndex = getFromToIndex(normalizedTarget.x as DoubleArray, range);
+  const fromToIndex = xGetFromToIndex(normalizedTarget.x as DoubleArray, range);
 
   const targetValue = xSum(normalizedTarget.y as DoubleArray, fromToIndex);
   const values = matrix.map((row) => xSum(row, fromToIndex));

@@ -2,12 +2,14 @@ import type { DoubleArray } from 'cheminfo-types';
 import type {
   DoubleMatrix,
   PointWithIndex,
+  XGetFromToIndexOptions,
   XYFilterXOptions,
 } from 'ml-spectra-processing';
 import {
   matrixCenterZMean,
   matrixPQN,
   matrixZRescale,
+  xGetFromToIndex,
   xSubtract,
   xSum,
   xyMaxYPoint,
@@ -18,8 +20,6 @@ import type { SpectraProcessor } from '../SpectraProcessor.js';
 
 import type { GetNormalizedDataOptions } from './getNormalizedData.js';
 import { getNormalizedData } from './getNormalizedData.js';
-import type { Range } from './scaled/getFromToIndex.js';
-import { getFromToIndex } from './scaled/getFromToIndex.js';
 import { integration } from './scaled/integration.js';
 import { max } from './scaled/max.js';
 import { min } from './scaled/min.js';
@@ -33,11 +33,11 @@ export interface FilterOptions {
 export interface ScaleOptions {
   targetID?: string;
   method?: string;
-  range?: Range;
+  range?: XGetFromToIndexOptions;
   relative?: boolean;
 }
 
-export interface RangeWithLabel extends Range {
+export interface RangeWithLabel extends XGetFromToIndexOptions {
   label?: string;
   integration?: number;
   maxPoint?: PointWithIndex;
@@ -195,7 +195,7 @@ export function getPostProcessedData(
       result.ranges.push(resultRanges);
       for (const currentRange of rangesCopy) {
         if (currentRange.label) {
-          const fromToIndex = getFromToIndex(
+          const fromToIndex = xGetFromToIndex(
             normalizedTarget.x as DoubleArray,
             currentRange,
           );

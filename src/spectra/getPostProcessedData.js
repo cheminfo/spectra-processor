@@ -2,6 +2,7 @@ import {
   matrixCenterZMean,
   matrixPQN,
   matrixZRescale,
+  xGetFromToIndex,
   xSubtract,
   xSum,
   xyMaxYPoint,
@@ -9,7 +10,6 @@ import {
 import hash from 'object-hash';
 
 import { getNormalizedData } from './getNormalizedData.js';
-import { getFromToIndex } from './scaled/getFromToIndex.js';
 import { integration } from './scaled/integration.js';
 import { max } from './scaled/max.js';
 import { min } from './scaled/min.js';
@@ -135,7 +135,7 @@ export function getPostProcessedData(spectraProcessor, options = {}) {
       normalizedData.ranges.push(resultRanges);
       for (let currentRange of rangesCopy) {
         if (currentRange.label) {
-          let fromToIndex = getFromToIndex(normalizedTarget.x, currentRange);
+          let fromToIndex = xGetFromToIndex(normalizedTarget.x, currentRange);
 
           let deltaX = normalizedTarget.x[1] - normalizedTarget.x[0];
 
