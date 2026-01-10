@@ -3,7 +3,7 @@ import { expect, test } from 'vitest';
 import { getNormalizedData } from '../getNormalizedData.js';
 
 test('getNormalizedData', () => {
-  let spectra = [
+  const spectra = [
     {
       normalized: {
         x: [10, 20, 30],
@@ -36,7 +36,8 @@ test('getNormalizedData', () => {
     },
   ];
 
-  let normalizedData = getNormalizedData(spectra);
+  // @ts-expect-error not full object but just for testing
+  const normalizedData = getNormalizedData(spectra);
 
   expect(normalizedData).toStrictEqual({
     ids: [undefined, undefined, undefined, undefined, undefined],

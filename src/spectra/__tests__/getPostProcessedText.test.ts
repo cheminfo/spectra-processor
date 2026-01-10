@@ -7,7 +7,7 @@ import { getPostProcessedText } from '../getPostProcessedText.js';
 expect.extend({ toBeDeepCloseTo });
 
 test('getPostProcessedText', () => {
-  let spectraProcessor = new SpectraProcessor();
+  const spectraProcessor = new SpectraProcessor();
   spectraProcessor.spectra = [
     {
       id: 1,
@@ -32,7 +32,7 @@ test('getPostProcessedText', () => {
     },
   ];
 
-  let result = getPostProcessedText(spectraProcessor, {
+  const result = getPostProcessedText(spectraProcessor, {
     postProcessing: {
       scale: {
         method: 'min',

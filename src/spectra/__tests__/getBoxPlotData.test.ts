@@ -17,7 +17,7 @@ const nomralizedData = {
 
 describe('getBoxPlotData', () => {
   it('Load set of data', () => {
-    let result = getBoxPlotData(nomralizedData);
+    const result = getBoxPlotData(nomralizedData);
 
     expect(result).toStrictEqual({
       x: [10, 20, 30],
