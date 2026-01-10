@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0](https://github.com/cheminfo/spectra-processor/compare/v4.0.1...v5.0.0) (2026-01-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* migration to TS
+
+### Features
+
+* migration to TS ([a724eb6](https://github.com/cheminfo/spectra-processor/commit/a724eb6ae54500a8fd69fca3d87626872b423f6c))
+
 ## [4.0.1](https://github.com/cheminfo/spectra-processor/compare/v4.0.0...v4.0.1) (2025-08-20)
 
 
