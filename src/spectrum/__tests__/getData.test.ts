@@ -7,10 +7,8 @@ describe('getData', () => {
     const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const y = [0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0];
     const result = getData(
-      {
-        x,
-        y,
-      },
+      // @ts-expect-error just a test
+      { x, y },
       {
         xFilter: {
           from: 1,
@@ -31,10 +29,8 @@ describe('getData', () => {
     const x = [0, 1, 2, 3, 4];
     const y = [1, 2, 3, 4, 5];
     const result = getData(
-      {
-        x,
-        y,
-      },
+      // @ts-expect-error just a test
+      { x, y },
       {
         yFactor: -100,
       },

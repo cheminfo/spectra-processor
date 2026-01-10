@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { SpectraProcessor } from '../SpectraProcessor.js';
-import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart.js';
+import { SpectraProcessor } from '../SpectraProcessor.ts';
+import { getAutocorrelationChart } from '../jsgraph/getAutocorrelationChart.ts';
 
 describe('getAutocorrelationChart', () => {
   it('check jsgraph chart', () => {
@@ -25,7 +25,7 @@ describe('getAutocorrelationChart', () => {
       { x: [0, 1, 2, 3], y: [3, 6, 9, 0] },
       { id: '3' },
     );
-    let result = getAutocorrelationChart(spectraProcessor);
+    const result = getAutocorrelationChart(spectraProcessor);
 
     expect(result).toMatchSnapshot();
   });

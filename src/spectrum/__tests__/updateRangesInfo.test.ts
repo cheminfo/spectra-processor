@@ -11,6 +11,7 @@ describe('updateRangesInfo', () => {
         x,
         y,
       },
+      ranges: {},
     };
 
     updateRangesInfo(spectrum, [

@@ -1,5 +1,5 @@
-import type { DoubleArray } from 'cheminfo-types';
-import type { DoubleMatrix, MatrixBoxPlot } from 'ml-spectra-processing';
+import type { DoubleArray, DoubleMatrix } from 'cheminfo-types';
+import type { MatrixBoxPlot } from 'ml-spectra-processing';
 import { matrixBoxPlot } from 'ml-spectra-processing';
 
 export interface NormalizedData {

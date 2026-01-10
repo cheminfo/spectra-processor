@@ -1,4 +1,4 @@
-import type { DataXY, DoubleArray } from 'cheminfo-types';
+import type { DataXY, DoubleArray, FromTo } from 'cheminfo-types';
 import type { FilterXYType } from 'ml-signal-processing';
 import { filterXY } from 'ml-signal-processing';
 import { xMinMaxValues, xyCheck } from 'ml-spectra-processing';
@@ -8,7 +8,7 @@ interface NormalizeOptions {
   to?: number;
   numberOfPoints?: number;
   filters?: FilterXYType[];
-  exclusions?: unknown[];
+  exclusions?: FromTo[];
   applyRangeSelectionFirst?: boolean;
 }
 

@@ -2961,9 +2961,9 @@ exports[`SpectraProcessor > Load set of data 2`] = `
 exports[`SpectraProcessor > test getNormalizedData of non uniform data 1`] = `
 {
   "ids": [
-    1,
-    2,
-    3,
+    "1",
+    "2",
+    "3",
   ],
   "matrix": [
     [
@@ -3011,7 +3011,7 @@ exports[`SpectraProcessor > test getPostProcessedChart minMax and relative 1`] =
 {
   "data": [
     {
-      "label": 1,
+      "label": "1",
       "styles": {
         "selected": {
           "lineColor": "darkgrey",
@@ -3038,7 +3038,7 @@ exports[`SpectraProcessor > test getPostProcessedChart minMax and relative 1`] =
       ],
     },
     {
-      "label": 2,
+      "label": "2",
       "styles": {
         "selected": {
           "lineColor": "darkgrey",
@@ -3065,7 +3065,7 @@ exports[`SpectraProcessor > test getPostProcessedChart minMax and relative 1`] =
       ],
     },
     {
-      "label": 3,
+      "label": "3",
       "styles": {
         "selected": {
           "lineColor": "darkgrey",

@@ -1,6 +1,5 @@
-import type { DoubleArray } from 'cheminfo-types';
+import type { DoubleArray, DoubleMatrix } from 'cheminfo-types';
 import type {
-  DoubleMatrix,
   PointWithIndex,
   XGetFromToIndexOptions,
   XYFilterXOptions,

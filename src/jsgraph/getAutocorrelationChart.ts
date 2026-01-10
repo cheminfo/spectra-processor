@@ -51,7 +51,7 @@ export interface ColorSpectrum {
  */
 export function getAutocorrelationChart(
   spectraProcessor: SpectraProcessor,
-  index: number,
+  index?: number,
   options: GetAutocorrelationChartOptions = {},
 ): ColorSpectrum {
   const {

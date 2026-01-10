@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 import { describe, expect, it } from 'vitest';
 
-import { SpectraProcessor } from '../SpectraProcessor.js';
+import { SpectraProcessor } from '../SpectraProcessor.ts';
 
 expect.extend({ toBeDeepCloseTo });
 

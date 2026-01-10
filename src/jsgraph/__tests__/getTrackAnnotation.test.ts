@@ -25,6 +25,7 @@ test('check jsgraph annotations', () => {
       id: 2,
     },
   ];
+  // @ts-expect-error not full object but just for testing
   const result = getTrackAnnotation(spectra, 1);
 
   expect(result).toMatchSnapshot();

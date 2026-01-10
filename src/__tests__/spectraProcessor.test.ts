@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import { describe, expect, it } from 'vitest';
 
-import { SpectraProcessor } from '../SpectraProcessor.js';
+import { SpectraProcessor } from '../SpectraProcessor.ts';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
@@ -12,18 +12,18 @@ const testFilesDir = '../../testFiles/xtc';
 
 describe('SpectraProcessor', () => {
   it('Load set of data', () => {
-    let files = readdirSync(join(import.meta.dirname, testFilesDir)).filter(
+    const files = readdirSync(join(import.meta.dirname, testFilesDir)).filter(
       (file) => file.match(/0140|0189|0235/),
     );
-    let spectraProcessor = new SpectraProcessor();
+    const spectraProcessor = new SpectraProcessor();
     spectraProcessor.setNormalization({
       from: 1000,
       to: 2600,
       numberOfPoints: 16,
       filters: [{ name: 'centerMean' }, { name: 'divideBySD' }],
     });
-    for (let file of files) {
-      let jcamp = readFileSync(
+    for (const file of files) {
+      const jcamp = readFileSync(
         join(import.meta.dirname, testFilesDir, file),
         'utf8',
       );
@@ -32,12 +32,12 @@ describe('SpectraProcessor', () => {
 
     expect(spectraProcessor.spectra).toHaveLength(45);
 
-    let normalized = spectraProcessor.getNormalizedData();
+    const normalized = spectraProcessor.getNormalizedData();
 
     expect(normalized.ids).toHaveLength(45);
     expect(normalized.matrix[0]).toHaveLength(16);
 
-    let normalizedSelection = spectraProcessor.getNormalizedData({
+    const normalizedSelection = spectraProcessor.getNormalizedData({
       ids: ['0140_1a.jdx', '0140_1b.jdx', '0140_1c.jdx', 'asdf'],
     });
 
@@ -46,7 +46,7 @@ describe('SpectraProcessor', () => {
 
     expect(normalized).toMatchSnapshot();
 
-    let normalizedTSV = spectraProcessor.getNormalizedText();
+    const normalizedTSV = spectraProcessor.getNormalizedText();
 
     expect(normalizedTSV).toHaveLength(50412);
     expect(normalizedTSV).toMatchSnapshot();
@@ -60,7 +60,6 @@ describe('SpectraProcessor', () => {
         from: 1000,
         to: 2600,
         numberOfPoints: 16,
-        applySNV: true,
       });
     }).toThrowError('data must be an object of x and y arrays');
 
@@ -191,9 +190,9 @@ describe('SpectraProcessor', () => {
   });
 
   it('test getPostProcesseddData', () => {
-    let spectraProcessor = getSimpleDataProcessor();
+    const spectraProcessor = getSimpleDataProcessor();
 
-    let scaled = spectraProcessor.getPostProcessedData({
+    const scaled = spectraProcessor.getPostProcessedData({
       scale: { range: { from: 0.9, to: 2.1 } },
     });
 
@@ -205,9 +204,9 @@ describe('SpectraProcessor', () => {
   });
 
   it('test getPostProcesseddData undefined method, relative', () => {
-    let spectraProcessor = getSimpleDataProcessor();
+    const spectraProcessor = getSimpleDataProcessor();
 
-    let scaled = spectraProcessor.getPostProcessedData({
+    const scaled = spectraProcessor.getPostProcessedData({
       scale: { range: { from: 0.9, to: 2.1 }, relative: true },
     });
 
@@ -219,9 +218,9 @@ describe('SpectraProcessor', () => {
   });
 
   it('test getPostProcesseddData minMax method, relative', () => {
-    let spectraProcessor = getSimpleDataProcessor();
+    const spectraProcessor = getSimpleDataProcessor();
 
-    let scaled = spectraProcessor.getPostProcessedData({
+    const scaled = spectraProcessor.getPostProcessedData({
       scale: {
         range: { from: 0.9, to: 2.1 },
         method: 'minMax',
@@ -237,9 +236,9 @@ describe('SpectraProcessor', () => {
   });
 
   it('test getPostProcessedChart minMax and relative', () => {
-    let spectraProcessor = getSimpleDataProcessor();
+    const spectraProcessor = getSimpleDataProcessor();
 
-    let spectra = spectraProcessor.getPostProcessedChart({
+    const spectra = spectraProcessor.getPostProcessedChart({
       scale: {
         range: { from: 0.9, to: 2.1 },
         method: 'minMax',
@@ -251,24 +250,24 @@ describe('SpectraProcessor', () => {
   });
 
   it('test getNormalizedData of non uniform data', () => {
-    let spectraProcessor = getNonUniformDataProcessor();
+    const spectraProcessor = getNonUniformDataProcessor();
 
-    let spectra = spectraProcessor.getNormalizedData();
+    const spectra = spectraProcessor.getNormalizedData();
 
     expect(spectra).toMatchSnapshot();
   });
 
   it('test getMinMaxX of non uniform data', () => {
-    let spectraProcessor = getNonUniformDataProcessor();
+    const spectraProcessor = getNonUniformDataProcessor();
 
-    let minMaxX = spectraProcessor.getMinMaxX();
+    const minMaxX = spectraProcessor.getMinMaxX();
 
     expect(minMaxX).toStrictEqual({ min: 0, max: 5 });
   });
 
   it('test getNormalizedMinMaxX of non uniform data', () => {
-    let spectraProcessor = getLogSpectra();
-    let boundary = spectraProcessor.getNormalizedCommonBoundary();
+    const spectraProcessor = getLogSpectra();
+    const boundary = spectraProcessor.getNormalizedCommonBoundary();
 
     expect(boundary).toMatchCloseTo({
       x: { min: -1, max: 1 },
@@ -286,9 +285,18 @@ function getSimpleDataProcessor() {
     },
   });
 
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [1, 2, 3, 4] }, { id: 1 });
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [2, 3, 4, 5] }, { id: 2 });
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 4, 5, 6] }, { id: 3 });
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [1, 2, 3, 4] },
+    { id: '1' },
+  );
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [2, 3, 4, 5] },
+    { id: '2' },
+  );
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [3, 4, 5, 6] },
+    { id: '3' },
+  );
   return spectraProcessor;
 }
 
@@ -301,9 +309,18 @@ function getNonUniformDataProcessor() {
     },
   });
 
-  spectraProcessor.addFromData({ x: [0, 1, 2, 4], y: [1, 2, 3, 4] }, { id: 1 });
-  spectraProcessor.addFromData({ x: [0, 1, 2, 5], y: [2, 3, 4, 5] }, { id: 2 });
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 4, 5, 6] }, { id: 3 });
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 4], y: [1, 2, 3, 4] },
+    { id: '1' },
+  );
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 5], y: [2, 3, 4, 5] },
+    { id: '2' },
+  );
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [3, 4, 5, 6] },
+    { id: '3' },
+  );
   return spectraProcessor;
 }
 
@@ -319,11 +336,11 @@ function getLogSpectra() {
 
   spectraProcessor.addFromData(
     { x: [0.01, 1, 2, 10], y: [1, 2, 3, 4] },
-    { id: 1 },
+    { id: '1' },
   );
   spectraProcessor.addFromData(
     { x: [0.1, 1, 2, 100], y: [2, 3, 4, 5] },
-    { id: 2 },
+    { id: '2' },
   );
 
   return spectraProcessor;

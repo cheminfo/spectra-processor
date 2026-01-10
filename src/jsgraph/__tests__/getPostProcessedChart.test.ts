@@ -12,9 +12,18 @@ test('getPostProcessedChart', () => {
     },
   });
 
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [1, 2, 3, 4] }, { id: 1 });
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [2, 4, 6, 8] }, { id: 2 });
-  spectraProcessor.addFromData({ x: [0, 1, 2, 3], y: [3, 6, 9, 0] }, { id: 3 });
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [1, 2, 3, 4] },
+    { id: '1' },
+  );
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [2, 4, 6, 8] },
+    { id: '2' },
+  );
+  spectraProcessor.addFromData(
+    { x: [0, 1, 2, 3], y: [3, 6, 9, 0] },
+    { id: '3' },
+  );
 
   const result = getPostProcessedChart(spectraProcessor);
 
