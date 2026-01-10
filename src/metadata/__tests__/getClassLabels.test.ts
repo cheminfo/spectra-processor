@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { getClassLabels } from '../getClassLabels.js';
+import { getClassLabels } from '../getClassLabels.ts';
 
 test('getClassLabels', () => {
-  let metadata = [
+  const metadata = [
     {
       category: 'A',
     },
@@ -15,7 +15,7 @@ test('getClassLabels', () => {
     },
   ];
 
-  let result = getClassLabels(metadata);
+  const result = getClassLabels(metadata);
 
   expect(result).toStrictEqual(['A', 'B', 'A']);
 });

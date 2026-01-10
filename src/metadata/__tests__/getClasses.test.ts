@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { getClasses } from '../getClasses.js';
+import { getClasses } from '../getClasses.ts';
 
 test('getClasses', () => {
-  let metadata = [
+  const metadata = [
     {
       category: 'A',
     },
@@ -15,7 +15,7 @@ test('getClasses', () => {
     },
   ];
 
-  let result = getClasses(metadata);
+  const result = getClasses(metadata);
 
   expect(result).toStrictEqual([0, 1, 0]);
 });
