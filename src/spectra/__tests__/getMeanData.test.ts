@@ -14,7 +14,7 @@ test('Simple dataset', () => {
       [3, 1],
     ],
   };
-  const result = getMeanData(normalized, 0);
+  const result = getMeanData(normalized);
 
   expect(result.x).toStrictEqual([1, 2]);
   expect(result.y).toStrictEqual([2, 2]);

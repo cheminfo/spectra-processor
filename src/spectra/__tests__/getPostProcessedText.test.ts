@@ -9,22 +9,25 @@ expect.extend({ toBeDeepCloseTo });
 test('getPostProcessedText', () => {
   const spectraProcessor = new SpectraProcessor();
   spectraProcessor.spectra = [
+    // @ts-expect-error partial Spectra for tests
     {
-      id: 1,
+      id: '1',
       normalized: {
         x: [10, 20, 30],
         y: [1, 2, 3],
       },
     },
+    // @ts-expect-error partial Spectra for tests
     {
-      id: 2,
+      id: '2',
       normalized: {
         x: [10, 20, 30],
         y: [2, 3, 4],
       },
     },
+    // @ts-expect-error partial Spectra for tests
     {
-      id: 3,
+      id: '3',
       normalized: {
         x: [10, 20, 30],
         y: [3, 4, 5],

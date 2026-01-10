@@ -10,8 +10,8 @@ let spectraProcessor: SpectraProcessor;
 
 beforeEach(() => {
   spectraProcessor = new SpectraProcessor();
-  // @ts-expect-error not full object but just for testing
   spectraProcessor.spectra = [
+    // @ts-expect-error not full object but just for testing
     {
       id: '1',
       normalized: {
@@ -19,6 +19,7 @@ beforeEach(() => {
         y: [1, 2, 3],
       },
     },
+    // @ts-expect-error not full object but just for testing
     {
       id: '2',
       normalized: {
@@ -26,6 +27,7 @@ beforeEach(() => {
         y: [2, 3, 4],
       },
     },
+    // @ts-expect-error not full object but just for testing
     {
       id: '3',
       normalized: {
@@ -180,7 +182,7 @@ describe('getPostProcessedData', () => {
       [2, 3, 4],
       [3, 4, 5],
     ]);
-    expect(result.ranges[1]).toStrictEqual({
+    expect(result.ranges?.[1]).toStrictEqual({
       A: {
         label: 'A',
         from: 6,
@@ -221,7 +223,7 @@ describe('getPostProcessedData', () => {
       [2, 3, 4],
       [3, 4, 5],
     ]);
-    expect(result.ranges[1]).toStrictEqual({
+    expect(result.ranges?.[1]).toStrictEqual({
       A: {
         label: 'A',
         from: 6,
@@ -237,7 +239,7 @@ describe('getPostProcessedData', () => {
         maxPoint: { x: 30, y: 4, index: 2 },
       },
     });
-    expect(result.calculations[1]).toStrictEqual({
+    expect(result.calculations?.[1]).toStrictEqual({
       sum: 90,
       difference: -50,
     });
