@@ -1,4 +1,4 @@
-import type { DataXY } from 'cheminfo-types';
+import type { DataXY, DoubleArray, FromTo } from 'cheminfo-types';
 import type { FilterXYType } from 'ml-signal-processing';
 import { filterXY } from 'ml-signal-processing';
 import { xMinMaxValues, xyCheck } from 'ml-spectra-processing';
@@ -8,7 +8,7 @@ interface NormalizeOptions {
   to?: number;
   numberOfPoints?: number;
   filters?: FilterXYType[];
-  exclusions?: any[];
+  exclusions?: FromTo[];
   applyRangeSelectionFirst?: boolean;
 }
 
@@ -23,8 +23,8 @@ export interface AllowedBoundary {
   };
 }
 
-export interface NormalizeResult {
-  data: DataXY;
+export interface NormalizedResult {
+  data: DataXY<DoubleArray>;
   allowedBoundary: AllowedBoundary;
 }
 
@@ -37,7 +37,7 @@ export interface NormalizeResult {
 export function getNormalized(
   input: DataXY,
   options: NormalizeOptions = {},
-): NormalizeResult {
+): NormalizedResult {
   xyCheck(input);
 
   let { filters = [] } = options;
