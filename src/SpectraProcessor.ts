@@ -205,7 +205,7 @@ export class SpectraProcessor {
   /**
    * Returns an object containing 4 parameters with the normalized data
    * @param options - Options for normalization
-   * @returns
+   * @returns The normalized data: ids, matrix, meta and x array
    */
   getNormalizedData(
     options: GetNormalizedDataOptions = {},
@@ -248,7 +248,7 @@ export class SpectraProcessor {
   /**
    * Returns an object containing 4 parameters with the scaled data
    * @param options - Options for post-processing
-   * @returns
+   * @returns The post-processed data: ids, matrix, meta and x array
    */
   getPostProcessedData(options?: GetPostProcessedDataOptions) {
     return getPostProcessedData(this, options);
@@ -331,7 +331,6 @@ export class SpectraProcessor {
    * Add a spectrum based on the data
    * @param data - {x, y}
    * @param options - Options for adding spectrum
-   * @returns Spectrum
    */
   addFromData(data: DataXY, options: AddFromDataOptions = {}): void {
     if (this.spectra.length === 0) this.keepOriginal = true;
@@ -563,6 +562,7 @@ export class SpectraProcessor {
    * We provide the allowed from / to after normalization
    * For the X axis we return the smallest common values
    * For the Y axis we return the largest min / max
+   * @returns Common boundary as `{ x: { min, max }, y: { min, max } }`
    */
   getNormalizedCommonBoundary(): AxisBoundary {
     const boundary: AxisBoundary = {
@@ -592,7 +592,7 @@ export class SpectraProcessor {
    * Create SpectraProcessor from normalized TSV
    * @param text - TSV text
    * @param options - Parsing options
-   * @param options.fs
+   * @param options.fs - Field separator used in the TSV (defaults to a tab)
    * @returns SpectraProcessor instance
    */
   static fromNormalizedMatrix(

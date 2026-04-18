@@ -91,6 +91,7 @@ export class Spectrum {
 
   /**
    * Get the minimum x value
+   * @returns The minimum x value
    */
   get minX(): number {
     return this.x[0];
@@ -98,6 +99,7 @@ export class Spectrum {
 
   /**
    * Get the maximum x value
+   * @returns The maximum x value
    */
   get maxX(): number {
     return this.x.at(-1) as number;
@@ -128,7 +130,7 @@ export class Spectrum {
   /**
    * Get x and y arrays
    * @returns Object containing x and y arrays
-   * @throws Error if x or y is not an array
+   * @throws {Error} If x or y is not an array
    */
   getXY(): { x: number[]; y: number[] } {
     if (!Array.isArray(this.x) || !Array.isArray(this.y)) {
@@ -148,6 +150,7 @@ export class Spectrum {
   /**
    * Update normalization
    * @param normalization - normalization configuration
+   * @returns The new normalized data
    */
   updateNormalization(normalization: Record<string, any>): DataXY<DoubleArray> {
     const result = getNormalized(this, normalization);

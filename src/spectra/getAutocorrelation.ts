@@ -11,6 +11,12 @@ export interface AutocorrelationResult {
   y: Float64Array;
 }
 
+/**
+ * Compute the autocorrelation of the matrix column at `index`.
+ * @param normalized - Normalized data with shared x axis and a value matrix
+ * @param index - Column index used as the reference for the autocorrelation
+ * @returns The shared x axis and the autocorrelation y values
+ */
 export function getAutocorrelation(
   normalized: NormalizedData,
   index: number,

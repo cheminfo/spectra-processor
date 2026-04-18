@@ -29,10 +29,10 @@ export interface NormalizedResult {
 }
 
 /**
- *
- * @private
- * @param input
- * @param [options={}]
+ * Apply the configured filters and resample on an equally spaced x grid.
+ * @param input - The original data with x and y arrays
+ * @param options - Normalization options (range, number of points, filters, exclusions)
+ * @returns The normalized data and the allowed x/y boundary
  */
 export function getNormalized(
   input: DataXY,
