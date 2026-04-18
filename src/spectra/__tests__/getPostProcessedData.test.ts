@@ -1,5 +1,5 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, expect, test } from 'vitest';
 
 import { SpectraProcessor } from '../../SpectraProcessor.ts';
 import { getPostProcessedData } from '../getPostProcessedData.ts';
@@ -38,210 +38,208 @@ beforeEach(() => {
   ];
 });
 
-describe('getPostProcessedData', () => {
-  it('No options', () => {
-    const result = getPostProcessedData(spectraProcessor);
+test('No options', () => {
+  const result = getPostProcessedData(spectraProcessor);
 
-    expect(result.matrix).toStrictEqual([
-      [1, 2, 3],
-      [2, 3, 4],
-      [3, 4, 5],
-    ]);
+  expect(result.matrix).toStrictEqual([
+    [1, 2, 3],
+    [2, 3, 4],
+    [3, 4, 5],
+  ]);
+});
+
+test('filter pqn', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    filters: [{ name: 'pqn', options: { max: 10 } }],
   });
 
-  it('filter pqn', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      filters: [{ name: 'pqn', options: { max: 10 } }],
-    });
+  expect(result.matrix).toBeDeepCloseTo([
+    [2.672612419124244, 5.345224838248488, 8.017837257372733],
+    [3.7139067635410377, 5.570860145311556, 7.427813527082075],
+    [4.242640687119285, 5.65685424949238, 7.071067811865475],
+  ]);
+});
 
-    expect(result.matrix).toBeDeepCloseTo([
-      [2.672612419124244, 5.345224838248488, 8.017837257372733],
-      [3.7139067635410377, 5.570860145311556, 7.427813527082075],
-      [4.242640687119285, 5.65685424949238, 7.071067811865475],
-    ]);
+test('filter rescale', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    filters: [{ name: 'rescale', options: { max: 10 } }],
+  });
+  result.matrix = result.matrix?.map((row) => Array.from(row));
+
+  expect(result.matrix).toStrictEqual([
+    [0, 2.5, 5],
+    [2.5, 5, 7.5],
+    [5, 7.5, 10],
+  ]);
+});
+
+test('filter centerMean', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    filters: [{ name: 'centerMean' }],
+  });
+  result.matrix = result.matrix?.map((row) => Array.from(row));
+
+  expect(result.matrix).toStrictEqual([
+    [-1, -1, -1],
+    [0, 0, 0],
+    [1, 1, 1],
+  ]);
+});
+
+test('minMax', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    scale: { method: 'minMax' },
   });
 
-  it('filter rescale', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      filters: [{ name: 'rescale', options: { max: 10 } }],
-    });
-    result.matrix = result.matrix?.map((row) => Array.from(row));
+  expect(result.matrix).toStrictEqual([
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+  ]);
+});
 
-    expect(result.matrix).toStrictEqual([
-      [0, 2.5, 5],
-      [2.5, 5, 7.5],
-      [5, 7.5, 10],
-    ]);
+test('minMax cache', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    scale: { method: 'minMax' },
+  });
+  const result2 = getPostProcessedData(spectraProcessor, {
+    scale: { method: 'minMax' },
   });
 
-  it('filter centerMean', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      filters: [{ name: 'centerMean' }],
-    });
-    result.matrix = result.matrix?.map((row) => Array.from(row));
+  expect(result).toStrictEqual(result2);
+  expect(result2.matrix).toStrictEqual([
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+  ]);
 
-    expect(result.matrix).toStrictEqual([
-      [-1, -1, -1],
-      [0, 0, 0],
-      [1, 1, 1],
-    ]);
+  // same values but other pointer, normalized changed we can not use the cache
+  spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
+  const result3 = getPostProcessedData(spectraProcessor, {
+    scale: { method: 'minMax' },
+  });
+  const equals = result === result3;
+
+  expect(equals).toBe(false);
+});
+
+test('min', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    scale: {
+      method: 'min',
+      targetID: '3',
+    },
   });
 
-  it('minMax', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      scale: { method: 'minMax' },
-    });
+  expect(result.matrix).toStrictEqual([
+    Float64Array.from([3, 6, 9]),
+    Float64Array.from([3, 4.5, 6]),
+    Float64Array.from([3, 4, 5]),
+  ]);
+});
 
-    expect(result.matrix).toStrictEqual([
-      [1, 2, 3],
-      [1, 2, 3],
-      [1, 2, 3],
-    ]);
+test('max', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    scale: { method: 'max', targetID: '2' },
   });
 
-  it('minMax cache', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      scale: { method: 'minMax' },
-    });
-    const result2 = getPostProcessedData(spectraProcessor, {
-      scale: { method: 'minMax' },
-    });
+  expect(result.matrix).toBeDeepCloseTo(
+    [
+      Float64Array.from([1.3333333, 2.666666, 4]),
+      Float64Array.from([2, 3, 4]),
+      Float64Array.from([2.4, 3.2, 4]),
+    ],
+    5,
+  );
+});
 
-    expect(result).toStrictEqual(result2);
-    expect(result2.matrix).toStrictEqual([
-      [1, 2, 3],
-      [1, 2, 3],
-      [1, 2, 3],
-    ]);
-
-    // same values but other pointer, normalized changed we can not use the cache
-    spectraProcessor.spectra[0].normalized = { x: [10, 20, 30], y: [1, 2, 3] };
-    const result3 = getPostProcessedData(spectraProcessor, {
-      scale: { method: 'minMax' },
-    });
-    const equals = result === result3;
-
-    expect(equals).toBe(false);
+test('integration', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    scale: { method: 'integration', targetID: '2' },
   });
 
-  it('min', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      scale: {
-        method: 'min',
-        targetID: '3',
+  expect(result.matrix).toBeDeepCloseTo(
+    [
+      Float64Array.from([1.5, 3, 4.5]),
+      Float64Array.from([2, 3, 4]),
+      Float64Array.from([2.25, 3, 3.75]),
+    ],
+    5,
+  );
+});
+
+test('ranges', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    ranges: [
+      { label: 'A', from: 6, to: 14 },
+      { label: 'B', from: 16, to: 34 },
+    ],
+  });
+
+  expect(result.matrix).toStrictEqual([
+    [1, 2, 3],
+    [2, 3, 4],
+    [3, 4, 5],
+  ]);
+  expect(result.ranges?.[1]).toStrictEqual({
+    A: {
+      label: 'A',
+      from: 6,
+      to: 14,
+      integration: 20,
+      maxPoint: { x: 10, y: 2, index: 0 },
+    },
+    B: {
+      label: 'B',
+      from: 16,
+      to: 34,
+      integration: 70,
+      maxPoint: { x: 30, y: 4, index: 2 },
+    },
+  });
+});
+
+test('ranges and calculations', () => {
+  const result = getPostProcessedData(spectraProcessor, {
+    ranges: [
+      { label: 'A', from: 6, to: 14 },
+      { label: 'B', from: 16, to: 34 },
+    ],
+    calculations: [
+      {
+        formula: 'A+B',
+        label: 'sum',
       },
-    });
-
-    expect(result.matrix).toStrictEqual([
-      Float64Array.from([3, 6, 9]),
-      Float64Array.from([3, 4.5, 6]),
-      Float64Array.from([3, 4, 5]),
-    ]);
+      {
+        formula: 'A-B',
+        label: 'difference',
+      },
+    ],
   });
 
-  it('max', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      scale: { method: 'max', targetID: '2' },
-    });
-
-    expect(result.matrix).toBeDeepCloseTo(
-      [
-        Float64Array.from([1.3333333, 2.666666, 4]),
-        Float64Array.from([2, 3, 4]),
-        Float64Array.from([2.4, 3.2, 4]),
-      ],
-      5,
-    );
+  expect(result.matrix).toStrictEqual([
+    [1, 2, 3],
+    [2, 3, 4],
+    [3, 4, 5],
+  ]);
+  expect(result.ranges?.[1]).toStrictEqual({
+    A: {
+      label: 'A',
+      from: 6,
+      to: 14,
+      integration: 20,
+      maxPoint: { x: 10, y: 2, index: 0 },
+    },
+    B: {
+      label: 'B',
+      from: 16,
+      to: 34,
+      integration: 70,
+      maxPoint: { x: 30, y: 4, index: 2 },
+    },
   });
-
-  it('integration', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      scale: { method: 'integration', targetID: '2' },
-    });
-
-    expect(result.matrix).toBeDeepCloseTo(
-      [
-        Float64Array.from([1.5, 3, 4.5]),
-        Float64Array.from([2, 3, 4]),
-        Float64Array.from([2.25, 3, 3.75]),
-      ],
-      5,
-    );
-  });
-
-  it('ranges', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      ranges: [
-        { label: 'A', from: 6, to: 14 },
-        { label: 'B', from: 16, to: 34 },
-      ],
-    });
-
-    expect(result.matrix).toStrictEqual([
-      [1, 2, 3],
-      [2, 3, 4],
-      [3, 4, 5],
-    ]);
-    expect(result.ranges?.[1]).toStrictEqual({
-      A: {
-        label: 'A',
-        from: 6,
-        to: 14,
-        integration: 20,
-        maxPoint: { x: 10, y: 2, index: 0 },
-      },
-      B: {
-        label: 'B',
-        from: 16,
-        to: 34,
-        integration: 70,
-        maxPoint: { x: 30, y: 4, index: 2 },
-      },
-    });
-  });
-
-  it('ranges and calculations', () => {
-    const result = getPostProcessedData(spectraProcessor, {
-      ranges: [
-        { label: 'A', from: 6, to: 14 },
-        { label: 'B', from: 16, to: 34 },
-      ],
-      calculations: [
-        {
-          formula: 'A+B',
-          label: 'sum',
-        },
-        {
-          formula: 'A-B',
-          label: 'difference',
-        },
-      ],
-    });
-
-    expect(result.matrix).toStrictEqual([
-      [1, 2, 3],
-      [2, 3, 4],
-      [3, 4, 5],
-    ]);
-    expect(result.ranges?.[1]).toStrictEqual({
-      A: {
-        label: 'A',
-        from: 6,
-        to: 14,
-        integration: 20,
-        maxPoint: { x: 10, y: 2, index: 0 },
-      },
-      B: {
-        label: 'B',
-        from: 16,
-        to: 34,
-        integration: 70,
-        maxPoint: { x: 30, y: 4, index: 2 },
-      },
-    });
-    expect(result.calculations?.[1]).toStrictEqual({
-      sum: 90,
-      difference: -50,
-    });
+  expect(result.calculations?.[1]).toStrictEqual({
+    sum: 90,
+    difference: -50,
   });
 });
