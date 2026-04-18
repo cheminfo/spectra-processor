@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getNormalizedData } from '../getNormalizedData.js';
+import { getNormalizedData } from '../getNormalizedData.ts';
 
 test('getNormalizedData', () => {
   const spectra = [

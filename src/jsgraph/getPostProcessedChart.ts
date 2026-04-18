@@ -1,8 +1,8 @@
-import type { SpectraProcessor } from '../SpectraProcessor.js';
-import type { GetPostProcessedDataOptions } from '../spectra/getPostProcessedData.js';
+import type { SpectraProcessor } from '../SpectraProcessor.ts';
+import type { GetPostProcessedDataOptions } from '../spectra/getPostProcessedData.ts';
 
-import type { Chart, ChartData } from './addChartDataStyle.js';
-import { addChartDataStyle } from './addChartDataStyle.js';
+import type { Chart, ChartData } from './addChartDataStyle.ts';
+import { addChartDataStyle } from './addChartDataStyle.ts';
 
 /**
  * Get chart with post-processed data

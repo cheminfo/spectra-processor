@@ -1,9 +1,9 @@
 import type { XYFilterXOptions } from 'ml-spectra-processing';
 
-import type { Spectrum } from '../spectrum/Spectrum.js';
+import type { Spectrum } from '../spectrum/Spectrum.ts';
 
-import type { Chart } from './addChartDataStyle.js';
-import { addChartDataStyle } from './addChartDataStyle.js';
+import type { Chart } from './addChartDataStyle.ts';
+import { addChartDataStyle } from './addChartDataStyle.ts';
 
 export interface GetChartOptions {
   /**

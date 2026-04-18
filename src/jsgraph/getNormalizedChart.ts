@@ -2,10 +2,10 @@ import type { DataXY } from 'cheminfo-types';
 import type { XYFilterXOptions } from 'ml-spectra-processing';
 import { xyFilterX } from 'ml-spectra-processing';
 
-import type { Spectrum } from '../spectrum/Spectrum.js';
+import type { Spectrum } from '../spectrum/Spectrum.ts';
 
-import type { Chart, ChartData } from './addChartDataStyle.js';
-import { addChartDataStyle } from './addChartDataStyle.js';
+import type { Chart, ChartData } from './addChartDataStyle.ts';
+import { addChartDataStyle } from './addChartDataStyle.ts';
 
 export interface GetNormalizedChartOptions {
   /**

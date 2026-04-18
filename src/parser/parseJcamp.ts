@@ -2,8 +2,8 @@ import type { DataXY } from 'cheminfo-types';
 import type { Entry } from 'jcampconverter';
 import { convert } from 'jcampconverter';
 
-import type { Kind } from '../Kinds.js';
-import { getJcampKind } from '../Kinds.js';
+import type { Kind } from '../Kinds.ts';
+import { getJcampKind } from '../Kinds.ts';
 
 export interface ParseJcampResult {
   data: DataXY;

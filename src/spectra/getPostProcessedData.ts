@@ -15,14 +15,14 @@ import {
 } from 'ml-spectra-processing';
 import hash from 'object-hash';
 
-import type { SpectraProcessor } from '../SpectraProcessor.js';
+import type { SpectraProcessor } from '../SpectraProcessor.ts';
 
-import type { GetNormalizedDataOptions } from './getNormalizedData.js';
-import { getNormalizedData } from './getNormalizedData.js';
-import { integration } from './scaled/integration.js';
-import { max } from './scaled/max.js';
-import { min } from './scaled/min.js';
-import { minMax } from './scaled/minMax.js';
+import type { GetNormalizedDataOptions } from './getNormalizedData.ts';
+import { getNormalizedData } from './getNormalizedData.ts';
+import { integration } from './scaled/integration.ts';
+import { max } from './scaled/max.ts';
+import { min } from './scaled/min.ts';
+import { minMax } from './scaled/minMax.ts';
 
 export interface FilterOptions {
   name?: string;

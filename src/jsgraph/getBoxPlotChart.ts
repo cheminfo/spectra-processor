@@ -3,8 +3,8 @@ import chroma from 'chroma-js';
 import { Matrix } from 'ml-matrix';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
-import type { NormalizedData } from '../spectra/getBoxPlotData.js';
-import { getBoxPlotData } from '../spectra/getBoxPlotData.js';
+import type { NormalizedData } from '../spectra/getBoxPlotData.ts';
+import { getBoxPlotData } from '../spectra/getBoxPlotData.ts';
 
 export interface AnnotationPosition {
   x: number | string;

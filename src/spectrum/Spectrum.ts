@@ -2,11 +2,11 @@ import type { DataXY, DoubleArray, NumberArray } from 'cheminfo-types';
 import { xMinMaxValues } from 'ml-spectra-processing';
 
 import type { RangeInfo } from './RangeInfo.ts';
-import type { DataOptions } from './getData.js';
-import { getData } from './getData.js';
-import type { AllowedBoundary } from './getNormalized.js';
-import { getNormalized } from './getNormalized.js';
-import { updateRangesInfo } from './updateRangesInfo.js';
+import type { DataOptions } from './getData.ts';
+import { getData } from './getData.ts';
+import type { AllowedBoundary } from './getNormalized.ts';
+import { getNormalized } from './getNormalized.ts';
+import { updateRangesInfo } from './updateRangesInfo.ts';
 
 /**
  * Boundary information for x and y axes

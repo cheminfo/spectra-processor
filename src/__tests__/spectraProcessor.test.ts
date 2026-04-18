@@ -61,7 +61,7 @@ describe('SpectraProcessor', () => {
         to: 2600,
         numberOfPoints: 16,
       });
-    }).toThrowError('data must be an object of x and y arrays');
+    }).toThrow('data must be an object of x and y arrays');
 
     expect(spectraProcessor.getIDs()).toStrictEqual([
       '0140_1a.jdx',

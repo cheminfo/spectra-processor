@@ -1,5 +1,5 @@
-import type { CategoryStats } from './getCategoriesStats.js';
-import { getCategoriesStats } from './getCategoriesStats.js';
+import type { CategoryStats } from './getCategoriesStats.ts';
+import { getCategoriesStats } from './getCategoriesStats.ts';
 
 export interface GetClassesOptions {
   /**

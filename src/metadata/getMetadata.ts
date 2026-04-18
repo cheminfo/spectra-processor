@@ -1,4 +1,4 @@
-import type { Spectrum } from '../spectrum/Spectrum.js';
+import type { Spectrum } from '../spectrum/Spectrum.ts';
 
 export interface GetMetadataOptions {
   /**

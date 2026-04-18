@@ -1,9 +1,9 @@
-import type { Spectrum } from '../spectrum/Spectrum.js';
+import type { Spectrum } from '../spectrum/Spectrum.ts';
 
-import type { GetNormalizedDataOptions } from './getNormalizedData.js';
-import { getNormalizedData } from './getNormalizedData.js';
-import type { ConvertToTextOptions } from './util/convertToText.js';
-import { convertToText } from './util/convertToText.js';
+import type { GetNormalizedDataOptions } from './getNormalizedData.ts';
+import { getNormalizedData } from './getNormalizedData.ts';
+import type { ConvertToTextOptions } from './util/convertToText.ts';
+import { convertToText } from './util/convertToText.ts';
 
 export interface GetNormalizedTextOptions
   extends GetNormalizedDataOptions, ConvertToTextOptions {}

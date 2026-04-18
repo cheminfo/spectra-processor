@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import type { XYFilterXOptions } from 'ml-spectra-processing';
 import { xMinMaxValues, xyFilterX } from 'ml-spectra-processing';
 
-import type { SpectraProcessor } from '../SpectraProcessor.js';
+import type { SpectraProcessor } from '../SpectraProcessor.ts';
 
 export interface AutocorrelationData {
   x: DoubleArray;

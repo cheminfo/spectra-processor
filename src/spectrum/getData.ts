@@ -2,7 +2,7 @@ import type { DataXY } from 'cheminfo-types';
 import type { XYFilterXOptions } from 'ml-spectra-processing';
 import { xyFilterX } from 'ml-spectra-processing';
 
-import type { Spectrum } from './Spectrum.js';
+import type { Spectrum } from './Spectrum.ts';
 
 export interface DataOptions {
   /**

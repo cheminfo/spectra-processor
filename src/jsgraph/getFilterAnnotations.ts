@@ -23,10 +23,11 @@ export interface RectAnnotation {
  * @returns Array of rectangle annotations
  */
 export function getFilterAnnotations(filter: Filter = {}): RectAnnotation[] {
-  let { exclusions = [] } = filter;
-  let annotations: RectAnnotation[] = [];
-  exclusions = exclusions.filter((exclusion) => !exclusion.ignore);
-  annotations = exclusions.map((exclusion) => {
+  const { exclusions = [], from, to } = filter;
+  const filteredExclusions = exclusions.filter(
+    (exclusion) => !exclusion.ignore,
+  );
+  const annotations: RectAnnotation[] = filteredExclusions.map((exclusion) => {
     const annotation: RectAnnotation = {
       type: 'rect',
       position: [
@@ -38,22 +39,22 @@ export function getFilterAnnotations(filter: Filter = {}): RectAnnotation[] {
     };
     return annotation;
   });
-  if (filter.from !== undefined) {
+  if (from !== undefined) {
     annotations.push({
       type: 'rect',
       position: [
         { x: Number.MIN_SAFE_INTEGER, y: '0px' },
-        { x: filter.from, y: '2000px' },
+        { x: from, y: '2000px' },
       ],
       strokeWidth: 0,
       fillColor: 'rgba(255,255,224,1)',
     });
   }
-  if (filter.to !== undefined) {
+  if (to !== undefined) {
     annotations.push({
       type: 'rect',
       position: [
-        { x: filter.to, y: '0px' },
+        { x: to, y: '0px' },
         { x: Number.MAX_SAFE_INTEGER, y: '2000px' },
       ],
       strokeWidth: 0,

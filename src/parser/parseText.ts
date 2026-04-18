@@ -1,7 +1,7 @@
 import type { DataXY } from 'cheminfo-types';
 import { parseXY } from 'xy-parser';
 
-import type { Kind } from '../Kinds.js';
+import type { Kind } from '../Kinds.ts';
 
 export interface ParseTextOptions {
   /**

@@ -1,9 +1,9 @@
-import type { SpectraProcessor } from '../SpectraProcessor.js';
+import type { SpectraProcessor } from '../SpectraProcessor.ts';
 
-import type { GetPostProcessedDataOptions } from './getPostProcessedData.js';
-import { getPostProcessedData } from './getPostProcessedData.js';
-import type { ConvertToTextOptions } from './util/convertToText.js';
-import { convertToText } from './util/convertToText.js';
+import type { GetPostProcessedDataOptions } from './getPostProcessedData.ts';
+import { getPostProcessedData } from './getPostProcessedData.ts';
+import type { ConvertToTextOptions } from './util/convertToText.ts';
+import { convertToText } from './util/convertToText.ts';
 
 export interface GetPostProcessedTextOptions extends ConvertToTextOptions {
   /**

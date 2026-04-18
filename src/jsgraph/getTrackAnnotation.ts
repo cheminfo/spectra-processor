@@ -1,5 +1,5 @@
-import { getNormalizedData } from '../spectra/getNormalizedData.js';
-import type { Spectrum } from '../spectrum/Spectrum.js';
+import { getNormalizedData } from '../spectra/getNormalizedData.ts';
+import type { Spectrum } from '../spectrum/Spectrum.ts';
 
 export interface AnnotationPosition {
   x: number | string;
